@@ -28,6 +28,21 @@ header p {
 main {
     padding: 20px;
 }
+.item-box {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.item-box h2 {
+    margin-bottom: 10px;
+}
+
+.item-box p {
+    margin-bottom: 5px;
+}
 
 /* Style the footer */
 footer {
