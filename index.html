@@ -18,6 +18,7 @@
         <p><strong>CPU Temperature:</strong> <span id="cpu-temp">Loading...</span></p>
         <p><strong>Uptime:</strong> <span id="uptime">Loading...</span></p>
 	<p><strong>GPU Temperature:</strong> <span id="gpu-temp">Loading...</span></p>
+	<p><strong>NVMe Temperature:</strong> <span id="nvme-temp">Loading...</span></p>
     </div>
 
     <script>
@@ -30,6 +31,7 @@
             document.getElementById('cpu-temp').textContent = `${data.cpu_temp || 'N/A'}°C`;
             document.getElementById('uptime').textContent = `${Math.floor((Date.now() / 1000 - data.uptime) / 3600)} hours`;
 	    document.getElementById('gpu-temp').textContent = `${data.gpu_temp || 'N/A'}°C`;        
+	    document.getElementById('nvme-temp').textContent = `${data.nvme_temp || 'N/A'}°C`;	
 	}
 
         fetchSystemInfo();
