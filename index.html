@@ -17,6 +17,8 @@
         <p><strong>Disk Usage:</strong> <span id="disk-usage">Loading...</span></p>
         <p><strong>CPU Temperature:</strong> <span id="cpu-temp">Loading...</span></p>
         <p><strong>Uptime:</strong> <span id="uptime">Loading...</span></p>
+	<p><strong>CPU Temperature:</strong> <span id="cpu-temp">Loading...</span></p>
+	<p><strong>GPU Temperature:</strong> <span id="gpu-temp">Loading...</span></p>
     </div>
 
     <script>
@@ -28,7 +30,8 @@
             document.getElementById('disk-usage').textContent = `${data.disk_usage}%`;
             document.getElementById('cpu-temp').textContent = `${data.cpu_temp || 'N/A'}°C`;
             document.getElementById('uptime').textContent = `${Math.floor((Date.now() / 1000 - data.uptime) / 3600)} hours`;
-        }
+	    document.getElementById('gpu-temp').textContent = `${data.gpu_temp || 'N/A'}°C`;        
+	}
 
         fetchSystemInfo();
         setInterval(fetchSystemInfo, 5000); // Refresh every 5 seconds

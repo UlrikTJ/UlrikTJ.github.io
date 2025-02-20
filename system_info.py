@@ -1,5 +1,6 @@
 import psutil
 import json
+import subprocess
 
 def get_system_info():
     info = {
@@ -7,15 +8,27 @@ def get_system_info():
         "memory_usage": psutil.virtual_memory().percent,
         "disk_usage": psutil.disk_usage('/').percent,
         "cpu_temp": get_cpu_temp(),
+        "gpu_temp": get_gpu_temp(),
         "uptime": psutil.boot_time()
     }
     return info
 
 def get_cpu_temp():
     try:
-        temps = psutil.sensors_temperatures()
-        if 'coretemp' in temps:
-            return temps['coretemp'][0].current
+        output = subprocess.check_output(["sensors"], text=True)
+        for line in output.splitlines():
+            if "Tctl" in line:
+                return float(line.split()[1].replace("°C", ""))
+        return None
+    except:
+        return None
+
+def get_gpu_temp():
+    try:
+        output = subprocess.check_output(["sensors"], text=True)
+        for line in output.splitlines():
+            if "edge" in line:
+                return float(line.split()[1].replace("°C", ""))
         return None
     except:
         return None
