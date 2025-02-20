@@ -55,6 +55,5 @@ def get_gpu_usage():
         return int(output.strip())
     except:
         return None
-
 if __name__ == "__main__":
     print(json.dumps(get_system_info()))
