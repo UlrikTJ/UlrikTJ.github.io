@@ -46,14 +46,17 @@ def get_nvme_temp():
     except:
         return None
 
-def get_gpu_usage():
+def get_gpu_info():
     try:
         output = subprocess.check_output(
-            ["nvidia-smi", "--query-gpu=utilization.gpu", "--format=csv,noheader"],
+            ["nvidia-smi", "--query-gpu=index,name,utilization.gpu", "--format=csv,noheader"],
             text=True
         )
-        return int(output.strip())
-    except:
+        gpu_info = output.strip().splitlines()
+        return gpu_info
+    except Exception as e:
+        print("Error fetching GPU info:", e)  # Debug print
         return None
+
 if __name__ == "__main__":
     print(json.dumps(get_system_info()))
