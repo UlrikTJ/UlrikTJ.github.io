@@ -2,7 +2,7 @@ import psutil
 import json
 import subprocess
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def get_system_info():
     info = {
@@ -127,4 +127,4 @@ if __name__ == "__main__":
     
     # Save both current and historical data
     with open('data.json', 'w') as f:
-        json.dump({"current": minute_data, "historical": historical_data}, f)
+        json.dump({"current": minute_data, "historical": historical_data}, f, indent=12)
