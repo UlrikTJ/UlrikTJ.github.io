@@ -1,25 +1,273 @@
 {
             "current": [
                         {
-                                    "timestamp": "2025-02-25T16:41:01.300684",
-                                    "cpu_usage": 1.6,
+                                    "timestamp": "2025-02-25T16:42:01.082096",
+                                    "cpu_usage": 0.4,
                                     "cpu_usage_per_core": [
-                                                3.0,
                                                 0.0,
-                                                3.0,
-                                                1.0,
-                                                2.0,
-                                                1.0,
-                                                2.0,
-                                                1.0,
-                                                3.0,
                                                 0.0,
-                                                6.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                2.0,
+                                                0.0
+                                    ],
+                                    "memory_usage": 7.9,
+                                    "disk_usage": 3.7,
+                                    "cpu_temp": 40.8,
+                                    "gpu_temp": 40.0,
+                                    "gpu_usage": [
+                                                {
+                                                            "index": 0,
+                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                            "usage": 0
+                                                }
+                                    ],
+                                    "nvme_temp": 31.9,
+                                    "uptime": 1740172247.0
+                        },
+                        {
+                                    "timestamp": "2025-02-25T16:42:04.465456",
+                                    "cpu_usage": 2.8,
+                                    "cpu_usage_per_core": [
+                                                2.0,
+                                                0.0,
+                                                5.0,
+                                                1.0,
+                                                0.0,
+                                                2.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
                                                 0.0
                                     ],
                                     "memory_usage": 7.8,
                                     "disk_usage": 3.7,
-                                    "cpu_temp": 48.9,
+                                    "cpu_temp": 47.4,
+                                    "gpu_temp": 41.0,
+                                    "gpu_usage": [
+                                                {
+                                                            "index": 0,
+                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                            "usage": 0
+                                                }
+                                    ],
+                                    "nvme_temp": 31.9,
+                                    "uptime": 1740172247.0
+                        },
+                        {
+                                    "timestamp": "2025-02-25T16:42:07.787091",
+                                    "cpu_usage": 0.3,
+                                    "cpu_usage_per_core": [
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                2.0,
+                                                1.0,
+                                                0.0
+                                    ],
+                                    "memory_usage": 7.9,
+                                    "disk_usage": 3.7,
+                                    "cpu_temp": 42.1,
+                                    "gpu_temp": 40.0,
+                                    "gpu_usage": [
+                                                {
+                                                            "index": 0,
+                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                            "usage": 0
+                                                }
+                                    ],
+                                    "nvme_temp": 30.9,
+                                    "uptime": 1740172247.0
+                        },
+                        {
+                                    "timestamp": "2025-02-25T16:42:11.087897",
+                                    "cpu_usage": 0.3,
+                                    "cpu_usage_per_core": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0
+                                    ],
+                                    "memory_usage": 7.9,
+                                    "disk_usage": 3.7,
+                                    "cpu_temp": 41.4,
+                                    "gpu_temp": 40.0,
+                                    "gpu_usage": [
+                                                {
+                                                            "index": 0,
+                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                            "usage": 0
+                                                }
+                                    ],
+                                    "nvme_temp": 31.9,
+                                    "uptime": 1740172247.0
+                        },
+                        {
+                                    "timestamp": "2025-02-25T16:42:14.365410",
+                                    "cpu_usage": 0.3,
+                                    "cpu_usage_per_core": [
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                2.0,
+                                                0.0,
+                                                0.0
+                                    ],
+                                    "memory_usage": 7.9,
+                                    "disk_usage": 3.7,
+                                    "cpu_temp": 41.4,
+                                    "gpu_temp": 40.0,
+                                    "gpu_usage": [
+                                                {
+                                                            "index": 0,
+                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                            "usage": 0
+                                                }
+                                    ],
+                                    "nvme_temp": 30.9,
+                                    "uptime": 1740172247.0
+                        },
+                        {
+                                    "timestamp": "2025-02-25T16:42:17.643834",
+                                    "cpu_usage": 0.3,
+                                    "cpu_usage_per_core": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                1.0,
+                                                0.0
+                                    ],
+                                    "memory_usage": 7.9,
+                                    "disk_usage": 3.7,
+                                    "cpu_temp": 41.4,
+                                    "gpu_temp": 40.0,
+                                    "gpu_usage": [
+                                                {
+                                                            "index": 0,
+                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                            "usage": 0
+                                                }
+                                    ],
+                                    "nvme_temp": 30.9,
+                                    "uptime": 1740172247.0
+                        },
+                        {
+                                    "timestamp": "2025-02-25T16:42:20.963822",
+                                    "cpu_usage": 0.3,
+                                    "cpu_usage_per_core": [
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0
+                                    ],
+                                    "memory_usage": 7.9,
+                                    "disk_usage": 3.7,
+                                    "cpu_temp": 41.4,
+                                    "gpu_temp": 40.0,
+                                    "gpu_usage": [
+                                                {
+                                                            "index": 0,
+                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                            "usage": 0
+                                                }
+                                    ],
+                                    "nvme_temp": 30.9,
+                                    "uptime": 1740172247.0
+                        },
+                        {
+                                    "timestamp": "2025-02-25T16:42:24.205733",
+                                    "cpu_usage": 0.2,
+                                    "cpu_usage_per_core": [
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                1.0,
+                                                0.0
+                                    ],
+                                    "memory_usage": 7.8,
+                                    "disk_usage": 3.7,
+                                    "cpu_temp": 41.4,
+                                    "gpu_temp": 40.0,
+                                    "gpu_usage": [
+                                                {
+                                                            "index": 0,
+                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                            "usage": 0
+                                                }
+                                    ],
+                                    "nvme_temp": 30.9,
+                                    "uptime": 1740172247.0
+                        },
+                        {
+                                    "timestamp": "2025-02-25T16:42:27.487812",
+                                    "cpu_usage": 0.3,
+                                    "cpu_usage_per_core": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0
+                                    ],
+                                    "memory_usage": 7.9,
+                                    "disk_usage": 3.7,
+                                    "cpu_temp": 41.4,
                                     "gpu_temp": 40.0,
                                     "gpu_usage": [
                                                 {
@@ -32,25 +280,118 @@
                                     "uptime": 1740172247.0
                         },
                         {
-                                    "timestamp": "2025-02-25T16:41:04.644534",
-                                    "cpu_usage": 0.5,
+                                    "timestamp": "2025-02-25T16:42:30.809070",
+                                    "cpu_usage": 0.3,
+                                    "cpu_usage_per_core": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0
+                                    ],
+                                    "memory_usage": 7.9,
+                                    "disk_usage": 3.7,
+                                    "cpu_temp": 41.4,
+                                    "gpu_temp": 41.0,
+                                    "gpu_usage": [
+                                                {
+                                                            "index": 0,
+                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                            "usage": 0
+                                                }
+                                    ],
+                                    "nvme_temp": 30.9,
+                                    "uptime": 1740172247.0
+                        },
+                        {
+                                    "timestamp": "2025-02-25T16:42:34.126269",
+                                    "cpu_usage": 0.3,
                                     "cpu_usage_per_core": [
                                                 0.0,
                                                 0.0,
                                                 1.0,
                                                 0.0,
+                                                0.0,
+                                                0.0,
                                                 1.0,
-                                                2.0,
                                                 0.0,
                                                 0.0,
-                                                0.0,
-                                                2.0,
                                                 1.0,
+                                                1.0,
+                                                0.0
+                                    ],
+                                    "memory_usage": 7.9,
+                                    "disk_usage": 3.7,
+                                    "cpu_temp": 41.4,
+                                    "gpu_temp": 40.0,
+                                    "gpu_usage": [
+                                                {
+                                                            "index": 0,
+                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                            "usage": 0
+                                                }
+                                    ],
+                                    "nvme_temp": 31.9,
+                                    "uptime": 1740172247.0
+                        },
+                        {
+                                    "timestamp": "2025-02-25T16:42:37.456227",
+                                    "cpu_usage": 0.3,
+                                    "cpu_usage_per_core": [
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
                                                 0.0
                                     ],
                                     "memory_usage": 7.8,
                                     "disk_usage": 3.7,
-                                    "cpu_temp": 43.8,
+                                    "cpu_temp": 41.4,
+                                    "gpu_temp": 40.0,
+                                    "gpu_usage": [
+                                                {
+                                                            "index": 0,
+                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                            "usage": 0
+                                                }
+                                    ],
+                                    "nvme_temp": 30.9,
+                                    "uptime": 1740172247.0
+                        },
+                        {
+                                    "timestamp": "2025-02-25T16:42:40.813254",
+                                    "cpu_usage": 0.4,
+                                    "cpu_usage_per_core": [
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0
+                                    ],
+                                    "memory_usage": 7.8,
+                                    "disk_usage": 3.7,
+                                    "cpu_temp": 41.4,
                                     "gpu_temp": 40.0,
                                     "gpu_usage": [
                                                 {
@@ -63,87 +404,25 @@
                                     "uptime": 1740172247.0
                         },
                         {
-                                    "timestamp": "2025-02-25T16:41:07.962379",
-                                    "cpu_usage": 0.5,
-                                    "cpu_usage_per_core": [
-                                                1.0,
-                                                0.0,
-                                                2.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                1.0,
-                                                1.0,
-                                                0.0
-                                    ],
-                                    "memory_usage": 7.9,
-                                    "disk_usage": 3.7,
-                                    "cpu_temp": 41.2,
-                                    "gpu_temp": 39.0,
-                                    "gpu_usage": [
-                                                {
-                                                            "index": 0,
-                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                            "usage": 0
-                                                }
-                                    ],
-                                    "nvme_temp": 31.9,
-                                    "uptime": 1740172247.0
-                        },
-                        {
-                                    "timestamp": "2025-02-25T16:41:11.288596",
-                                    "cpu_usage": 1.6,
-                                    "cpu_usage_per_core": [
-                                                1.0,
-                                                0.0,
-                                                1.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                2.0,
-                                                0.0,
-                                                2.0,
-                                                1.0,
-                                                2.0,
-                                                0.0
-                                    ],
-                                    "memory_usage": 7.8,
-                                    "disk_usage": 3.7,
-                                    "cpu_temp": 48.5,
-                                    "gpu_temp": 40.0,
-                                    "gpu_usage": [
-                                                {
-                                                            "index": 0,
-                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                            "usage": 0
-                                                }
-                                    ],
-                                    "nvme_temp": 30.9,
-                                    "uptime": 1740172247.0
-                        },
-                        {
-                                    "timestamp": "2025-02-25T16:41:14.602748",
+                                    "timestamp": "2025-02-25T16:42:44.161050",
                                     "cpu_usage": 0.3,
                                     "cpu_usage_per_core": [
-                                                0.0,
-                                                0.0,
-                                                2.0,
-                                                0.0,
                                                 1.0,
                                                 0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
                                                 2.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
+                                                2.0,
                                                 0.0
                                     ],
                                     "memory_usage": 7.8,
                                     "disk_usage": 3.7,
-                                    "cpu_temp": 43.4,
+                                    "cpu_temp": 41.4,
                                     "gpu_temp": 40.0,
                                     "gpu_usage": [
                                                 {
@@ -156,26 +435,57 @@
                                     "uptime": 1740172247.0
                         },
                         {
-                                    "timestamp": "2025-02-25T16:41:17.920664",
+                                    "timestamp": "2025-02-25T16:42:47.561256",
                                     "cpu_usage": 0.3,
                                     "cpu_usage_per_core": [
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0
+                                    ],
+                                    "memory_usage": 7.9,
+                                    "disk_usage": 3.7,
+                                    "cpu_temp": 41.4,
+                                    "gpu_temp": 41.0,
+                                    "gpu_usage": [
+                                                {
+                                                            "index": 0,
+                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                            "usage": 0
+                                                }
+                                    ],
+                                    "nvme_temp": 32.9,
+                                    "uptime": 1740172247.0
+                        },
+                        {
+                                    "timestamp": "2025-02-25T16:42:50.894839",
+                                    "cpu_usage": 0.3,
+                                    "cpu_usage_per_core": [
+                                                1.0,
+                                                0.0,
+                                                1.0,
+                                                0.0,
+                                                0.0,
+                                                0.0,
                                                 2.0,
-                                                1.0,
                                                 0.0,
                                                 0.0,
                                                 0.0,
                                                 0.0,
-                                                1.0,
-                                                0.0,
-                                                0.0,
-                                                1.0,
-                                                0.0,
-                                                1.0
+                                                0.0
                                     ],
                                     "memory_usage": 7.8,
                                     "disk_usage": 3.7,
-                                    "cpu_temp": 41.0,
-                                    "gpu_temp": 39.0,
+                                    "cpu_temp": 41.4,
+                                    "gpu_temp": 41.0,
                                     "gpu_usage": [
                                                 {
                                                             "index": 0,
@@ -187,25 +497,25 @@
                                     "uptime": 1740172247.0
                         },
                         {
-                                    "timestamp": "2025-02-25T16:41:21.211118",
-                                    "cpu_usage": 0.3,
+                                    "timestamp": "2025-02-25T16:42:54.235852",
+                                    "cpu_usage": 0.2,
                                     "cpu_usage_per_core": [
                                                 0.0,
                                                 0.0,
+                                                1.0,
+                                                0.0,
                                                 0.0,
                                                 0.0,
                                                 1.0,
                                                 0.0,
                                                 0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
+                                                2.0,
                                                 1.0,
                                                 0.0
                                     ],
-                                    "memory_usage": 7.8,
+                                    "memory_usage": 7.9,
                                     "disk_usage": 3.7,
-                                    "cpu_temp": 41.0,
+                                    "cpu_temp": 41.5,
                                     "gpu_temp": 40.0,
                                     "gpu_usage": [
                                                 {
@@ -218,119 +528,26 @@
                                     "uptime": 1740172247.0
                         },
                         {
-                                    "timestamp": "2025-02-25T16:41:24.536213",
-                                    "cpu_usage": 0.2,
-                                    "cpu_usage_per_core": [
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                1.0,
-                                                1.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                1.0,
-                                                1.0,
-                                                0.0
-                                    ],
-                                    "memory_usage": 7.8,
-                                    "disk_usage": 3.7,
-                                    "cpu_temp": 41.0,
-                                    "gpu_temp": 39.0,
-                                    "gpu_usage": [
-                                                {
-                                                            "index": 0,
-                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                            "usage": 0
-                                                }
-                                    ],
-                                    "nvme_temp": 30.9,
-                                    "uptime": 1740172247.0
-                        },
-                        {
-                                    "timestamp": "2025-02-25T16:41:27.866927",
-                                    "cpu_usage": 0.2,
-                                    "cpu_usage_per_core": [
-                                                0.0,
-                                                0.0,
-                                                1.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                1.0,
-                                                1.0,
-                                                0.0
-                                    ],
-                                    "memory_usage": 7.8,
-                                    "disk_usage": 3.7,
-                                    "cpu_temp": 41.0,
-                                    "gpu_temp": 39.0,
-                                    "gpu_usage": [
-                                                {
-                                                            "index": 0,
-                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                            "usage": 0
-                                                }
-                                    ],
-                                    "nvme_temp": 30.9,
-                                    "uptime": 1740172247.0
-                        },
-                        {
-                                    "timestamp": "2025-02-25T16:41:31.205965",
+                                    "timestamp": "2025-02-25T16:42:57.570581",
                                     "cpu_usage": 0.3,
                                     "cpu_usage_per_core": [
-                                                1.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                1.0,
-                                                0.0,
-                                                0.0,
-                                                1.0,
-                                                0.0,
-                                                0.0
-                                    ],
-                                    "memory_usage": 7.8,
-                                    "disk_usage": 3.7,
-                                    "cpu_temp": 41.0,
-                                    "gpu_temp": 39.0,
-                                    "gpu_usage": [
-                                                {
-                                                            "index": 0,
-                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                            "usage": 0
-                                                }
-                                    ],
-                                    "nvme_temp": 30.9,
-                                    "uptime": 1740172247.0
-                        },
-                        {
-                                    "timestamp": "2025-02-25T16:41:34.542636",
-                                    "cpu_usage": 0.2,
-                                    "cpu_usage_per_core": [
-                                                0.0,
-                                                0.0,
                                                 0.0,
                                                 0.0,
                                                 1.0,
                                                 0.0,
                                                 0.0,
                                                 0.0,
+                                                0.0,
+                                                0.0,
                                                 1.0,
                                                 1.0,
-                                                1.0,
+                                                0.0,
                                                 0.0
                                     ],
                                     "memory_usage": 7.9,
                                     "disk_usage": 3.7,
-                                    "cpu_temp": 41.0,
-                                    "gpu_temp": 39.0,
+                                    "cpu_temp": 41.5,
+                                    "gpu_temp": 41.0,
                                     "gpu_usage": [
                                                 {
                                                             "index": 0,
@@ -342,88 +559,26 @@
                                     "uptime": 1740172247.0
                         },
                         {
-                                    "timestamp": "2025-02-25T16:41:37.863108",
-                                    "cpu_usage": 0.3,
+                                    "timestamp": "2025-02-25T16:43:00.882752",
+                                    "cpu_usage": 1.1,
                                     "cpu_usage_per_core": [
+                                                1.0,
                                                 0.0,
                                                 0.0,
                                                 0.0,
+                                                1.0,
                                                 0.0,
                                                 0.0,
                                                 0.0,
+                                                1.0,
                                                 2.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0
-                                    ],
-                                    "memory_usage": 7.8,
-                                    "disk_usage": 3.7,
-                                    "cpu_temp": 40.9,
-                                    "gpu_temp": 39.0,
-                                    "gpu_usage": [
-                                                {
-                                                            "index": 0,
-                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                            "usage": 0
-                                                }
-                                    ],
-                                    "nvme_temp": 30.9,
-                                    "uptime": 1740172247.0
-                        },
-                        {
-                                    "timestamp": "2025-02-25T16:41:41.167370",
-                                    "cpu_usage": 0.3,
-                                    "cpu_usage_per_core": [
-                                                0.0,
-                                                1.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                1.0,
-                                                0.0,
-                                                0.0,
-                                                1.0,
-                                                1.0,
-                                                0.0
-                                    ],
-                                    "memory_usage": 7.9,
-                                    "disk_usage": 3.7,
-                                    "cpu_temp": 40.8,
-                                    "gpu_temp": 39.0,
-                                    "gpu_usage": [
-                                                {
-                                                            "index": 0,
-                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                            "usage": 0
-                                                }
-                                    ],
-                                    "nvme_temp": 30.9,
-                                    "uptime": 1740172247.0
-                        },
-                        {
-                                    "timestamp": "2025-02-25T16:41:44.490821",
-                                    "cpu_usage": 0.3,
-                                    "cpu_usage_per_core": [
-                                                2.0,
-                                                0.0,
-                                                1.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                1.0,
-                                                0.0,
-                                                1.0,
-                                                0.0,
                                                 1.0,
                                                 0.0
                                     ],
                                     "memory_usage": 7.8,
                                     "disk_usage": 3.7,
-                                    "cpu_temp": 40.8,
-                                    "gpu_temp": 40.0,
+                                    "cpu_temp": 41.5,
+                                    "gpu_temp": 41.0,
                                     "gpu_usage": [
                                                 {
                                                             "index": 0,
@@ -432,186 +587,279 @@
                                                 }
                                     ],
                                     "nvme_temp": 30.9,
-                                    "uptime": 1740172247.0
-                        },
-                        {
-                                    "timestamp": "2025-02-25T16:41:47.826894",
-                                    "cpu_usage": 0.3,
-                                    "cpu_usage_per_core": [
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                2.0,
-                                                0.0
-                                    ],
-                                    "memory_usage": 7.8,
-                                    "disk_usage": 3.7,
-                                    "cpu_temp": 40.8,
-                                    "gpu_temp": 39.0,
-                                    "gpu_usage": [
-                                                {
-                                                            "index": 0,
-                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                            "usage": 0
-                                                }
-                                    ],
-                                    "nvme_temp": 30.9,
-                                    "uptime": 1740172247.0
-                        },
-                        {
-                                    "timestamp": "2025-02-25T16:41:51.166601",
-                                    "cpu_usage": 0.2,
-                                    "cpu_usage_per_core": [
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                1.0,
-                                                0.0,
-                                                1.0,
-                                                1.0,
-                                                0.0
-                                    ],
-                                    "memory_usage": 7.9,
-                                    "disk_usage": 3.7,
-                                    "cpu_temp": 40.8,
-                                    "gpu_temp": 39.0,
-                                    "gpu_usage": [
-                                                {
-                                                            "index": 0,
-                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                            "usage": 0
-                                                }
-                                    ],
-                                    "nvme_temp": 30.9,
-                                    "uptime": 1740172247.0
-                        },
-                        {
-                                    "timestamp": "2025-02-25T16:41:54.535312",
-                                    "cpu_usage": 0.2,
-                                    "cpu_usage_per_core": [
-                                                1.0,
-                                                0.0,
-                                                1.0,
-                                                0.0,
-                                                1.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                1.0,
-                                                0.0,
-                                                0.0
-                                    ],
-                                    "memory_usage": 7.9,
-                                    "disk_usage": 3.7,
-                                    "cpu_temp": 40.8,
-                                    "gpu_temp": 39.0,
-                                    "gpu_usage": [
-                                                {
-                                                            "index": 0,
-                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                            "usage": 0
-                                                }
-                                    ],
-                                    "nvme_temp": 31.9,
-                                    "uptime": 1740172247.0
-                        },
-                        {
-                                    "timestamp": "2025-02-25T16:41:57.910466",
-                                    "cpu_usage": 0.3,
-                                    "cpu_usage_per_core": [
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                1.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                1.0,
-                                                0.0,
-                                                0.0
-                                    ],
-                                    "memory_usage": 7.9,
-                                    "disk_usage": 3.7,
-                                    "cpu_temp": 40.8,
-                                    "gpu_temp": 40.0,
-                                    "gpu_usage": [
-                                                {
-                                                            "index": 0,
-                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                            "usage": 0
-                                                }
-                                    ],
-                                    "nvme_temp": 30.9,
-                                    "uptime": 1740172247.0
-                        },
-                        {
-                                    "timestamp": "2025-02-25T16:42:01.194183",
-                                    "cpu_usage": 0.3,
-                                    "cpu_usage_per_core": [
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                1.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                0.0,
-                                                2.0,
-                                                0.0
-                                    ],
-                                    "memory_usage": 7.9,
-                                    "disk_usage": 3.7,
-                                    "cpu_temp": 40.8,
-                                    "gpu_temp": 40.0,
-                                    "gpu_usage": [
-                                                {
-                                                            "index": 0,
-                                                            "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                            "usage": 0
-                                                }
-                                    ],
-                                    "nvme_temp": 33.9,
                                     "uptime": 1740172247.0
                         }
             ],
             "historical": [
                         [
                                     {
-                                                "timestamp": "2025-02-25T16:41:01.300684",
-                                                "cpu_usage": 1.6,
+                                                "timestamp": "2025-02-25T16:42:01.082096",
+                                                "cpu_usage": 0.4,
                                                 "cpu_usage_per_core": [
-                                                            3.0,
                                                             0.0,
-                                                            3.0,
-                                                            1.0,
-                                                            2.0,
-                                                            1.0,
-                                                            2.0,
-                                                            1.0,
-                                                            3.0,
                                                             0.0,
-                                                            6.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            2.0,
+                                                            0.0
+                                                ],
+                                                "memory_usage": 7.9,
+                                                "disk_usage": 3.7,
+                                                "cpu_temp": 40.8,
+                                                "gpu_temp": 40.0,
+                                                "gpu_usage": [
+                                                            {
+                                                                        "index": 0,
+                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                                        "usage": 0
+                                                            }
+                                                ],
+                                                "nvme_temp": 31.9,
+                                                "uptime": 1740172247.0
+                                    },
+                                    {
+                                                "timestamp": "2025-02-25T16:42:04.465456",
+                                                "cpu_usage": 2.8,
+                                                "cpu_usage_per_core": [
+                                                            2.0,
+                                                            0.0,
+                                                            5.0,
+                                                            1.0,
+                                                            0.0,
+                                                            2.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
                                                             0.0
                                                 ],
                                                 "memory_usage": 7.8,
                                                 "disk_usage": 3.7,
-                                                "cpu_temp": 48.9,
+                                                "cpu_temp": 47.4,
+                                                "gpu_temp": 41.0,
+                                                "gpu_usage": [
+                                                            {
+                                                                        "index": 0,
+                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                                        "usage": 0
+                                                            }
+                                                ],
+                                                "nvme_temp": 31.9,
+                                                "uptime": 1740172247.0
+                                    },
+                                    {
+                                                "timestamp": "2025-02-25T16:42:07.787091",
+                                                "cpu_usage": 0.3,
+                                                "cpu_usage_per_core": [
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            2.0,
+                                                            1.0,
+                                                            0.0
+                                                ],
+                                                "memory_usage": 7.9,
+                                                "disk_usage": 3.7,
+                                                "cpu_temp": 42.1,
+                                                "gpu_temp": 40.0,
+                                                "gpu_usage": [
+                                                            {
+                                                                        "index": 0,
+                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                                        "usage": 0
+                                                            }
+                                                ],
+                                                "nvme_temp": 30.9,
+                                                "uptime": 1740172247.0
+                                    },
+                                    {
+                                                "timestamp": "2025-02-25T16:42:11.087897",
+                                                "cpu_usage": 0.3,
+                                                "cpu_usage_per_core": [
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0
+                                                ],
+                                                "memory_usage": 7.9,
+                                                "disk_usage": 3.7,
+                                                "cpu_temp": 41.4,
+                                                "gpu_temp": 40.0,
+                                                "gpu_usage": [
+                                                            {
+                                                                        "index": 0,
+                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                                        "usage": 0
+                                                            }
+                                                ],
+                                                "nvme_temp": 31.9,
+                                                "uptime": 1740172247.0
+                                    },
+                                    {
+                                                "timestamp": "2025-02-25T16:42:14.365410",
+                                                "cpu_usage": 0.3,
+                                                "cpu_usage_per_core": [
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            2.0,
+                                                            0.0,
+                                                            0.0
+                                                ],
+                                                "memory_usage": 7.9,
+                                                "disk_usage": 3.7,
+                                                "cpu_temp": 41.4,
+                                                "gpu_temp": 40.0,
+                                                "gpu_usage": [
+                                                            {
+                                                                        "index": 0,
+                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                                        "usage": 0
+                                                            }
+                                                ],
+                                                "nvme_temp": 30.9,
+                                                "uptime": 1740172247.0
+                                    },
+                                    {
+                                                "timestamp": "2025-02-25T16:42:17.643834",
+                                                "cpu_usage": 0.3,
+                                                "cpu_usage_per_core": [
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
+                                                            1.0,
+                                                            0.0
+                                                ],
+                                                "memory_usage": 7.9,
+                                                "disk_usage": 3.7,
+                                                "cpu_temp": 41.4,
+                                                "gpu_temp": 40.0,
+                                                "gpu_usage": [
+                                                            {
+                                                                        "index": 0,
+                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                                        "usage": 0
+                                                            }
+                                                ],
+                                                "nvme_temp": 30.9,
+                                                "uptime": 1740172247.0
+                                    },
+                                    {
+                                                "timestamp": "2025-02-25T16:42:20.963822",
+                                                "cpu_usage": 0.3,
+                                                "cpu_usage_per_core": [
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0
+                                                ],
+                                                "memory_usage": 7.9,
+                                                "disk_usage": 3.7,
+                                                "cpu_temp": 41.4,
+                                                "gpu_temp": 40.0,
+                                                "gpu_usage": [
+                                                            {
+                                                                        "index": 0,
+                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                                        "usage": 0
+                                                            }
+                                                ],
+                                                "nvme_temp": 30.9,
+                                                "uptime": 1740172247.0
+                                    },
+                                    {
+                                                "timestamp": "2025-02-25T16:42:24.205733",
+                                                "cpu_usage": 0.2,
+                                                "cpu_usage_per_core": [
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0
+                                                ],
+                                                "memory_usage": 7.8,
+                                                "disk_usage": 3.7,
+                                                "cpu_temp": 41.4,
+                                                "gpu_temp": 40.0,
+                                                "gpu_usage": [
+                                                            {
+                                                                        "index": 0,
+                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                                        "usage": 0
+                                                            }
+                                                ],
+                                                "nvme_temp": 30.9,
+                                                "uptime": 1740172247.0
+                                    },
+                                    {
+                                                "timestamp": "2025-02-25T16:42:27.487812",
+                                                "cpu_usage": 0.3,
+                                                "cpu_usage_per_core": [
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0
+                                                ],
+                                                "memory_usage": 7.9,
+                                                "disk_usage": 3.7,
+                                                "cpu_temp": 41.4,
                                                 "gpu_temp": 40.0,
                                                 "gpu_usage": [
                                                             {
@@ -624,25 +872,118 @@
                                                 "uptime": 1740172247.0
                                     },
                                     {
-                                                "timestamp": "2025-02-25T16:41:04.644534",
-                                                "cpu_usage": 0.5,
+                                                "timestamp": "2025-02-25T16:42:30.809070",
+                                                "cpu_usage": 0.3,
+                                                "cpu_usage_per_core": [
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0
+                                                ],
+                                                "memory_usage": 7.9,
+                                                "disk_usage": 3.7,
+                                                "cpu_temp": 41.4,
+                                                "gpu_temp": 41.0,
+                                                "gpu_usage": [
+                                                            {
+                                                                        "index": 0,
+                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                                        "usage": 0
+                                                            }
+                                                ],
+                                                "nvme_temp": 30.9,
+                                                "uptime": 1740172247.0
+                                    },
+                                    {
+                                                "timestamp": "2025-02-25T16:42:34.126269",
+                                                "cpu_usage": 0.3,
                                                 "cpu_usage_per_core": [
                                                             0.0,
                                                             0.0,
                                                             1.0,
                                                             0.0,
+                                                            0.0,
+                                                            0.0,
                                                             1.0,
-                                                            2.0,
                                                             0.0,
                                                             0.0,
-                                                            0.0,
-                                                            2.0,
                                                             1.0,
+                                                            1.0,
+                                                            0.0
+                                                ],
+                                                "memory_usage": 7.9,
+                                                "disk_usage": 3.7,
+                                                "cpu_temp": 41.4,
+                                                "gpu_temp": 40.0,
+                                                "gpu_usage": [
+                                                            {
+                                                                        "index": 0,
+                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                                        "usage": 0
+                                                            }
+                                                ],
+                                                "nvme_temp": 31.9,
+                                                "uptime": 1740172247.0
+                                    },
+                                    {
+                                                "timestamp": "2025-02-25T16:42:37.456227",
+                                                "cpu_usage": 0.3,
+                                                "cpu_usage_per_core": [
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
                                                             0.0
                                                 ],
                                                 "memory_usage": 7.8,
                                                 "disk_usage": 3.7,
-                                                "cpu_temp": 43.8,
+                                                "cpu_temp": 41.4,
+                                                "gpu_temp": 40.0,
+                                                "gpu_usage": [
+                                                            {
+                                                                        "index": 0,
+                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                                        "usage": 0
+                                                            }
+                                                ],
+                                                "nvme_temp": 30.9,
+                                                "uptime": 1740172247.0
+                                    },
+                                    {
+                                                "timestamp": "2025-02-25T16:42:40.813254",
+                                                "cpu_usage": 0.4,
+                                                "cpu_usage_per_core": [
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0
+                                                ],
+                                                "memory_usage": 7.8,
+                                                "disk_usage": 3.7,
+                                                "cpu_temp": 41.4,
                                                 "gpu_temp": 40.0,
                                                 "gpu_usage": [
                                                             {
@@ -655,87 +996,25 @@
                                                 "uptime": 1740172247.0
                                     },
                                     {
-                                                "timestamp": "2025-02-25T16:41:07.962379",
-                                                "cpu_usage": 0.5,
-                                                "cpu_usage_per_core": [
-                                                            1.0,
-                                                            0.0,
-                                                            2.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            1.0,
-                                                            1.0,
-                                                            0.0
-                                                ],
-                                                "memory_usage": 7.9,
-                                                "disk_usage": 3.7,
-                                                "cpu_temp": 41.2,
-                                                "gpu_temp": 39.0,
-                                                "gpu_usage": [
-                                                            {
-                                                                        "index": 0,
-                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                                        "usage": 0
-                                                            }
-                                                ],
-                                                "nvme_temp": 31.9,
-                                                "uptime": 1740172247.0
-                                    },
-                                    {
-                                                "timestamp": "2025-02-25T16:41:11.288596",
-                                                "cpu_usage": 1.6,
-                                                "cpu_usage_per_core": [
-                                                            1.0,
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            2.0,
-                                                            0.0,
-                                                            2.0,
-                                                            1.0,
-                                                            2.0,
-                                                            0.0
-                                                ],
-                                                "memory_usage": 7.8,
-                                                "disk_usage": 3.7,
-                                                "cpu_temp": 48.5,
-                                                "gpu_temp": 40.0,
-                                                "gpu_usage": [
-                                                            {
-                                                                        "index": 0,
-                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                                        "usage": 0
-                                                            }
-                                                ],
-                                                "nvme_temp": 30.9,
-                                                "uptime": 1740172247.0
-                                    },
-                                    {
-                                                "timestamp": "2025-02-25T16:41:14.602748",
+                                                "timestamp": "2025-02-25T16:42:44.161050",
                                                 "cpu_usage": 0.3,
                                                 "cpu_usage_per_core": [
-                                                            0.0,
-                                                            0.0,
-                                                            2.0,
-                                                            0.0,
                                                             1.0,
                                                             0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
                                                             2.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
+                                                            2.0,
                                                             0.0
                                                 ],
                                                 "memory_usage": 7.8,
                                                 "disk_usage": 3.7,
-                                                "cpu_temp": 43.4,
+                                                "cpu_temp": 41.4,
                                                 "gpu_temp": 40.0,
                                                 "gpu_usage": [
                                                             {
@@ -748,26 +1027,57 @@
                                                 "uptime": 1740172247.0
                                     },
                                     {
-                                                "timestamp": "2025-02-25T16:41:17.920664",
+                                                "timestamp": "2025-02-25T16:42:47.561256",
                                                 "cpu_usage": 0.3,
                                                 "cpu_usage_per_core": [
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0
+                                                ],
+                                                "memory_usage": 7.9,
+                                                "disk_usage": 3.7,
+                                                "cpu_temp": 41.4,
+                                                "gpu_temp": 41.0,
+                                                "gpu_usage": [
+                                                            {
+                                                                        "index": 0,
+                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
+                                                                        "usage": 0
+                                                            }
+                                                ],
+                                                "nvme_temp": 32.9,
+                                                "uptime": 1740172247.0
+                                    },
+                                    {
+                                                "timestamp": "2025-02-25T16:42:50.894839",
+                                                "cpu_usage": 0.3,
+                                                "cpu_usage_per_core": [
+                                                            1.0,
+                                                            0.0,
+                                                            1.0,
+                                                            0.0,
+                                                            0.0,
+                                                            0.0,
                                                             2.0,
-                                                            1.0,
                                                             0.0,
                                                             0.0,
                                                             0.0,
                                                             0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            1.0
+                                                            0.0
                                                 ],
                                                 "memory_usage": 7.8,
                                                 "disk_usage": 3.7,
-                                                "cpu_temp": 41.0,
-                                                "gpu_temp": 39.0,
+                                                "cpu_temp": 41.4,
+                                                "gpu_temp": 41.0,
                                                 "gpu_usage": [
                                                             {
                                                                         "index": 0,
@@ -779,25 +1089,25 @@
                                                 "uptime": 1740172247.0
                                     },
                                     {
-                                                "timestamp": "2025-02-25T16:41:21.211118",
-                                                "cpu_usage": 0.3,
+                                                "timestamp": "2025-02-25T16:42:54.235852",
+                                                "cpu_usage": 0.2,
                                                 "cpu_usage_per_core": [
                                                             0.0,
                                                             0.0,
+                                                            1.0,
+                                                            0.0,
                                                             0.0,
                                                             0.0,
                                                             1.0,
                                                             0.0,
                                                             0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
+                                                            2.0,
                                                             1.0,
                                                             0.0
                                                 ],
-                                                "memory_usage": 7.8,
+                                                "memory_usage": 7.9,
                                                 "disk_usage": 3.7,
-                                                "cpu_temp": 41.0,
+                                                "cpu_temp": 41.5,
                                                 "gpu_temp": 40.0,
                                                 "gpu_usage": [
                                                             {
@@ -810,119 +1120,26 @@
                                                 "uptime": 1740172247.0
                                     },
                                     {
-                                                "timestamp": "2025-02-25T16:41:24.536213",
-                                                "cpu_usage": 0.2,
-                                                "cpu_usage_per_core": [
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            1.0,
-                                                            1.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            1.0,
-                                                            1.0,
-                                                            0.0
-                                                ],
-                                                "memory_usage": 7.8,
-                                                "disk_usage": 3.7,
-                                                "cpu_temp": 41.0,
-                                                "gpu_temp": 39.0,
-                                                "gpu_usage": [
-                                                            {
-                                                                        "index": 0,
-                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                                        "usage": 0
-                                                            }
-                                                ],
-                                                "nvme_temp": 30.9,
-                                                "uptime": 1740172247.0
-                                    },
-                                    {
-                                                "timestamp": "2025-02-25T16:41:27.866927",
-                                                "cpu_usage": 0.2,
-                                                "cpu_usage_per_core": [
-                                                            0.0,
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            1.0,
-                                                            1.0,
-                                                            0.0
-                                                ],
-                                                "memory_usage": 7.8,
-                                                "disk_usage": 3.7,
-                                                "cpu_temp": 41.0,
-                                                "gpu_temp": 39.0,
-                                                "gpu_usage": [
-                                                            {
-                                                                        "index": 0,
-                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                                        "usage": 0
-                                                            }
-                                                ],
-                                                "nvme_temp": 30.9,
-                                                "uptime": 1740172247.0
-                                    },
-                                    {
-                                                "timestamp": "2025-02-25T16:41:31.205965",
+                                                "timestamp": "2025-02-25T16:42:57.570581",
                                                 "cpu_usage": 0.3,
                                                 "cpu_usage_per_core": [
-                                                            1.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            0.0
-                                                ],
-                                                "memory_usage": 7.8,
-                                                "disk_usage": 3.7,
-                                                "cpu_temp": 41.0,
-                                                "gpu_temp": 39.0,
-                                                "gpu_usage": [
-                                                            {
-                                                                        "index": 0,
-                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                                        "usage": 0
-                                                            }
-                                                ],
-                                                "nvme_temp": 30.9,
-                                                "uptime": 1740172247.0
-                                    },
-                                    {
-                                                "timestamp": "2025-02-25T16:41:34.542636",
-                                                "cpu_usage": 0.2,
-                                                "cpu_usage_per_core": [
-                                                            0.0,
-                                                            0.0,
                                                             0.0,
                                                             0.0,
                                                             1.0,
                                                             0.0,
                                                             0.0,
                                                             0.0,
+                                                            0.0,
+                                                            0.0,
                                                             1.0,
                                                             1.0,
-                                                            1.0,
+                                                            0.0,
                                                             0.0
                                                 ],
                                                 "memory_usage": 7.9,
                                                 "disk_usage": 3.7,
-                                                "cpu_temp": 41.0,
-                                                "gpu_temp": 39.0,
+                                                "cpu_temp": 41.5,
+                                                "gpu_temp": 41.0,
                                                 "gpu_usage": [
                                                             {
                                                                         "index": 0,
@@ -934,88 +1151,26 @@
                                                 "uptime": 1740172247.0
                                     },
                                     {
-                                                "timestamp": "2025-02-25T16:41:37.863108",
-                                                "cpu_usage": 0.3,
+                                                "timestamp": "2025-02-25T16:43:00.882752",
+                                                "cpu_usage": 1.1,
                                                 "cpu_usage_per_core": [
+                                                            1.0,
                                                             0.0,
                                                             0.0,
                                                             0.0,
+                                                            1.0,
                                                             0.0,
                                                             0.0,
                                                             0.0,
+                                                            1.0,
                                                             2.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0
-                                                ],
-                                                "memory_usage": 7.8,
-                                                "disk_usage": 3.7,
-                                                "cpu_temp": 40.9,
-                                                "gpu_temp": 39.0,
-                                                "gpu_usage": [
-                                                            {
-                                                                        "index": 0,
-                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                                        "usage": 0
-                                                            }
-                                                ],
-                                                "nvme_temp": 30.9,
-                                                "uptime": 1740172247.0
-                                    },
-                                    {
-                                                "timestamp": "2025-02-25T16:41:41.167370",
-                                                "cpu_usage": 0.3,
-                                                "cpu_usage_per_core": [
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            0.0,
-                                                            1.0,
-                                                            1.0,
-                                                            0.0
-                                                ],
-                                                "memory_usage": 7.9,
-                                                "disk_usage": 3.7,
-                                                "cpu_temp": 40.8,
-                                                "gpu_temp": 39.0,
-                                                "gpu_usage": [
-                                                            {
-                                                                        "index": 0,
-                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                                        "usage": 0
-                                                            }
-                                                ],
-                                                "nvme_temp": 30.9,
-                                                "uptime": 1740172247.0
-                                    },
-                                    {
-                                                "timestamp": "2025-02-25T16:41:44.490821",
-                                                "cpu_usage": 0.3,
-                                                "cpu_usage_per_core": [
-                                                            2.0,
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
                                                             1.0,
                                                             0.0
                                                 ],
                                                 "memory_usage": 7.8,
                                                 "disk_usage": 3.7,
-                                                "cpu_temp": 40.8,
-                                                "gpu_temp": 40.0,
+                                                "cpu_temp": 41.5,
+                                                "gpu_temp": 41.0,
                                                 "gpu_usage": [
                                                             {
                                                                         "index": 0,
@@ -1024,161 +1179,6 @@
                                                             }
                                                 ],
                                                 "nvme_temp": 30.9,
-                                                "uptime": 1740172247.0
-                                    },
-                                    {
-                                                "timestamp": "2025-02-25T16:41:47.826894",
-                                                "cpu_usage": 0.3,
-                                                "cpu_usage_per_core": [
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            2.0,
-                                                            0.0
-                                                ],
-                                                "memory_usage": 7.8,
-                                                "disk_usage": 3.7,
-                                                "cpu_temp": 40.8,
-                                                "gpu_temp": 39.0,
-                                                "gpu_usage": [
-                                                            {
-                                                                        "index": 0,
-                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                                        "usage": 0
-                                                            }
-                                                ],
-                                                "nvme_temp": 30.9,
-                                                "uptime": 1740172247.0
-                                    },
-                                    {
-                                                "timestamp": "2025-02-25T16:41:51.166601",
-                                                "cpu_usage": 0.2,
-                                                "cpu_usage_per_core": [
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            1.0,
-                                                            1.0,
-                                                            0.0
-                                                ],
-                                                "memory_usage": 7.9,
-                                                "disk_usage": 3.7,
-                                                "cpu_temp": 40.8,
-                                                "gpu_temp": 39.0,
-                                                "gpu_usage": [
-                                                            {
-                                                                        "index": 0,
-                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                                        "usage": 0
-                                                            }
-                                                ],
-                                                "nvme_temp": 30.9,
-                                                "uptime": 1740172247.0
-                                    },
-                                    {
-                                                "timestamp": "2025-02-25T16:41:54.535312",
-                                                "cpu_usage": 0.2,
-                                                "cpu_usage_per_core": [
-                                                            1.0,
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            0.0
-                                                ],
-                                                "memory_usage": 7.9,
-                                                "disk_usage": 3.7,
-                                                "cpu_temp": 40.8,
-                                                "gpu_temp": 39.0,
-                                                "gpu_usage": [
-                                                            {
-                                                                        "index": 0,
-                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                                        "usage": 0
-                                                            }
-                                                ],
-                                                "nvme_temp": 31.9,
-                                                "uptime": 1740172247.0
-                                    },
-                                    {
-                                                "timestamp": "2025-02-25T16:41:57.910466",
-                                                "cpu_usage": 0.3,
-                                                "cpu_usage_per_core": [
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            0.0
-                                                ],
-                                                "memory_usage": 7.9,
-                                                "disk_usage": 3.7,
-                                                "cpu_temp": 40.8,
-                                                "gpu_temp": 40.0,
-                                                "gpu_usage": [
-                                                            {
-                                                                        "index": 0,
-                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                                        "usage": 0
-                                                            }
-                                                ],
-                                                "nvme_temp": 30.9,
-                                                "uptime": 1740172247.0
-                                    },
-                                    {
-                                                "timestamp": "2025-02-25T16:42:01.194183",
-                                                "cpu_usage": 0.3,
-                                                "cpu_usage_per_core": [
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            1.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            0.0,
-                                                            2.0,
-                                                            0.0
-                                                ],
-                                                "memory_usage": 7.9,
-                                                "disk_usage": 3.7,
-                                                "cpu_temp": 40.8,
-                                                "gpu_temp": 40.0,
-                                                "gpu_usage": [
-                                                            {
-                                                                        "index": 0,
-                                                                        "name": "NVIDIA GeForce GTX 1650 Ti",
-                                                                        "usage": 0
-                                                            }
-                                                ],
-                                                "nvme_temp": 33.9,
                                                 "uptime": 1740172247.0
                                     }
                         ]
