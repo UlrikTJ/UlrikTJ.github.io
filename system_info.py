@@ -108,23 +108,32 @@ def save_data(data_point):
     with open('data.json', 'w') as f:
         json.dump(stored_data, f)
         
-# Modify your main script to save historical data
 if __name__ == "__main__":
-    # Load existing historical data
-    try:
-        with open('historical_data.json', 'r') as f:
-            historical_data = json.load(f)
-    except FileNotFoundError:
-        historical_data = []
-    
-    # Add new minute data
+    # Collect new data points
     minute_data = collect_minute_data()
-    historical_data.append(minute_data)
     
-    # Keep only last 24 hours of data (1440 minutes)
-    if len(historical_data) > 1440:
-        historical_data = historical_data[-1440:]
+    try:
+        with open('data.json', 'r') as f:
+            stored_data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        stored_data = {"current": [], "historical": []}
     
-    # Save both current and historical data
+    # Update current data
+    stored_data["current"] = minute_data
+    
+    # Add to historical data if needed
+    # stored_data["historical"].extend(minute_data)
+    
+    # Keep only last hour of data
+    current_time = datetime.now()
+    one_hour_ago = current_time - timedelta(hours=1)
+    
+    # Filter historical data to keep only last hour
+    stored_data["historical"] = [
+        point for point in stored_data["historical"]
+        if datetime.fromisoformat(point["timestamp"]) > one_hour_ago
+    ]
+    
+    # Save the data
     with open('data.json', 'w') as f:
-        json.dump({"current": minute_data, "historical": historical_data}, f, indent=12)
+        json.dump(stored_data, f, indent=4)

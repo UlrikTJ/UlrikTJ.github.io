@@ -177,44 +177,63 @@
 
 
     async function updateCharts() {
-        try {
-            const response = await fetch('data.json');
-            const data = await response.json();
+    try {
+        const response = await fetch('data.json');
+        const data = await response.json();
 
-            // Update current stats with latest values
-            const latestData = data.current[data.current.length - 1];
+        // Update current stats with latest values from the current array
+        const latestData = data.current[data.current.length - 1];
+        
+        // Update all display values
+        document.getElementById('cpu-usage').textContent = `${latestData.cpu_usage.toFixed(2)}%`;
+        document.getElementById('memory-usage').textContent = `${latestData.memory_usage.toFixed(2)}%`;
+        document.getElementById('disk-usage').textContent = `${latestData.disk_usage.toFixed(2)}%`;
+        document.getElementById('cpu-temp').textContent = `${latestData.cpu_temp ? latestData.cpu_temp.toFixed(2) : 'N/A'}°C`;
+        document.getElementById('gpu-temp').textContent = `${latestData.gpu_temp ? latestData.gpu_temp.toFixed(2) : 'N/A'}°C`;
+        document.getElementById('nvme-temp').textContent = `${latestData.nvme_temp ? latestData.nvme_temp.toFixed(2) : 'N/A'}°C`;
+        document.getElementById('uptime').textContent = `${Math.floor((Date.now() / 1000 - latestData.uptime) / 3600)} hours`;
 
-            // Update display values...
-            document.getElementById('cpu-usage').textContent = `${latestData.cpu_usage.toFixed(2)}%`;
-            // ... other display updates ...
-
-            // Update charts with historical data
-            const historicalData = data.historical;
-
-            // Sort data by timestamp
-            historicalData.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-
-            // Update CPU Chart
-            cpuChart.data.labels = historicalData.map(d => new Date(d.timestamp));
-            cpuChart.data.datasets[0].data = historicalData.map(d => d.cpu_usage);
-            cpuChart.update('none');
-
-            // Update Memory Chart
-            memoryChart.data.labels = historicalData.map(d => new Date(d.timestamp));
-            memoryChart.data.datasets[0].data = historicalData.map(d => d.memory_usage);
-            memoryChart.update('none');
-
-            // Update Temperature Chart
-            temperatureChart.data.labels = historicalData.map(d => new Date(d.timestamp));
-            temperatureChart.data.datasets[0].data = historicalData.map(d => d.cpu_temp);
-            temperatureChart.data.datasets[1].data = historicalData.map(d => d.gpu_temp);
-            temperatureChart.data.datasets[2].data = historicalData.map(d => d.nvme_temp);
-            temperatureChart.update('none');
-
-        } catch (error) {
-            console.error('Error fetching data:', error);
+        // Update GPU usage display
+        if (latestData.gpu_usage && latestData.gpu_usage.length > 0) {
+            const gpuInfo = latestData.gpu_usage[0];
+            document.getElementById('gpu-usage').textContent = `${gpuInfo.name}: ${gpuInfo.usage}%`;
         }
+
+        // Update core usage if visible
+        const coreUsage = document.getElementById('core-usage');
+        if (coreUsage.style.display !== 'none') {
+            coreUsage.innerHTML = latestData.cpu_usage_per_core.map((usage, index) => 
+                `<div>Core ${index}: ${usage.toFixed(1)}%</div>`
+            ).join('');
+        }
+
+        // Combine current and historical data for the charts
+        const allData = [...data.current];
+
+        // Sort data by timestamp
+        allData.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+        // Update CPU Chart
+        cpuChart.data.labels = allData.map(d => new Date(d.timestamp));
+        cpuChart.data.datasets[0].data = allData.map(d => d.cpu_usage);
+        cpuChart.update('none');
+
+        // Update Memory Chart
+        memoryChart.data.labels = allData.map(d => new Date(d.timestamp));
+        memoryChart.data.datasets[0].data = allData.map(d => d.memory_usage);
+        memoryChart.update('none');
+
+        // Update Temperature Chart
+        temperatureChart.data.labels = allData.map(d => new Date(d.timestamp));
+        temperatureChart.data.datasets[0].data = allData.map(d => d.cpu_temp);
+        temperatureChart.data.datasets[1].data = allData.map(d => d.gpu_temp);
+        temperatureChart.data.datasets[2].data = allData.map(d => d.nvme_temp);
+        temperatureChart.update('none');
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
     }
+}
 
     // Initialize and start updates
     initializeCharts();
