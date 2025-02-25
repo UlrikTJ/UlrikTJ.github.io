@@ -12,12 +12,15 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
+            background-color: #f5f5f5;
         }
         .status { 
             margin: 20px;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .dropdown {
             margin-top: 10px;
@@ -26,25 +29,51 @@
             width: 100%;
             max-width: 800px;
             margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .time-range-selector {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             text-align: center;
         }
         .time-range-selector button {
             margin: 0 5px;
-            padding: 5px 10px;
+            padding: 8px 12px;
             border: 1px solid #ccc;
-            border-radius: 3px;
-            background: #f0f0f0;
+            border-radius: 4px;
+            background: #f8f9fa;
             cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
         }
         .time-range-selector button:hover {
-            background: #e0e0e0;
+            background: #e9ecef;
+            border-color: #adb5bd;
         }
         .time-range-selector button.active {
             background: #007bff;
             color: white;
+            border-color: #0056b3;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .status p {
+            margin: 10px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        #core-usage {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        #core-usage div {
+            margin: 5px 0;
         }
     </style>
 </head>
@@ -67,29 +96,51 @@
         <p><strong>Uptime:</strong> <span id="uptime">Loading...</span></p>
     </div>
 
-    <div class="time-range-selector">
-        <button onclick="setTimeRange('minute')">Last Minute</button>
-        <button onclick="setTimeRange('hour')">Last Hour</button>
-        <button onclick="setTimeRange('day')">Last Day</button>
-        <button onclick="setTimeRange('week')">Last Week</button>
-        <button onclick="setTimeRange('month')">Last Month</button>
-        <button onclick="setTimeRange('6month')">Last 6 Months</button>
-        <button onclick="setTimeRange('year')">Last Year</button>
-    </div>
-
     <div class="graph-container">
+        <div class="time-range-selector" id="cpu-range-selector">
+            <button onclick="setTimeRange('minute', 'cpu')">Last Minute</button>
+            <button onclick="setTimeRange('hour', 'cpu')">Last Hour</button>
+            <button onclick="setTimeRange('day', 'cpu')">Last Day</button>
+            <button onclick="setTimeRange('week', 'cpu')">Last Week</button>
+            <button onclick="setTimeRange('month', 'cpu')">Last Month</button>
+            <button onclick="setTimeRange('6month', 'cpu')">Last 6 Months</button>
+            <button onclick="setTimeRange('year', 'cpu')">Last Year</button>
+        </div>
         <canvas id="cpuGraph"></canvas>
     </div>
+
     <div class="graph-container">
+        <div class="time-range-selector" id="memory-range-selector">
+            <button onclick="setTimeRange('minute', 'memory')">Last Minute</button>
+            <button onclick="setTimeRange('hour', 'memory')">Last Hour</button>
+            <button onclick="setTimeRange('day', 'memory')">Last Day</button>
+            <button onclick="setTimeRange('week', 'memory')">Last Week</button>
+            <button onclick="setTimeRange('month', 'memory')">Last Month</button>
+            <button onclick="setTimeRange('6month', 'memory')">Last 6 Months</button>
+            <button onclick="setTimeRange('year', 'memory')">Last Year</button>
+        </div>
         <canvas id="memoryGraph"></canvas>
     </div>
+
     <div class="graph-container">
+        <div class="time-range-selector" id="temp-range-selector">
+            <button onclick="setTimeRange('minute', 'temp')">Last Minute</button>
+            <button onclick="setTimeRange('hour', 'temp')">Last Hour</button>
+            <button onclick="setTimeRange('day', 'temp')">Last Day</button>
+            <button onclick="setTimeRange('week', 'temp')">Last Week</button>
+            <button onclick="setTimeRange('month', 'temp')">Last Month</button>
+            <button onclick="setTimeRange('6month', 'temp')">Last 6 Months</button>
+            <button onclick="setTimeRange('year', 'temp')">Last Year</button>
+        </div>
         <canvas id="temperatureGraph"></canvas>
     </div>
-
     <script>
         let cpuChart, memoryChart, temperatureChart;
-        let currentTimeRange = 'hour'; // default time range
+        let timeRanges = {
+            cpu: 'hour',
+            memory: 'hour',
+            temp: 'hour'
+        };
 
         function initializeCharts() {
             const commonOptions = {
@@ -223,12 +274,13 @@
             });
         }
 
-        function setTimeRange(range) {
-            currentTimeRange = range;
-            document.querySelectorAll('.time-range-selector button').forEach(btn => {
+        function setTimeRange(range, chartType) {
+            timeRanges[chartType] = range;
+            const container = document.querySelector(`#${chartType}-range-selector`);
+            container.querySelectorAll('button').forEach(btn => {
                 btn.classList.remove('active');
             });
-            document.querySelector(`button[onclick="setTimeRange('${range}')"]`).classList.add('active');
+            container.querySelector(`button[onclick="setTimeRange('${range}', '${chartType}')"]`).classList.add('active');
             updateCharts();
         }
 
@@ -262,9 +314,10 @@
                     cutoff = now.minus({ hours: 1 });
             }
 
-            return data.filter(point => 
-                luxon.DateTime.fromISO(point.timestamp, { zone: 'Europe/Copenhagen' }) > cutoff
-            );
+            return data.filter(point => {
+                const pointTime = luxon.DateTime.fromISO(point.timestamp);
+                return pointTime > cutoff;
+            });
         }
 
         function updateChartOptions(chart, range) {
@@ -299,43 +352,51 @@
             }
         }
 
+        function updateSingleChart(chart, data, timeRange, type) {
+            const filteredData = filterDataByTimeRange(data, timeRange);
+            
+            filteredData.sort((a, b) => 
+                luxon.DateTime.fromISO(a.timestamp).valueOf() - 
+                luxon.DateTime.fromISO(b.timestamp).valueOf()
+            );
+
+            updateChartOptions(chart, timeRange);
+
+            const timestamps = filteredData.map(d => 
+                luxon.DateTime.fromISO(d.timestamp).toJSDate()
+            );
+
+            chart.data.labels = timestamps;
+
+            if (type === 'cpu') {
+                chart.data.datasets[0].data = filteredData.map(d => d.cpu_usage);
+            } else if (type === 'memory') {
+                chart.data.datasets[0].data = filteredData.map(d => d.memory_usage);
+            } else if (type === 'temp') {
+                chart.data.datasets[0].data = filteredData.map(d => d.cpu_temp);
+                chart.data.datasets[1].data = filteredData.map(d => d.gpu_temp);
+                chart.data.datasets[2].data = filteredData.map(d => d.nvme_temp);
+            }
+
+            chart.update('none');
+        }
+
         async function updateCharts() {
             try {
                 const response = await fetch('data.json');
                 const data = await response.json();
                 
-                const allData = [...data.historical];
-                const filteredData = filterDataByTimeRange(allData, currentTimeRange);
+                // Combine current and historical data
+                const allData = [...data.current, ...data.historical];
                 
-                filteredData.sort((a, b) => 
-                    luxon.DateTime.fromISO(a.timestamp).valueOf() - 
-                    luxon.DateTime.fromISO(b.timestamp).valueOf()
-                );
+                // Update each chart with its own time range
+                updateSingleChart(cpuChart, allData, timeRanges.cpu, 'cpu');
+                updateSingleChart(memoryChart, allData, timeRanges.memory, 'memory');
+                updateSingleChart(temperatureChart, allData, timeRanges.temp, 'temp');
 
-                updateChartOptions(cpuChart, currentTimeRange);
-                updateChartOptions(memoryChart, currentTimeRange);
-                updateChartOptions(temperatureChart, currentTimeRange);
-
-                const timestamps = filteredData.map(d => 
-                    luxon.DateTime.fromISO(d.timestamp, { zone: 'Europe/Copenhagen' }).toJSDate()
-                );
-
-                cpuChart.data.labels = timestamps;
-                cpuChart.data.datasets[0].data = filteredData.map(d => d.cpu_usage);
-                cpuChart.update('none');
-
-                memoryChart.data.labels = timestamps;
-                memoryChart.data.datasets[0].data = filteredData.map(d => d.memory_usage);
-                memoryChart.update('none');
-
-                temperatureChart.data.labels = timestamps;
-                temperatureChart.data.datasets[0].data = filteredData.map(d => d.cpu_temp);
-                temperatureChart.data.datasets[1].data = filteredData.map(d => d.gpu_temp);
-                temperatureChart.data.datasets[2].data = filteredData.map(d => d.nvme_temp);
-                temperatureChart.update('none');
-
-                if (filteredData.length > 0) {
-                    updateCurrentStats(filteredData[filteredData.length - 1]);
+                // Update current stats
+                if (data.current.length > 0) {
+                    updateCurrentStats(data.current[data.current.length - 1]);
                 }
 
             } catch (error) {
@@ -350,8 +411,10 @@
 
         // Initialize and start updates
         initializeCharts();
-        setTimeRange('hour'); // Set default time range
-        setInterval(updateCharts, 5000); // Update every 5 seconds
+        setTimeRange('hour', 'cpu');
+        setTimeRange('hour', 'memory');
+        setTimeRange('hour', 'temp');
+        setInterval(updateCharts, 5000);
     </script>
 </body>
 </html>
