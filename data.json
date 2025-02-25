@@ -1,109 +1,47 @@
 {
     "current": [
         {
-            "timestamp": "2025-02-25T22:34:01.866680+01:00",
-            "cpu_usage": 0.2,
-            "cpu_usage_per_core": [
-                1.0,
-                1.0,
-                0.0,
-                1.0,
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                4.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "memory_usage": 8.1,
-            "disk_usage": 3.7,
-            "cpu_temp": 47.5,
-            "gpu_temp": 41.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 33.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:05.065106+01:00",
-            "cpu_usage": 0.3,
-            "cpu_usage_per_core": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                17.3,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0
-            ],
-            "memory_usage": 8.1,
-            "disk_usage": 3.7,
-            "cpu_temp": 52.6,
-            "gpu_temp": 41.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 32.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:08.344903+01:00",
-            "cpu_usage": 0.6,
-            "cpu_usage_per_core": [
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                8.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0
-            ],
-            "memory_usage": 8.1,
-            "disk_usage": 3.7,
-            "cpu_temp": 47.5,
-            "gpu_temp": 41.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 33.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:11.609843+01:00",
+            "timestamp": "2025-02-25T22:35:01.373874+01:00",
             "cpu_usage": 0.2,
             "cpu_usage_per_core": [
                 0.0,
+                1.0,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
+                0.0,
+                0.0,
+                1.0,
+                3.0
+            ],
+            "memory_usage": 8.2,
+            "disk_usage": 3.7,
+            "cpu_temp": 47.8,
+            "gpu_temp": 40.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 34.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:35:04.647736+01:00",
+            "cpu_usage": 1.9,
+            "cpu_usage_per_core": [
+                1.0,
+                0.0,
+                2.0,
+                2.0,
+                0.0,
+                0.0,
+                1.0,
                 0.0,
                 0.0,
                 0.0,
@@ -112,8 +50,8 @@
             ],
             "memory_usage": 8.2,
             "disk_usage": 3.7,
-            "cpu_temp": 42.5,
-            "gpu_temp": 41.0,
+            "cpu_temp": 53.1,
+            "gpu_temp": 39.0,
             "gpu_usage": [
                 {
                     "index": 0,
@@ -121,19 +59,19 @@
                     "usage": 0
                 }
             ],
-            "nvme_temp": 33.9,
+            "nvme_temp": 34.9,
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:34:14.908071+01:00",
-            "cpu_usage": 0.2,
+            "timestamp": "2025-02-25T22:35:07.961253+01:00",
+            "cpu_usage": 2.5,
             "cpu_usage_per_core": [
-                0.0,
-                0.0,
+                1.0,
                 1.0,
                 0.0,
-                0.0,
-                0.0,
+                3.0,
+                2.0,
+                1.0,
                 0.0,
                 0.0,
                 0.0,
@@ -143,7 +81,7 @@
             ],
             "memory_usage": 8.2,
             "disk_usage": 3.7,
-            "cpu_temp": 42.0,
+            "cpu_temp": 48.1,
             "gpu_temp": 40.0,
             "gpu_usage": [
                 {
@@ -156,118 +94,25 @@
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:34:18.250226+01:00",
-            "cpu_usage": 0.2,
+            "timestamp": "2025-02-25T22:35:11.291362+01:00",
+            "cpu_usage": 1.7,
             "cpu_usage_per_core": [
+                1.0,
                 0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
+                1.0,
+                3.0,
+                2.0,
+                2.0,
                 1.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "memory_usage": 8.2,
-            "disk_usage": 3.7,
-            "cpu_temp": 42.0,
-            "gpu_temp": 40.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 33.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:21.493310+01:00",
-            "cpu_usage": 0.3,
-            "cpu_usage_per_core": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
                 1.0,
-                0.0,
-                0.0,
                 0.0
             ],
             "memory_usage": 8.2,
             "disk_usage": 3.7,
-            "cpu_temp": 42.0,
-            "gpu_temp": 40.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 33.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:24.806205+01:00",
-            "cpu_usage": 0.2,
-            "cpu_usage_per_core": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0
-            ],
-            "memory_usage": 8.2,
-            "disk_usage": 3.7,
-            "cpu_temp": 42.0,
-            "gpu_temp": 40.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 33.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:28.134241+01:00",
-            "cpu_usage": 0.2,
-            "cpu_usage_per_core": [
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "memory_usage": 8.2,
-            "disk_usage": 3.7,
-            "cpu_temp": 42.0,
+            "cpu_temp": 43.1,
             "gpu_temp": 40.0,
             "gpu_usage": [
                 {
@@ -280,56 +125,25 @@
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:34:31.445854+01:00",
-            "cpu_usage": 0.1,
+            "timestamp": "2025-02-25T22:35:14.567439+01:00",
+            "cpu_usage": 0.3,
             "cpu_usage_per_core": [
+                4.1,
+                5.0,
+                16.8,
+                22.8,
+                12.0,
+                13.1,
+                11.9,
+                0.0,
+                9.9,
                 0.0,
                 0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
+                1.0
             ],
             "memory_usage": 8.2,
             "disk_usage": 3.7,
-            "cpu_temp": 41.8,
-            "gpu_temp": 41.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 32.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:34.756959+01:00",
-            "cpu_usage": 0.2,
-            "cpu_usage_per_core": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0
-            ],
-            "memory_usage": 8.2,
-            "disk_usage": 3.7,
-            "cpu_temp": 41.8,
+            "cpu_temp": 50.0,
             "gpu_temp": 40.0,
             "gpu_usage": [
                 {
@@ -342,8 +156,70 @@
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:34:38.055064+01:00",
-            "cpu_usage": 0.2,
+            "timestamp": "2025-02-25T22:35:17.816644+01:00",
+            "cpu_usage": 2.8,
+            "cpu_usage_per_core": [
+                1.0,
+                0.0,
+                1.0,
+                2.0,
+                1.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "memory_usage": 8.2,
+            "disk_usage": 3.7,
+            "cpu_temp": 45.0,
+            "gpu_temp": 40.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 32.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:35:21.091881+01:00",
+            "cpu_usage": 0.3,
+            "cpu_usage_per_core": [
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                1.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "memory_usage": 8.2,
+            "disk_usage": 3.7,
+            "cpu_temp": 41.6,
+            "gpu_temp": 40.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 32.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:35:24.400242+01:00",
+            "cpu_usage": 0.1,
             "cpu_usage_per_core": [
                 1.0,
                 0.0,
@@ -351,16 +227,109 @@
                 0.0,
                 0.0,
                 0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "memory_usage": 8.2,
+            "disk_usage": 3.7,
+            "cpu_temp": 41.5,
+            "gpu_temp": 40.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 31.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:35:27.701666+01:00",
+            "cpu_usage": 0.5,
+            "cpu_usage_per_core": [
+                2.0,
                 1.0,
+                6.1,
+                0.0,
+                10.0,
+                2.0,
+                1.0,
+                0.0,
+                0.0,
+                2.0,
+                2.0,
+                3.0
+            ],
+            "memory_usage": 8.2,
+            "disk_usage": 3.7,
+            "cpu_temp": 41.5,
+            "gpu_temp": 40.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 32.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:35:30.970461+01:00",
+            "cpu_usage": 1.3,
+            "cpu_usage_per_core": [
+                10.1,
+                0.0,
+                9.1,
+                0.0,
+                0.0,
+                9.0,
+                9.0,
+                0.0,
+                9.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "memory_usage": 8.1,
+            "disk_usage": 3.7,
+            "cpu_temp": 49.4,
+            "gpu_temp": 40.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 31.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:35:34.226035+01:00",
+            "cpu_usage": 1.4,
+            "cpu_usage_per_core": [
                 0.0,
                 0.0,
                 0.0,
                 2.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                1.0,
                 1.0
             ],
             "memory_usage": 8.2,
             "disk_usage": 3.7,
-            "cpu_temp": 41.8,
+            "cpu_temp": 44.2,
             "gpu_temp": 40.0,
             "gpu_usage": [
                 {
@@ -373,14 +342,45 @@
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:34:41.394501+01:00",
-            "cpu_usage": 0.3,
+            "timestamp": "2025-02-25T22:35:37.521623+01:00",
+            "cpu_usage": 0.8,
             "cpu_usage_per_core": [
+                1.0,
+                0.0,
+                1.0,
                 0.0,
                 0.0,
                 0.0,
                 1.0,
                 0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0
+            ],
+            "memory_usage": 8.1,
+            "disk_usage": 3.7,
+            "cpu_temp": 41.8,
+            "gpu_temp": 40.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 31.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:35:40.845767+01:00",
+            "cpu_usage": 0.9,
+            "cpu_usage_per_core": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
                 0.0,
                 0.0,
                 0.0,
@@ -400,15 +400,13 @@
                     "usage": 0
                 }
             ],
-            "nvme_temp": 34.9,
+            "nvme_temp": 31.9,
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:34:44.708407+01:00",
-            "cpu_usage": 0.0,
+            "timestamp": "2025-02-25T22:35:44.152623+01:00",
+            "cpu_usage": 0.1,
             "cpu_usage_per_core": [
-                0.0,
-                0.0,
                 0.0,
                 0.0,
                 0.0,
@@ -418,11 +416,13 @@
                 1.0,
                 0.0,
                 0.0,
+                0.0,
+                0.0,
                 0.0
             ],
             "memory_usage": 8.2,
             "disk_usage": 3.7,
-            "cpu_temp": 41.8,
+            "cpu_temp": 41.5,
             "gpu_temp": 40.0,
             "gpu_usage": [
                 {
@@ -431,11 +431,42 @@
                     "usage": 0
                 }
             ],
-            "nvme_temp": 34.9,
+            "nvme_temp": 33.9,
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:34:48.044742+01:00",
+            "timestamp": "2025-02-25T22:35:47.464877+01:00",
+            "cpu_usage": 0.2,
+            "cpu_usage_per_core": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                2.0,
+                0.0
+            ],
+            "memory_usage": 8.2,
+            "disk_usage": 3.7,
+            "cpu_temp": 41.5,
+            "gpu_temp": 40.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 33.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:35:50.758924+01:00",
             "cpu_usage": 0.2,
             "cpu_usage_per_core": [
                 1.0,
@@ -444,69 +475,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.0,
-                0.0,
                 1.0,
-                1.0,
-                0.0,
-                0.0
-            ],
-            "memory_usage": 8.2,
-            "disk_usage": 3.7,
-            "cpu_temp": 41.6,
-            "gpu_temp": 40.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 32.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:51.285191+01:00",
-            "cpu_usage": 0.3,
-            "cpu_usage_per_core": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "memory_usage": 8.2,
-            "disk_usage": 3.7,
-            "cpu_temp": 41.6,
-            "gpu_temp": 39.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 32.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:54.547973+01:00",
-            "cpu_usage": 0.3,
-            "cpu_usage_per_core": [
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
                 0.0,
                 0.0,
                 0.0,
@@ -528,20 +497,20 @@
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:34:57.847014+01:00",
-            "cpu_usage": 0.2,
+            "timestamp": "2025-02-25T22:35:54.172109+01:00",
+            "cpu_usage": 0.1,
             "cpu_usage_per_core": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
                 1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
                 0.0
             ],
             "memory_usage": 8.2,
@@ -555,29 +524,60 @@
                     "usage": 0
                 }
             ],
-            "nvme_temp": 32.9,
+            "nvme_temp": 33.9,
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:35:01.094656+01:00",
-            "cpu_usage": 1.0,
+            "timestamp": "2025-02-25T22:35:57.508680+01:00",
+            "cpu_usage": 0.2,
             "cpu_usage_per_core": [
+                1.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0,
+                2.0,
+                1.0,
                 1.0,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0,
-                1.0,
                 0.0
             ],
             "memory_usage": 8.2,
             "disk_usage": 3.7,
-            "cpu_temp": 48.2,
+            "cpu_temp": 41.4,
+            "gpu_temp": 39.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 31.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:36:00.870251+01:00",
+            "cpu_usage": 0.9,
+            "cpu_usage_per_core": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "memory_usage": 8.2,
+            "disk_usage": 3.7,
+            "cpu_temp": 48.8,
             "gpu_temp": 40.0,
             "gpu_usage": [
                 {
@@ -586,115 +586,53 @@
                     "usage": 0
                 }
             ],
-            "nvme_temp": 32.9,
+            "nvme_temp": 33.9,
             "uptime": 1740172247.0
         }
     ],
     "historical": [
         {
-            "timestamp": "2025-02-25T22:34:01.866680+01:00",
-            "cpu_usage": 0.2,
-            "cpu_usage_per_core": [
-                1.0,
-                1.0,
-                0.0,
-                1.0,
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                4.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "memory_usage": 8.1,
-            "disk_usage": 3.7,
-            "cpu_temp": 47.5,
-            "gpu_temp": 41.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 33.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:05.065106+01:00",
-            "cpu_usage": 0.3,
-            "cpu_usage_per_core": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                17.3,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0
-            ],
-            "memory_usage": 8.1,
-            "disk_usage": 3.7,
-            "cpu_temp": 52.6,
-            "gpu_temp": 41.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 32.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:08.344903+01:00",
-            "cpu_usage": 0.6,
-            "cpu_usage_per_core": [
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                8.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0
-            ],
-            "memory_usage": 8.1,
-            "disk_usage": 3.7,
-            "cpu_temp": 47.5,
-            "gpu_temp": 41.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 33.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:11.609843+01:00",
+            "timestamp": "2025-02-25T22:35:01.373874+01:00",
             "cpu_usage": 0.2,
             "cpu_usage_per_core": [
                 0.0,
+                1.0,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
+                0.0,
+                0.0,
+                1.0,
+                3.0
+            ],
+            "memory_usage": 8.2,
+            "disk_usage": 3.7,
+            "cpu_temp": 47.8,
+            "gpu_temp": 40.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 34.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:35:04.647736+01:00",
+            "cpu_usage": 1.9,
+            "cpu_usage_per_core": [
+                1.0,
+                0.0,
+                2.0,
+                2.0,
+                0.0,
+                0.0,
+                1.0,
                 0.0,
                 0.0,
                 0.0,
@@ -703,8 +641,8 @@
             ],
             "memory_usage": 8.2,
             "disk_usage": 3.7,
-            "cpu_temp": 42.5,
-            "gpu_temp": 41.0,
+            "cpu_temp": 53.1,
+            "gpu_temp": 39.0,
             "gpu_usage": [
                 {
                     "index": 0,
@@ -712,19 +650,19 @@
                     "usage": 0
                 }
             ],
-            "nvme_temp": 33.9,
+            "nvme_temp": 34.9,
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:34:14.908071+01:00",
-            "cpu_usage": 0.2,
+            "timestamp": "2025-02-25T22:35:07.961253+01:00",
+            "cpu_usage": 2.5,
             "cpu_usage_per_core": [
-                0.0,
-                0.0,
+                1.0,
                 1.0,
                 0.0,
-                0.0,
-                0.0,
+                3.0,
+                2.0,
+                1.0,
                 0.0,
                 0.0,
                 0.0,
@@ -734,7 +672,7 @@
             ],
             "memory_usage": 8.2,
             "disk_usage": 3.7,
-            "cpu_temp": 42.0,
+            "cpu_temp": 48.1,
             "gpu_temp": 40.0,
             "gpu_usage": [
                 {
@@ -747,118 +685,25 @@
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:34:18.250226+01:00",
-            "cpu_usage": 0.2,
+            "timestamp": "2025-02-25T22:35:11.291362+01:00",
+            "cpu_usage": 1.7,
             "cpu_usage_per_core": [
+                1.0,
                 0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
+                1.0,
+                3.0,
+                2.0,
+                2.0,
                 1.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "memory_usage": 8.2,
-            "disk_usage": 3.7,
-            "cpu_temp": 42.0,
-            "gpu_temp": 40.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 33.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:21.493310+01:00",
-            "cpu_usage": 0.3,
-            "cpu_usage_per_core": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
                 1.0,
-                0.0,
-                0.0,
                 0.0
             ],
             "memory_usage": 8.2,
             "disk_usage": 3.7,
-            "cpu_temp": 42.0,
-            "gpu_temp": 40.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 33.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:24.806205+01:00",
-            "cpu_usage": 0.2,
-            "cpu_usage_per_core": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0
-            ],
-            "memory_usage": 8.2,
-            "disk_usage": 3.7,
-            "cpu_temp": 42.0,
-            "gpu_temp": 40.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 33.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:28.134241+01:00",
-            "cpu_usage": 0.2,
-            "cpu_usage_per_core": [
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "memory_usage": 8.2,
-            "disk_usage": 3.7,
-            "cpu_temp": 42.0,
+            "cpu_temp": 43.1,
             "gpu_temp": 40.0,
             "gpu_usage": [
                 {
@@ -871,56 +716,25 @@
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:34:31.445854+01:00",
-            "cpu_usage": 0.1,
+            "timestamp": "2025-02-25T22:35:14.567439+01:00",
+            "cpu_usage": 0.3,
             "cpu_usage_per_core": [
+                4.1,
+                5.0,
+                16.8,
+                22.8,
+                12.0,
+                13.1,
+                11.9,
+                0.0,
+                9.9,
                 0.0,
                 0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
+                1.0
             ],
             "memory_usage": 8.2,
             "disk_usage": 3.7,
-            "cpu_temp": 41.8,
-            "gpu_temp": 41.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 32.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:34.756959+01:00",
-            "cpu_usage": 0.2,
-            "cpu_usage_per_core": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0
-            ],
-            "memory_usage": 8.2,
-            "disk_usage": 3.7,
-            "cpu_temp": 41.8,
+            "cpu_temp": 50.0,
             "gpu_temp": 40.0,
             "gpu_usage": [
                 {
@@ -933,8 +747,70 @@
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:34:38.055064+01:00",
-            "cpu_usage": 0.2,
+            "timestamp": "2025-02-25T22:35:17.816644+01:00",
+            "cpu_usage": 2.8,
+            "cpu_usage_per_core": [
+                1.0,
+                0.0,
+                1.0,
+                2.0,
+                1.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "memory_usage": 8.2,
+            "disk_usage": 3.7,
+            "cpu_temp": 45.0,
+            "gpu_temp": 40.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 32.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:35:21.091881+01:00",
+            "cpu_usage": 0.3,
+            "cpu_usage_per_core": [
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                1.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "memory_usage": 8.2,
+            "disk_usage": 3.7,
+            "cpu_temp": 41.6,
+            "gpu_temp": 40.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 32.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:35:24.400242+01:00",
+            "cpu_usage": 0.1,
             "cpu_usage_per_core": [
                 1.0,
                 0.0,
@@ -942,16 +818,109 @@
                 0.0,
                 0.0,
                 0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "memory_usage": 8.2,
+            "disk_usage": 3.7,
+            "cpu_temp": 41.5,
+            "gpu_temp": 40.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 31.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:35:27.701666+01:00",
+            "cpu_usage": 0.5,
+            "cpu_usage_per_core": [
+                2.0,
                 1.0,
+                6.1,
+                0.0,
+                10.0,
+                2.0,
+                1.0,
+                0.0,
+                0.0,
+                2.0,
+                2.0,
+                3.0
+            ],
+            "memory_usage": 8.2,
+            "disk_usage": 3.7,
+            "cpu_temp": 41.5,
+            "gpu_temp": 40.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 32.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:35:30.970461+01:00",
+            "cpu_usage": 1.3,
+            "cpu_usage_per_core": [
+                10.1,
+                0.0,
+                9.1,
+                0.0,
+                0.0,
+                9.0,
+                9.0,
+                0.0,
+                9.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "memory_usage": 8.1,
+            "disk_usage": 3.7,
+            "cpu_temp": 49.4,
+            "gpu_temp": 40.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 31.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:35:34.226035+01:00",
+            "cpu_usage": 1.4,
+            "cpu_usage_per_core": [
                 0.0,
                 0.0,
                 0.0,
                 2.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                1.0,
                 1.0
             ],
             "memory_usage": 8.2,
             "disk_usage": 3.7,
-            "cpu_temp": 41.8,
+            "cpu_temp": 44.2,
             "gpu_temp": 40.0,
             "gpu_usage": [
                 {
@@ -964,14 +933,45 @@
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:34:41.394501+01:00",
-            "cpu_usage": 0.3,
+            "timestamp": "2025-02-25T22:35:37.521623+01:00",
+            "cpu_usage": 0.8,
             "cpu_usage_per_core": [
+                1.0,
+                0.0,
+                1.0,
                 0.0,
                 0.0,
                 0.0,
                 1.0,
                 0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0
+            ],
+            "memory_usage": 8.1,
+            "disk_usage": 3.7,
+            "cpu_temp": 41.8,
+            "gpu_temp": 40.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 31.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:35:40.845767+01:00",
+            "cpu_usage": 0.9,
+            "cpu_usage_per_core": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
                 0.0,
                 0.0,
                 0.0,
@@ -991,15 +991,13 @@
                     "usage": 0
                 }
             ],
-            "nvme_temp": 34.9,
+            "nvme_temp": 31.9,
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:34:44.708407+01:00",
-            "cpu_usage": 0.0,
+            "timestamp": "2025-02-25T22:35:44.152623+01:00",
+            "cpu_usage": 0.1,
             "cpu_usage_per_core": [
-                0.0,
-                0.0,
                 0.0,
                 0.0,
                 0.0,
@@ -1009,11 +1007,13 @@
                 1.0,
                 0.0,
                 0.0,
+                0.0,
+                0.0,
                 0.0
             ],
             "memory_usage": 8.2,
             "disk_usage": 3.7,
-            "cpu_temp": 41.8,
+            "cpu_temp": 41.5,
             "gpu_temp": 40.0,
             "gpu_usage": [
                 {
@@ -1022,11 +1022,42 @@
                     "usage": 0
                 }
             ],
-            "nvme_temp": 34.9,
+            "nvme_temp": 33.9,
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:34:48.044742+01:00",
+            "timestamp": "2025-02-25T22:35:47.464877+01:00",
+            "cpu_usage": 0.2,
+            "cpu_usage_per_core": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                2.0,
+                0.0
+            ],
+            "memory_usage": 8.2,
+            "disk_usage": 3.7,
+            "cpu_temp": 41.5,
+            "gpu_temp": 40.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 33.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:35:50.758924+01:00",
             "cpu_usage": 0.2,
             "cpu_usage_per_core": [
                 1.0,
@@ -1035,69 +1066,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.0,
-                0.0,
                 1.0,
-                1.0,
-                0.0,
-                0.0
-            ],
-            "memory_usage": 8.2,
-            "disk_usage": 3.7,
-            "cpu_temp": 41.6,
-            "gpu_temp": 40.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 32.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:51.285191+01:00",
-            "cpu_usage": 0.3,
-            "cpu_usage_per_core": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "memory_usage": 8.2,
-            "disk_usage": 3.7,
-            "cpu_temp": 41.6,
-            "gpu_temp": 39.0,
-            "gpu_usage": [
-                {
-                    "index": 0,
-                    "name": "NVIDIA GeForce GTX 1650 Ti",
-                    "usage": 0
-                }
-            ],
-            "nvme_temp": 32.9,
-            "uptime": 1740172247.0
-        },
-        {
-            "timestamp": "2025-02-25T22:34:54.547973+01:00",
-            "cpu_usage": 0.3,
-            "cpu_usage_per_core": [
-                0.0,
-                0.0,
-                1.0,
-                0.0,
-                0.0,
-                1.0,
-                0.0,
                 0.0,
                 0.0,
                 0.0,
@@ -1119,20 +1088,20 @@
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:34:57.847014+01:00",
-            "cpu_usage": 0.2,
+            "timestamp": "2025-02-25T22:35:54.172109+01:00",
+            "cpu_usage": 0.1,
             "cpu_usage_per_core": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
                 1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
                 0.0
             ],
             "memory_usage": 8.2,
@@ -1146,29 +1115,60 @@
                     "usage": 0
                 }
             ],
-            "nvme_temp": 32.9,
+            "nvme_temp": 33.9,
             "uptime": 1740172247.0
         },
         {
-            "timestamp": "2025-02-25T22:35:01.094656+01:00",
-            "cpu_usage": 1.0,
+            "timestamp": "2025-02-25T22:35:57.508680+01:00",
+            "cpu_usage": 0.2,
             "cpu_usage_per_core": [
+                1.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0,
+                2.0,
+                1.0,
                 1.0,
                 0.0,
                 0.0,
                 0.0,
                 0.0,
-                0.0,
-                1.0,
                 0.0
             ],
             "memory_usage": 8.2,
             "disk_usage": 3.7,
-            "cpu_temp": 48.2,
+            "cpu_temp": 41.4,
+            "gpu_temp": 39.0,
+            "gpu_usage": [
+                {
+                    "index": 0,
+                    "name": "NVIDIA GeForce GTX 1650 Ti",
+                    "usage": 0
+                }
+            ],
+            "nvme_temp": 31.9,
+            "uptime": 1740172247.0
+        },
+        {
+            "timestamp": "2025-02-25T22:36:00.870251+01:00",
+            "cpu_usage": 0.9,
+            "cpu_usage_per_core": [
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "memory_usage": 8.2,
+            "disk_usage": 3.7,
+            "cpu_temp": 48.8,
             "gpu_temp": 40.0,
             "gpu_usage": [
                 {
@@ -1177,7 +1177,7 @@
                     "usage": 0
                 }
             ],
-            "nvme_temp": 32.9,
+            "nvme_temp": 33.9,
             "uptime": 1740172247.0
         }
     ]
