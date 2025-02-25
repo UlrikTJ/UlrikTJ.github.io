@@ -5,15 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Server Status</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@2.x/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.x/dist/chartjs-adapter-luxon.min.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .status { margin: 20px; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
-        .dropdown { margin-top: 10px; }
-	.graph-container {
+        body { 
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .status { 
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .dropdown {
+            margin-top: 10px;
+        }
+        .graph-container {
             width: 100%;
             max-width: 800px;
             margin: 20px auto;
+        }
+        .time-range-selector {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .time-range-selector button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background: #f0f0f0;
+            cursor: pointer;
+        }
+        .time-range-selector button:hover {
+            background: #e0e0e0;
+        }
+        .time-range-selector button.active {
+            background: #007bff;
+            color: white;
         }
     </style>
 </head>
@@ -35,7 +66,18 @@
         <p><strong>NVMe Temperature:</strong> <span id="nvme-temp">Loading...</span></p>
         <p><strong>Uptime:</strong> <span id="uptime">Loading...</span></p>
     </div>
-	    <div class="graph-container">
+
+    <div class="time-range-selector">
+        <button onclick="setTimeRange('minute')">Last Minute</button>
+        <button onclick="setTimeRange('hour')">Last Hour</button>
+        <button onclick="setTimeRange('day')">Last Day</button>
+        <button onclick="setTimeRange('week')">Last Week</button>
+        <button onclick="setTimeRange('month')">Last Month</button>
+        <button onclick="setTimeRange('6month')">Last 6 Months</button>
+        <button onclick="setTimeRange('year')">Last Year</button>
+    </div>
+
+    <div class="graph-container">
         <canvas id="cpuGraph"></canvas>
     </div>
     <div class="graph-container">
@@ -44,208 +86,272 @@
     <div class="graph-container">
         <canvas id="temperatureGraph"></canvas>
     </div>
-    <script>
-    let cpuChart, memoryChart, temperatureChart;
-    let currentDataIndex = 0;
-    let currentData = null;
 
-    function initializeCharts() {
-        const commonOptions = {
-            responsive: true,
-            animation: {
-                duration: 0
-            },
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: 'minute',
-                        displayFormats: {
-                            minute: 'HH:mm'
+    <script>
+        let cpuChart, memoryChart, temperatureChart;
+        let currentTimeRange = 'hour'; // default time range
+
+        function initializeCharts() {
+            const commonOptions = {
+                responsive: true,
+                animation: {
+                    duration: 0
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'minute',
+                            displayFormats: {
+                                second: 'HH:mm:ss',
+                                minute: 'HH:mm',
+                                hour: 'HH:mm',
+                                day: 'MMM d',
+                                month: 'MMM yyyy'
+                            },
+                            timezone: 'Europe/Copenhagen'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Time'
                         }
                     },
-                    title: {
-                        display: true,
-                        text: 'Time'
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Value'
+                        }
                     }
                 },
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Value'
+                plugins: {
+                    legend: {
+                        position: 'top'
                     }
                 }
-            },
-            plugins: {
-                legend: {
-                    position: 'top'
-                }
-            }
-        };
-        // CPU Chart
-        cpuChart = new Chart(document.getElementById('cpuGraph'), {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'CPU Usage (%)',
-                    borderColor: 'rgb(75, 192, 192)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    tension: 0.1,
-                    data: []
-                }]
-            },
-            options: {
-                ...commonOptions,
-                scales: {
-                    ...commonOptions.scales,
-                    y: {
-                        ...commonOptions.scales.y,
-                        max: 100
-                    }
-                }
-            }
-        });
+            };
 
-        // Memory Chart
-        memoryChart = new Chart(document.getElementById('memoryGraph'), {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Memory Usage (%)',
-                    borderColor: 'rgb(153, 102, 255)',
-                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                    tension: 0.1,
-                    data: []
-                }]
-            },
-            options: {
-                ...commonOptions,
-                scales: {
-                    ...commonOptions.scales,
-                    y: {
-                        ...commonOptions.scales.y,
-                        max: 100
-                    }
-                }
-            }
-        });
-
-        // Temperature Chart
-        temperatureChart = new Chart(document.getElementById('temperatureGraph'), {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [
-                    {
-                        label: 'CPU Temperature (°C)',
-                        borderColor: 'rgb(255, 99, 132)',
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            // CPU Chart
+            cpuChart = new Chart(document.getElementById('cpuGraph'), {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'CPU Usage (%)',
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         tension: 0.1,
                         data: []
-                    },
-                    {
-                        label: 'GPU Temperature (°C)',
-                        borderColor: 'rgb(54, 162, 235)',
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        tension: 0.1,
-                        data: []
-                    },
-                    {
-                        label: 'NVMe Temperature (°C)',
-                        borderColor: 'rgb(255, 206, 86)',
-                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                        tension: 0.1,
-                        data: []
-                    }
-                ]
-            },
-            options: {
-                ...commonOptions,
-                scales: {
-                    ...commonOptions.scales,
-                    y: {
-                        ...commonOptions.scales.y,
-                        max: 100
+                    }]
+                },
+                options: {
+                    ...commonOptions,
+                    scales: {
+                        ...commonOptions.scales,
+                        y: {
+                            ...commonOptions.scales.y,
+                            max: 100
+                        }
                     }
                 }
-            }
-        });
-    }
+            });
 
+            // Memory Chart
+            memoryChart = new Chart(document.getElementById('memoryGraph'), {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Memory Usage (%)',
+                        borderColor: 'rgb(153, 102, 255)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        tension: 0.1,
+                        data: []
+                    }]
+                },
+                options: {
+                    ...commonOptions,
+                    scales: {
+                        ...commonOptions.scales,
+                        y: {
+                            ...commonOptions.scales.y,
+                            max: 100
+                        }
+                    }
+                }
+            });
 
-    async function updateCharts() {
-    try {
-        const response = await fetch('data.json');
-        const data = await response.json();
-
-        // Update current stats with latest values from the current array
-        const latestData = data.current[data.current.length - 1];
-        
-        // Update all display values
-        document.getElementById('cpu-usage').textContent = `${latestData.cpu_usage.toFixed(2)}%`;
-        document.getElementById('memory-usage').textContent = `${latestData.memory_usage.toFixed(2)}%`;
-        document.getElementById('disk-usage').textContent = `${latestData.disk_usage.toFixed(2)}%`;
-        document.getElementById('cpu-temp').textContent = `${latestData.cpu_temp ? latestData.cpu_temp.toFixed(2) : 'N/A'}°C`;
-        document.getElementById('gpu-temp').textContent = `${latestData.gpu_temp ? latestData.gpu_temp.toFixed(2) : 'N/A'}°C`;
-        document.getElementById('nvme-temp').textContent = `${latestData.nvme_temp ? latestData.nvme_temp.toFixed(2) : 'N/A'}°C`;
-        document.getElementById('uptime').textContent = `${Math.floor((Date.now() / 1000 - latestData.uptime) / 3600)} hours`;
-
-        // Update GPU usage display
-        if (latestData.gpu_usage && latestData.gpu_usage.length > 0) {
-            const gpuInfo = latestData.gpu_usage[0];
-            document.getElementById('gpu-usage').textContent = `${gpuInfo.name}: ${gpuInfo.usage}%`;
+            // Temperature Chart
+            temperatureChart = new Chart(document.getElementById('temperatureGraph'), {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'CPU Temperature (°C)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            tension: 0.1,
+                            data: []
+                        },
+                        {
+                            label: 'GPU Temperature (°C)',
+                            borderColor: 'rgb(54, 162, 235)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            tension: 0.1,
+                            data: []
+                        },
+                        {
+                            label: 'NVMe Temperature (°C)',
+                            borderColor: 'rgb(255, 206, 86)',
+                            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                            tension: 0.1,
+                            data: []
+                        }
+                    ]
+                },
+                options: {
+                    ...commonOptions,
+                    scales: {
+                        ...commonOptions.scales,
+                        y: {
+                            ...commonOptions.scales.y,
+                            max: 100
+                        }
+                    }
+                }
+            });
         }
 
-        // Update core usage if visible
-        const coreUsage = document.getElementById('core-usage');
-        if (coreUsage.style.display !== 'none') {
-            coreUsage.innerHTML = latestData.cpu_usage_per_core.map((usage, index) => 
-                `<div>Core ${index}: ${usage.toFixed(1)}%</div>`
-            ).join('');
+        function setTimeRange(range) {
+            currentTimeRange = range;
+            document.querySelectorAll('.time-range-selector button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`button[onclick="setTimeRange('${range}')"]`).classList.add('active');
+            updateCharts();
         }
 
-        // Combine current and historical data for the charts
-        const allData = [...data.current];
+        function filterDataByTimeRange(data, range) {
+            const now = luxon.DateTime.now().setZone('Europe/Copenhagen');
+            let cutoff;
+            
+            switch(range) {
+                case 'minute':
+                    cutoff = now.minus({ minutes: 1 });
+                    break;
+                case 'hour':
+                    cutoff = now.minus({ hours: 1 });
+                    break;
+                case 'day':
+                    cutoff = now.minus({ days: 1 });
+                    break;
+                case 'week':
+                    cutoff = now.minus({ weeks: 1 });
+                    break;
+                case 'month':
+                    cutoff = now.minus({ months: 1 });
+                    break;
+                case '6month':
+                    cutoff = now.minus({ months: 6 });
+                    break;
+                case 'year':
+                    cutoff = now.minus({ years: 1 });
+                    break;
+                default:
+                    cutoff = now.minus({ hours: 1 });
+            }
 
-        // Sort data by timestamp
-        allData.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+            return data.filter(point => 
+                luxon.DateTime.fromISO(point.timestamp, { zone: 'Europe/Copenhagen' }) > cutoff
+            );
+        }
 
-        // Update CPU Chart
-        cpuChart.data.labels = allData.map(d => new Date(d.timestamp));
-        cpuChart.data.datasets[0].data = allData.map(d => d.cpu_usage);
-        cpuChart.update('none');
+        function updateChartOptions(chart, range) {
+            const timeUnit = range === 'minute' ? 'second' :
+                            range === 'hour' ? 'minute' :
+                            range === 'day' ? 'hour' :
+                            range === 'week' ? 'day' :
+                            'month';
 
-        // Update Memory Chart
-        memoryChart.data.labels = allData.map(d => new Date(d.timestamp));
-        memoryChart.data.datasets[0].data = allData.map(d => d.memory_usage);
-        memoryChart.update('none');
+            chart.options.scales.x.time.unit = timeUnit;
+        }
 
-        // Update Temperature Chart
-        temperatureChart.data.labels = allData.map(d => new Date(d.timestamp));
-        temperatureChart.data.datasets[0].data = allData.map(d => d.cpu_temp);
-        temperatureChart.data.datasets[1].data = allData.map(d => d.gpu_temp);
-        temperatureChart.data.datasets[2].data = allData.map(d => d.nvme_temp);
-        temperatureChart.update('none');
+        function updateCurrentStats(latestData) {
+            document.getElementById('cpu-usage').textContent = `${latestData.cpu_usage.toFixed(2)}%`;
+            document.getElementById('memory-usage').textContent = `${latestData.memory_usage.toFixed(2)}%`;
+            document.getElementById('disk-usage').textContent = `${latestData.disk_usage.toFixed(2)}%`;
+            document.getElementById('cpu-temp').textContent = `${latestData.cpu_temp ? latestData.cpu_temp.toFixed(2) : 'N/A'}°C`;
+            document.getElementById('gpu-temp').textContent = `${latestData.gpu_temp ? latestData.gpu_temp.toFixed(2) : 'N/A'}°C`;
+            document.getElementById('nvme-temp').textContent = `${latestData.nvme_temp ? latestData.nvme_temp.toFixed(2) : 'N/A'}°C`;
+            document.getElementById('uptime').textContent = `${Math.floor((Date.now() / 1000 - latestData.uptime) / 3600)} hours`;
 
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    }
-}
+            if (latestData.gpu_usage && latestData.gpu_usage.length > 0) {
+                const gpuInfo = latestData.gpu_usage[0];
+                document.getElementById('gpu-usage').textContent = `${gpuInfo.name}: ${gpuInfo.usage}%`;
+            }
 
-    // Initialize and start updates
-    initializeCharts();
-    updateCharts();
+            const coreUsage = document.getElementById('core-usage');
+            if (coreUsage.style.display !== 'none') {
+                coreUsage.innerHTML = latestData.cpu_usage_per_core.map((usage, index) => 
+                    `<div>Core ${index}: ${usage.toFixed(1)}%</div>`
+                ).join('');
+            }
+        }
 
-    // Update every 5 seconds
-    setInterval(updateCharts, 5000);
+        async function updateCharts() {
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                
+                const allData = [...data.historical];
+                const filteredData = filterDataByTimeRange(allData, currentTimeRange);
+                
+                filteredData.sort((a, b) => 
+                    luxon.DateTime.fromISO(a.timestamp).valueOf() - 
+                    luxon.DateTime.fromISO(b.timestamp).valueOf()
+                );
 
-    function toggleCores() {
-        const coreUsage = document.getElementById('core-usage');
-        coreUsage.style.display = coreUsage.style.display === 'none' ? 'block' : 'none';
-    }
+                updateChartOptions(cpuChart, currentTimeRange);
+                updateChartOptions(memoryChart, currentTimeRange);
+                updateChartOptions(temperatureChart, currentTimeRange);
+
+                const timestamps = filteredData.map(d => 
+                    luxon.DateTime.fromISO(d.timestamp, { zone: 'Europe/Copenhagen' }).toJSDate()
+                );
+
+                cpuChart.data.labels = timestamps;
+                cpuChart.data.datasets[0].data = filteredData.map(d => d.cpu_usage);
+                cpuChart.update('none');
+
+                memoryChart.data.labels = timestamps;
+                memoryChart.data.datasets[0].data = filteredData.map(d => d.memory_usage);
+                memoryChart.update('none');
+
+                temperatureChart.data.labels = timestamps;
+                temperatureChart.data.datasets[0].data = filteredData.map(d => d.cpu_temp);
+                temperatureChart.data.datasets[1].data = filteredData.map(d => d.gpu_temp);
+                temperatureChart.data.datasets[2].data = filteredData.map(d => d.nvme_temp);
+                temperatureChart.update('none');
+
+                if (filteredData.length > 0) {
+                    updateCurrentStats(filteredData[filteredData.length - 1]);
+                }
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function toggleCores() {
+            const coreUsage = document.getElementById('core-usage');
+            coreUsage.style.display = coreUsage.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Initialize and start updates
+        initializeCharts();
+        setTimeRange('hour'); // Set default time range
+        setInterval(updateCharts, 5000); // Update every 5 seconds
     </script>
-    </body>
+</body>
 </html>

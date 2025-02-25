@@ -3,6 +3,7 @@ import json
 import subprocess
 import time
 from datetime import datetime, timedelta
+import pytz
 
 def get_system_info():
     info = {
@@ -67,50 +68,55 @@ def get_gpu_usage():
         print("Error fetching GPU usage:", e)  # Debug print
         return None
 
+# At the top of your script, define the timezone
+copenhagen_tz = pytz.timezone('Europe/Copenhagen')
+
+# Then modify where you create the timestamp
 def collect_minute_data():
     data_points = []
     start_time = time.time()
     
-    # Collect data every second for 60 seconds
     while time.time() - start_time < 60:
-        current_time = datetime.now().isoformat()
+        # Get current time in Copenhagen timezone
+        current_time = datetime.now(copenhagen_tz).isoformat()
         data_points.append({
             "timestamp": current_time,
             **get_system_info()
         })
-        time.sleep(1)  # Wait 1 second between readings
+        time.sleep(1)
     
-    return data_points  # Return all data points instead of averages
+    return data_points
 
-def save_data(data_point):
+def save_data(data_points):
     try:
         with open('data.json', 'r') as f:
             stored_data = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         stored_data = {"current": [], "historical": []}
     
-    # Add new data point
-    current_time = datetime.now()
+    # Update current data
+    stored_data["current"] = data_points
     
-    # Keep only data points from the last hour
-    one_hour_ago = current_time - timedelta(hours=1)
+    # Add new points to historical data
+    for point in data_points:
+        stored_data["historical"].append(point)
+    
+    # Keep only last year of data
+    current_time = datetime.now(copenhagen_tz)
+    one_year_ago = current_time - timedelta(days=365)
+    
     stored_data["historical"] = [
-        point for point in stored_data["historical"] 
-        if datetime.fromisoformat(point["timestamp"]) > one_hour_ago
+        point for point in stored_data["historical"]
+        if datetime.fromisoformat(point["timestamp"]) > one_year_ago
     ]
     
-    # Add new point to historical data
-    stored_data["historical"].append(data_point)
-    
-    # Update current minute data
-    stored_data["current"] = [data_point]
-    
+    # Save the data
     with open('data.json', 'w') as f:
-        json.dump(stored_data, f)
-        
+        json.dump(stored_data, f, indent=4)
+
 if __name__ == "__main__":
-    # Collect new data points
     minute_data = collect_minute_data()
+    save_data(minute_data)
     
     try:
         with open('data.json', 'r') as f:
@@ -126,12 +132,12 @@ if __name__ == "__main__":
     
     # Keep only last hour of data
     current_time = datetime.now()
-    one_hour_ago = current_time - timedelta(hours=1)
+    one_day_ago = current_time - timedelta(hours=24)
     
     # Filter historical data to keep only last hour
     stored_data["historical"] = [
         point for point in stored_data["historical"]
-        if datetime.fromisoformat(point["timestamp"]) > one_hour_ago
+        if datetime.fromisoformat(point["timestamp"]) > one_day_ago
     ]
     
     # Save the data
