@@ -177,69 +177,96 @@
 
 
     async function updateCharts() {
-        try {
-            const response = await fetch('data.json');
-            const rawData = await response.json();
+    try {
+        const response = await fetch('data.json');
+        const data = await response.json();
+        
+        // Store the current data points
+        currentData = data.current;
+        currentDataIndex = 0;  // Reset index when new data arrives
+        
+        // Update current stats with latest values
+        const latestData = currentData[currentData.length - 1];
+        document.getElementById('cpu-usage').textContent = `${latestData.cpu_usage.toFixed(2)}%`;
+        document.getElementById('memory-usage').textContent = `${latestData.memory_usage.toFixed(2)}%`;
+        document.getElementById('disk-usage').textContent = `${latestData.disk_usage.toFixed(2)}%`;
+        document.getElementById('cpu-temp').textContent = `${latestData.cpu_temp ? latestData.cpu_temp.toFixed(2) : 'N/A'}°C`;
+        document.getElementById('gpu-temp').textContent = `${latestData.gpu_temp ? latestData.gpu_temp.toFixed(2) : 'N/A'}°C`;
+        document.getElementById('nvme-temp').textContent = `${latestData.nvme_temp ? latestData.nvme_temp.toFixed(2) : 'N/A'}°C`;
+        document.getElementById('uptime').textContent = `${Math.floor((Date.now() / 1000 - latestData.uptime) / 3600)} hours`;
 
-            // Store the full minute's data
-            currentData = rawData.data_points;
-            currentDataIndex = 0;  // Reset index when new data arrives
-
-            // Update current stats with latest values
-            const latestData = currentData[currentData.length - 1];
-            document.getElementById('cpu-usage').textContent = `${latestData.cpu_usage.toFixed(2)}%`;
-            document.getElementById('memory-usage').textContent = `${latestData.memory_usage.toFixed(2)}%`;
-            document.getElementById('disk-usage').textContent = `${latestData.disk_usage.toFixed(2)}%`;
-            document.getElementById('cpu-temp').textContent = `${latestData.cpu_temp ? latestData.cpu_temp.toFixed(2) : 'N/A'}°C`;
-            document.getElementById('gpu-temp').textContent = `${latestData.gpu_temp ? latestData.gpu_temp.toFixed(2) : 'N/A'}°C`;
-            document.getElementById('nvme-temp').textContent = `${latestData.nvme_temp ? latestData.nvme_temp.toFixed(2) : 'N/A'}°C`;
-            document.getElementById('uptime').textContent = `${Math.floor((Date.now() / 1000 - latestData.uptime) / 3600)} hours`;
-
-        } catch (error) {
-            console.error('Error fetching data:', error);
+        // Update GPU usage display
+        const gpuUsageElement = document.getElementById('gpu-usage');
+        if (latestData.gpu_usage && latestData.gpu_usage.length > 0) {
+            const gpuInfo = latestData.gpu_usage[0];
+            gpuUsageElement.textContent = `${gpuInfo.name}: ${gpuInfo.usage}%`;
+        } else {
+            gpuUsageElement.textContent = 'No GPU data available';
         }
+
+        // Update core usage if visible
+        const coreUsage = document.getElementById('core-usage');
+        if (coreUsage.style.display !== 'none') {
+            coreUsage.innerHTML = latestData.cpu_usage_per_core.map((usage, index) => 
+                `<div>Core ${index}: ${usage.toFixed(1)}%</div>`
+            ).join('');
+        }
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
     }
+}
 
-    function updateChartsWithNewPoint() {
-        if (!currentData || currentDataIndex >= currentData.length) return;
+function updateChartsWithNewPoint() {
+    if (!currentData || currentDataIndex >= currentData.length) return;
 
-        const point = currentData[currentDataIndex];
-        const timestamp = new Date(point.timestamp);
+    const point = currentData[currentDataIndex];
+    const timestamp = new Date(point.timestamp);
 
-        // Update CPU Chart
-        cpuChart.data.labels.push(timestamp);
-        cpuChart.data.datasets[0].data.push(point.cpu_usage);
-        if (cpuChart.data.labels.length > 60) {
-            cpuChart.data.labels.shift();
-            cpuChart.data.datasets[0].data.shift();
-        }
-        cpuChart.update('none');  // 'none' for better performance
-
-        // Update Memory Chart
-        memoryChart.data.labels.push(timestamp);
-        memoryChart.data.datasets[0].data.push(point.memory_usage);
-        if (memoryChart.data.labels.length > 60) {
-            memoryChart.data.labels.shift();
-            memoryChart.data.datasets[0].data.shift();
-        }
-        memoryChart.update('none');
-
-        // Update Temperature Chart
-        temperatureChart.data.labels.push(timestamp);
-        temperatureChart.data.datasets[0].data.push(point.cpu_temp);
-        temperatureChart.data.datasets[1].data.push(point.gpu_temp);
-        temperatureChart.data.datasets[2].data.push(point.nvme_temp);
-        if (temperatureChart.data.labels.length > 60) {
-            temperatureChart.data.labels.shift();
-            temperatureChart.data.datasets[0].data.shift();
-            temperatureChart.data.datasets[1].data.shift();
-            temperatureChart.data.datasets[2].data.shift();
-        }
-        temperatureChart.update('none');
-
-        currentDataIndex++;
+    // Update CPU Chart
+    cpuChart.data.labels.push(timestamp);
+    cpuChart.data.datasets[0].data.push(point.cpu_usage);
+    if (cpuChart.data.labels.length > 60) {
+        cpuChart.data.labels.shift();
+        cpuChart.data.datasets[0].data.shift();
     }
-    
+    cpuChart.update('none');
+
+    // Update Memory Chart
+    memoryChart.data.labels.push(timestamp);
+    memoryChart.data.datasets[0].data.push(point.memory_usage);
+    if (memoryChart.data.labels.length > 60) {
+        memoryChart.data.labels.shift();
+        memoryChart.data.datasets[0].data.shift();
+    }
+    memoryChart.update('none');
+
+    // Update Temperature Chart
+    temperatureChart.data.labels.push(timestamp);
+    temperatureChart.data.datasets[0].data.push(point.cpu_temp);
+    temperatureChart.data.datasets[1].data.push(point.gpu_temp);
+    temperatureChart.data.datasets[2].data.push(point.nvme_temp);
+    if (temperatureChart.data.labels.length > 60) {
+        temperatureChart.data.labels.shift();
+        temperatureChart.data.datasets[0].data.shift();
+        temperatureChart.data.datasets[1].data.shift();
+        temperatureChart.data.datasets[2].data.shift();
+    }
+    temperatureChart.update('none');
+
+    currentDataIndex++;
+}
+
+// Initialize and start updates
+initializeCharts();
+updateCharts();
+
+// Fetch new data every minute
+setInterval(updateCharts, 60000);
+
+// Update charts every 3 seconds with new point (adjust this value to control how fast the data is revealed)
+setInterval(updateChartsWithNewPoint, 3000);
+
     function toggleCores() {
         const coreUsage = document.getElementById('core-usage');
         coreUsage.style.display = coreUsage.style.display === 'none' ? 'block' : 'none';
