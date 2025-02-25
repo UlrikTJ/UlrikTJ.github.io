@@ -82,6 +82,32 @@ def collect_minute_data():
     
     return data_points  # Return all data points instead of averages
 
+def save_data(data_point):
+    try:
+        with open('data.json', 'r') as f:
+            stored_data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        stored_data = {"current": [], "historical": []}
+    
+    # Add new data point
+    current_time = datetime.now()
+    
+    # Keep only data points from the last hour
+    one_hour_ago = current_time - timedelta(hours=1)
+    stored_data["historical"] = [
+        point for point in stored_data["historical"] 
+        if datetime.fromisoformat(point["timestamp"]) > one_hour_ago
+    ]
+    
+    # Add new point to historical data
+    stored_data["historical"].append(data_point)
+    
+    # Update current minute data
+    stored_data["current"] = [data_point]
+    
+    with open('data.json', 'w') as f:
+        json.dump(stored_data, f)
+        
 # Modify your main script to save historical data
 if __name__ == "__main__":
     # Load existing historical data

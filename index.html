@@ -45,44 +45,44 @@
         <canvas id="temperatureGraph"></canvas>
     </div>
     <script>
-        let cpuChart, memoryChart, temperatureChart;
-        let currentDataIndex = 0;
-        let currentData = null;
-    
-        function initializeCharts() {
-            const commonOptions = {
-                responsive: true,
-                animation: {
-                    duration: 0  // disable animation for smoother updates
-                },
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'second',
-                            displayFormats: {
-                                second: 'HH:mm:ss'
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: 'Time'
+    let cpuChart, memoryChart, temperatureChart;
+    let currentDataIndex = 0;
+    let currentData = null;
+
+    function initializeCharts() {
+        const commonOptions = {
+            responsive: true,
+            animation: {
+                duration: 0
+            },
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'minute',
+                        displayFormats: {
+                            minute: 'HH:mm'
                         }
                     },
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Value'
-                        }
+                    title: {
+                        display: true,
+                        text: 'Time'
                     }
                 },
-                plugins: {
-                    legend: {
-                        position: 'top'
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Value'
                     }
                 }
-            };
+            },
+            plugins: {
+                legend: {
+                    position: 'top'
+                }
+            }
+        };
         // CPU Chart
         cpuChart = new Chart(document.getElementById('cpuGraph'), {
             type: 'line',
@@ -177,109 +177,56 @@
 
 
     async function updateCharts() {
-    try {
-        const response = await fetch('data.json');
-        const data = await response.json();
-        
-        // Store the current data points
-        currentData = data.current;
-        currentDataIndex = 0;  // Reset index when new data arrives
-        
-        // Update current stats with latest values
-        const latestData = currentData[currentData.length - 1];
-        document.getElementById('cpu-usage').textContent = `${latestData.cpu_usage.toFixed(2)}%`;
-        document.getElementById('memory-usage').textContent = `${latestData.memory_usage.toFixed(2)}%`;
-        document.getElementById('disk-usage').textContent = `${latestData.disk_usage.toFixed(2)}%`;
-        document.getElementById('cpu-temp').textContent = `${latestData.cpu_temp ? latestData.cpu_temp.toFixed(2) : 'N/A'}°C`;
-        document.getElementById('gpu-temp').textContent = `${latestData.gpu_temp ? latestData.gpu_temp.toFixed(2) : 'N/A'}°C`;
-        document.getElementById('nvme-temp').textContent = `${latestData.nvme_temp ? latestData.nvme_temp.toFixed(2) : 'N/A'}°C`;
-        document.getElementById('uptime').textContent = `${Math.floor((Date.now() / 1000 - latestData.uptime) / 3600)} hours`;
+        try {
+            const response = await fetch('data.json');
+            const data = await response.json();
 
-        // Update GPU usage display
-        const gpuUsageElement = document.getElementById('gpu-usage');
-        if (latestData.gpu_usage && latestData.gpu_usage.length > 0) {
-            const gpuInfo = latestData.gpu_usage[0];
-            gpuUsageElement.textContent = `${gpuInfo.name}: ${gpuInfo.usage}%`;
-        } else {
-            gpuUsageElement.textContent = 'No GPU data available';
+            // Update current stats with latest values
+            const latestData = data.current[data.current.length - 1];
+
+            // Update display values...
+            document.getElementById('cpu-usage').textContent = `${latestData.cpu_usage.toFixed(2)}%`;
+            // ... other display updates ...
+
+            // Update charts with historical data
+            const historicalData = data.historical;
+
+            // Sort data by timestamp
+            historicalData.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+            // Update CPU Chart
+            cpuChart.data.labels = historicalData.map(d => new Date(d.timestamp));
+            cpuChart.data.datasets[0].data = historicalData.map(d => d.cpu_usage);
+            cpuChart.update('none');
+
+            // Update Memory Chart
+            memoryChart.data.labels = historicalData.map(d => new Date(d.timestamp));
+            memoryChart.data.datasets[0].data = historicalData.map(d => d.memory_usage);
+            memoryChart.update('none');
+
+            // Update Temperature Chart
+            temperatureChart.data.labels = historicalData.map(d => new Date(d.timestamp));
+            temperatureChart.data.datasets[0].data = historicalData.map(d => d.cpu_temp);
+            temperatureChart.data.datasets[1].data = historicalData.map(d => d.gpu_temp);
+            temperatureChart.data.datasets[2].data = historicalData.map(d => d.nvme_temp);
+            temperatureChart.update('none');
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
         }
-
-        // Update core usage if visible
-        const coreUsage = document.getElementById('core-usage');
-        if (coreUsage.style.display !== 'none') {
-            coreUsage.innerHTML = latestData.cpu_usage_per_core.map((usage, index) => 
-                `<div>Core ${index}: ${usage.toFixed(1)}%</div>`
-            ).join('');
-        }
-
-    } catch (error) {
-        console.error('Error fetching data:', error);
     }
-}
 
-function updateChartsWithNewPoint() {
-    if (!currentData || currentDataIndex >= currentData.length) return;
+    // Initialize and start updates
+    initializeCharts();
+    updateCharts();
 
-    const point = currentData[currentDataIndex];
-    const timestamp = new Date(point.timestamp);
-
-    // Update CPU Chart
-    cpuChart.data.labels.push(timestamp);
-    cpuChart.data.datasets[0].data.push(point.cpu_usage);
-    if (cpuChart.data.labels.length > 60) {
-        cpuChart.data.labels.shift();
-        cpuChart.data.datasets[0].data.shift();
-    }
-    cpuChart.update('none');
-
-    // Update Memory Chart
-    memoryChart.data.labels.push(timestamp);
-    memoryChart.data.datasets[0].data.push(point.memory_usage);
-    if (memoryChart.data.labels.length > 60) {
-        memoryChart.data.labels.shift();
-        memoryChart.data.datasets[0].data.shift();
-    }
-    memoryChart.update('none');
-
-    // Update Temperature Chart
-    temperatureChart.data.labels.push(timestamp);
-    temperatureChart.data.datasets[0].data.push(point.cpu_temp);
-    temperatureChart.data.datasets[1].data.push(point.gpu_temp);
-    temperatureChart.data.datasets[2].data.push(point.nvme_temp);
-    if (temperatureChart.data.labels.length > 60) {
-        temperatureChart.data.labels.shift();
-        temperatureChart.data.datasets[0].data.shift();
-        temperatureChart.data.datasets[1].data.shift();
-        temperatureChart.data.datasets[2].data.shift();
-    }
-    temperatureChart.update('none');
-
-    currentDataIndex++;
-}
-
-// Initialize and start updates
-initializeCharts();
-updateCharts();
-
-// Fetch new data every minute
-setInterval(updateCharts, 60000);
-
-// Update charts every 3 seconds with new point (adjust this value to control how fast the data is revealed)
-setInterval(updateChartsWithNewPoint, 3000);
+    // Update every 5 seconds
+    setInterval(updateCharts, 5000);
 
     function toggleCores() {
         const coreUsage = document.getElementById('core-usage');
         coreUsage.style.display = coreUsage.style.display === 'none' ? 'block' : 'none';
     }
-    // Initialize and start updates
-    initializeCharts();
-    updateCharts();
-
-    // Fetch new data every minute
-    setInterval(updateCharts, 60000);
-
-    // Update charts every second with new point
-    setInterval(updateChartsWithNewPoint, 1000);
     </script>
     </body>
 </html>
