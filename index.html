@@ -177,12 +177,12 @@
             const data = await response.json();
             
             // Update current stats (your existing updateCurrentStats function)
-            document.getElementById('cpu-usage').textContent = `${data.current.cpu_usage}%`;
-            document.getElementById('memory-usage').textContent = `${data.current.memory_usage}%`;
-            document.getElementById('disk-usage').textContent = `${data.current.disk_usage}%`;
-            document.getElementById('cpu-temp').textContent = `${data.current.cpu_temp || 'N/A'}°C`;
-            document.getElementById('gpu-temp').textContent = `${data.current.gpu_temp || 'N/A'}°C`;
-            document.getElementById('nvme-temp').textContent = `${data.current.nvme_temp || 'N/A'}°C`;
+            document.getElementById('cpu-usage').textContent = `${data.current.cpu_usage.toFixed(2)}%`;
+            document.getElementById('memory-usage').textContent = `${data.current.memory_usage.toFixed(2)}%`;
+            document.getElementById('disk-usage').textContent = `${data.current.disk_usage.toFixed(2)}%`;
+            document.getElementById('cpu-temp').textContent = `${data.current.cpu_temp.toFixed(2) || 'N/A'}°C`;
+            document.getElementById('gpu-temp').textContent = `${data.current.gpu_temp.toFixed(2) || 'N/A'}°C`;
+            document.getElementById('nvme-temp').textContent = `${data.current.nvme_temp.toFixed(2) || 'N/A'}°C`;
             document.getElementById('uptime').textContent = `${Math.floor((Date.now() / 1000 - data.current.uptime) / 3600)} hours`;
 
             // Update charts with historical data
