@@ -97,9 +97,13 @@ def save_data(data_points):
     # Update current data
     stored_data["current"] = data_points
     
-    # Add new points to historical data
+    # Get existing historical data timestamps for comparison
+    existing_timestamps = {point["timestamp"] for point in stored_data["historical"]}
+    
+    # Add new points to historical data only if they don't already exist
     for point in data_points:
-        stored_data["historical"].append(point)
+        if point["timestamp"] not in existing_timestamps:
+            stored_data["historical"].append(point)
     
     # Keep only last year of data
     current_time = datetime.now(copenhagen_tz)
@@ -107,8 +111,13 @@ def save_data(data_points):
     
     stored_data["historical"] = [
         point for point in stored_data["historical"]
-        if datetime.fromisoformat(point["timestamp"]) > one_year_ago
+        if datetime.fromisoformat(point["timestamp"].replace("+01:00", "")) > one_year_ago
     ]
+    
+    # Sort historical data by timestamp
+    stored_data["historical"].sort(
+        key=lambda x: datetime.fromisoformat(x["timestamp"].replace("+01:00", ""))
+    )
     
     # Save the data
     with open('data.json', 'w') as f:
