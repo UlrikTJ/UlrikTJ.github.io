@@ -97,32 +97,32 @@ def save_data(data_points):
     # Update current data
     stored_data["current"] = data_points
     
-    # Get existing historical data timestamps for comparison
-    existing_timestamps = {point["timestamp"] for point in stored_data["historical"]}
-    
-    # Add new points to historical data only if they don't already exist
-    for point in data_points:
-        if point["timestamp"] not in existing_timestamps:
-            stored_data["historical"].append(point)
+    # Add new points to historical data
+    stored_data["historical"].extend(data_points)
     
     # Keep only last year of data
     current_time = datetime.now(copenhagen_tz)
     one_year_ago = current_time - timedelta(days=365)
     
-    stored_data["historical"] = [
-        point for point in stored_data["historical"]
-        if datetime.fromisoformat(point["timestamp"].replace("+01:00", "")) > one_year_ago
-    ]
-    
-    # Sort historical data by timestamp
-    stored_data["historical"].sort(
-        key=lambda x: datetime.fromisoformat(x["timestamp"].replace("+01:00", ""))
+    # Filter and sort historical data
+    stored_data["historical"] = sorted(
+        [
+            point for point in stored_data["historical"]
+            if datetime.fromisoformat(point["timestamp"].split('+')[0]) > one_year_ago
+        ],
+        key=lambda x: datetime.fromisoformat(x["timestamp"].split('+')[0])
     )
+    
+    # Optional: Limit the number of data points
+    max_points = 100000
+    if len(stored_data["historical"]) > max_points:
+        stored_data["historical"] = stored_data["historical"][-max_points:]
     
     # Save the data
     with open('data.json', 'w') as f:
         json.dump(stored_data, f, indent=4)
-
+    
 if __name__ == "__main__":
     minute_data = collect_minute_data()
     save_data(minute_data)
+    
