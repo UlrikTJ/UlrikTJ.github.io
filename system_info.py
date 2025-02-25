@@ -71,27 +71,16 @@ def collect_minute_data():
     data_points = []
     start_time = time.time()
     
-    # Collect data for 60 seconds
+    # Collect data every second for 60 seconds
     while time.time() - start_time < 60:
+        current_time = datetime.now().isoformat()
         data_points.append({
-            "timestamp": datetime.now().isoformat(),
+            "timestamp": current_time,
             **get_system_info()
         })
-        time.sleep(1)  # Sample every second
+        time.sleep(1)  # Wait 1 second between readings
     
-    # Calculate averages for the minute
-    minute_data = {
-        "timestamp": datetime.now().isoformat(),
-        "cpu_usage": sum(d["cpu_usage"] for d in data_points) / len(data_points),
-        "memory_usage": sum(d["memory_usage"] for d in data_points) / len(data_points),
-        "disk_usage": sum(d["disk_usage"] for d in data_points) / len(data_points),
-        "cpu_temp": sum(d["cpu_temp"] for d in data_points) / len(data_points) if data_points[0]["cpu_temp"] else None,
-        "gpu_temp": sum(d["gpu_temp"] for d in data_points) / len(data_points) if data_points[0]["gpu_temp"] else None,
-        "nvme_temp": sum(d["nvme_temp"] for d in data_points) / len(data_points) if data_points[0]["nvme_temp"] else None,
-        "uptime": data_points[-1]["uptime"]
-    }
-    
-    return minute_data
+    return data_points  # Return all data points instead of averages
 
 # Modify your main script to save historical data
 if __name__ == "__main__":
