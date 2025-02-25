@@ -1,6 +1,8 @@
 import psutil
 import json
 import subprocess
+import time
+from datetime import datetime
 
 def get_system_info():
     info = {
@@ -65,5 +67,49 @@ def get_gpu_usage():
         print("Error fetching GPU usage:", e)  # Debug print
         return None
 
+def collect_minute_data():
+    data_points = []
+    start_time = time.time()
+    
+    # Collect data for 60 seconds
+    while time.time() - start_time < 60:
+        data_points.append({
+            "timestamp": datetime.now().isoformat(),
+            **get_system_info()
+        })
+        time.sleep(1)  # Sample every second
+    
+    # Calculate averages for the minute
+    minute_data = {
+        "timestamp": datetime.now().isoformat(),
+        "cpu_usage": sum(d["cpu_usage"] for d in data_points) / len(data_points),
+        "memory_usage": sum(d["memory_usage"] for d in data_points) / len(data_points),
+        "disk_usage": sum(d["disk_usage"] for d in data_points) / len(data_points),
+        "cpu_temp": sum(d["cpu_temp"] for d in data_points) / len(data_points) if data_points[0]["cpu_temp"] else None,
+        "gpu_temp": sum(d["gpu_temp"] for d in data_points) / len(data_points) if data_points[0]["gpu_temp"] else None,
+        "nvme_temp": sum(d["nvme_temp"] for d in data_points) / len(data_points) if data_points[0]["nvme_temp"] else None,
+        "uptime": data_points[-1]["uptime"]
+    }
+    
+    return minute_data
+
+# Modify your main script to save historical data
 if __name__ == "__main__":
-    print(json.dumps(get_system_info()))
+    # Load existing historical data
+    try:
+        with open('historical_data.json', 'r') as f:
+            historical_data = json.load(f)
+    except FileNotFoundError:
+        historical_data = []
+    
+    # Add new minute data
+    minute_data = collect_minute_data()
+    historical_data.append(minute_data)
+    
+    # Keep only last 24 hours of data (1440 minutes)
+    if len(historical_data) > 1440:
+        historical_data = historical_data[-1440:]
+    
+    # Save both current and historical data
+    with open('data.json', 'w') as f:
+        json.dump({"current": minute_data, "historical": historical_data}, f)
