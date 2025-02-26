@@ -107,78 +107,147 @@ def collect_minute_data():
 
     return data_points
 
+#def save_data(new_points):
+#    log("\n=== Starting Save Operation ===")
+#
+#    all_points = []
+#
+#    # 1. Load existing data if any
+#    if os.path.exists('data.json'):
+#        # Read the file and handle empty content as "{}"
+#        try:
+#            with open('data.json', 'r') as f:
+#                file_content = f.read().strip()
+#                if file_content == "":
+#                    # It's empty, so treat as empty dict
+#                    existing_data = {}
+#                else:
+#                    existing_data = json.loads(file_content)
+#
+#            if 'historical' in existing_data:
+#                all_points.extend(existing_data['historical'])
+#                log(f"Loaded {len(existing_data['historical'])} existing points")
+#
+#        except json.JSONDecodeError as e:
+#            # If it's not empty but invalid JSON, abort
+#            log(f"Error loading existing data: {e}")
+#            log("Aborting to avoid overwriting old data.")
+#            return None
+#        except Exception as e:
+#            # If any other error, also abort
+#            log(f"Error loading existing data: {e}")
+#            log("Aborting to avoid overwriting old data.")
+#            return None
+#
+#    # 2. Add new points
+#    all_points.extend(new_points)
+#    log(f"Added {len(new_points)} new points")
+#
+#    # 3. Deduplicate by timestamp
+#    points_dict = {}
+#    for point in all_points:
+#        points_dict[point['timestamp']] = point
+#
+#    # 4. Sort
+#    unique_points = list(points_dict.values())
+#    unique_points.sort(key=lambda x: datetime.fromisoformat(x['timestamp']))
+#
+#    log(f"Total unique points: {len(unique_points)}")
+#
+#    # 5. Construct new data
+#    new_data = {
+#        'current': new_points,
+#        'historical': unique_points
+#    }
+#
+#    # 6. Write to temp file, then replace
+#    temp_file = 'data.json.tmp'
+#    try:
+#        with open(temp_file, 'w') as f:
+#            json.dump(new_data, f, indent=4)
+#        
+#        # Verify
+#        with open(temp_file, 'r') as f:
+#            verify_data = json.load(f)
+#            if len(verify_data['historical']) != len(unique_points):
+#                raise ValueError("Verification failed: mismatch in historical points.")
+#
+#        os.replace(temp_file, 'data.json')
+#
+#        log("\nSave successful:")
+#        log(f"- Historical points: {len(unique_points)}")
+#        if len(unique_points) > 0:
+#            log(f"- Time range: {unique_points[0]['timestamp']} "
+#                f"to {unique_points[-1]['timestamp']}")
+#        log(f"- File size: {os.path.getsize('data.json')/1024:.2f}KB")
+#
+#    except Exception as e:
+#        log(f"Error during save: {e}")
+#        if os.path.exists(temp_file):
+#            os.remove(temp_file)
+#        raise
+#
+#    return len(unique_points)
+
 def save_data(new_points):
     log("\n=== Starting Save Operation ===")
 
-    all_points = []
-
-    # 1. Load existing data if any
+    # 1) Load the old historical array if it exists
+    old_data = []
     if os.path.exists('data.json'):
-        # Read the file and handle empty content as "{}"
         try:
             with open('data.json', 'r') as f:
                 file_content = f.read().strip()
-                if file_content == "":
-                    # It's empty, so treat as empty dict
-                    existing_data = {}
-                else:
+                if file_content:
                     existing_data = json.loads(file_content)
+                else:
+                    existing_data = {}
 
             if 'historical' in existing_data:
-                all_points.extend(existing_data['historical'])
-                log(f"Loaded {len(existing_data['historical'])} existing points")
+                old_data = existing_data['historical']
+                log(f"Loaded {len(old_data)} existing points")
 
         except json.JSONDecodeError as e:
-            # If it's not empty but invalid JSON, abort
             log(f"Error loading existing data: {e}")
             log("Aborting to avoid overwriting old data.")
             return None
         except Exception as e:
-            # If any other error, also abort
             log(f"Error loading existing data: {e}")
             log("Aborting to avoid overwriting old data.")
             return None
 
-    # 2. Add new points
-    all_points.extend(new_points)
+    # 2) Just append the new points to the old data
+    old_data.extend(new_points)
     log(f"Added {len(new_points)} new points")
 
-    # 3. Deduplicate by timestamp
-    points_dict = {}
-    for point in all_points:
-        points_dict[point['timestamp']] = point
+    # 3) Sort everything by timestamp (no dedup)
+    old_data.sort(key=lambda x: datetime.fromisoformat(x['timestamp']))
+    log(f"Total unique points: {len(old_data)}")
 
-    # 4. Sort
-    unique_points = list(points_dict.values())
-    unique_points.sort(key=lambda x: datetime.fromisoformat(x['timestamp']))
-
-    log(f"Total unique points: {len(unique_points)}")
-
-    # 5. Construct new data
+    # 4) Build the final JSON
     new_data = {
-        'current': new_points,
-        'historical': unique_points
+        'current': new_points,      # last minute’s collection
+        'historical': old_data      # everything old + new
     }
 
-    # 6. Write to temp file, then replace
+    # 5) Write to a temp file, then replace original
     temp_file = 'data.json.tmp'
     try:
         with open(temp_file, 'w') as f:
             json.dump(new_data, f, indent=4)
-        
-        # Verify
+
+        # Verify the save
         with open(temp_file, 'r') as f:
             verify_data = json.load(f)
-            if len(verify_data['historical']) != len(unique_points):
-                raise ValueError("Verification failed: mismatch in historical points.")
+            if len(verify_data['historical']) != len(old_data):
+                raise ValueError("Verification failed: mismatch in historical points count.")
 
         os.replace(temp_file, 'data.json')
 
         log("\nSave successful:")
-        log(f"- Historical points: {len(unique_points)}")
-        if len(unique_points) > 0:
-            log(f"- Time range: {unique_points[0]['timestamp']} "
-                f"to {unique_points[-1]['timestamp']}")
+        log(f"- Historical points: {len(old_data)}")
+        if old_data:
+            log(f"- Time range: {old_data[0]['timestamp']} to {old_data[-1]['timestamp']}")
         log(f"- File size: {os.path.getsize('data.json')/1024:.2f}KB")
 
     except Exception as e:
@@ -187,7 +256,7 @@ def save_data(new_points):
             os.remove(temp_file)
         raise
 
-    return len(unique_points)
+    return len(old_data)
 
 def verify_file():
     try:
