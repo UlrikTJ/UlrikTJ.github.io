@@ -1,11 +1,20 @@
+#!/usr/bin/env python3
+
 import os
 import psutil
 import json
 import subprocess
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 import pytz
 import sys
+
+# Redirect all print statements to stderr so they never pollute data.json
+def log(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+
+# Define the timezone
+copenhagen_tz = pytz.timezone('Europe/Copenhagen')
 
 def get_system_info():
     info = {
@@ -63,26 +72,18 @@ def get_gpu_usage():
             gpu_info.append({
                 "index": int(index),
                 "name": name,
-                "usage": int(usage.replace(" %", ""))  # Remove '%' and convert to integer
+                "usage": int(usage.replace(" %", ""))  # Remove '%' -> integer
             })
         return gpu_info
     except Exception as e:
-        print("Error fetching GPU usage:", e)  # Debug print
+        log("Error fetching GPU usage:", e)
         return None
-
-# At the top of your script, define the timezone
-copenhagen_tz = pytz.timezone('Europe/Copenhagen')
-
-def debug_print(message, end='\n'):
-    timestamp = datetime.now().strftime('%H:%M:%S')
-    print(f"[{timestamp}] {message}", end=end, flush=True)
 
 def collect_minute_data():
     data_points = []
     start_time = time.time()
-    print("\n=== Starting Data Collection ===")
-    sys.stdout.flush()
-    
+    log("\n=== Starting Data Collection ===")
+
     try:
         while time.time() - start_time < 60:
             current_time = datetime.now(copenhagen_tz).isoformat()
@@ -93,119 +94,140 @@ def collect_minute_data():
             }
             data_points.append(point)
             
-            # Clear line and update status
-            sys.stdout.write('\r' + ' ' * 80)  # Clear the line
-            sys.stdout.write(f"\rCollecting... Points: {len(data_points):2d} | CPU: {info['cpu_usage']:4.1f}% | MEM: {info['memory_usage']:4.1f}%")
-            sys.stdout.flush()
+            # Update status on stderr
+            log(f"\rCollecting... Points: {len(data_points):2d} | "
+                f"CPU: {info['cpu_usage']:4.1f}% | "
+                f"MEM: {info['memory_usage']:4.1f}%", end="")
             
             time.sleep(1)
-        
-        print("\nCollection complete!")
-        sys.stdout.flush()
+
+        log("\nCollection complete!")
     except Exception as e:
-        print(f"\nError during collection: {e}")
-        sys.stdout.flush()
-    
+        log(f"\nError during collection: {e}")
+
     return data_points
 
-def save_data(data_points):
-    print("\n=== Starting Save Operation ===")
-    sys.stdout.flush()
-    
-    try:
-        # Load existing data or create new structure
-        if os.path.exists('data.json') and os.path.getsize('data.json') > 0:
-            with open('data.json', 'r') as f:
-                stored_data = json.load(f)
-                print(f"Loaded existing data with {len(stored_data['historical'])} historical points")
-        else:
-            stored_data = {"current": [], "historical": []}
-            print("No existing data found, creating new structure")
-        
-        # Update current data
-        stored_data["current"] = data_points
-        
-        # Append new points to historical data
-        stored_data["historical"].extend(data_points)
-        print(f"Added {len(data_points)} new points")
-        
-        # Remove duplicates based on timestamp
-        unique_points = {}
-        for point in stored_data["historical"]:
-            unique_points[point["timestamp"]] = point
-        stored_data["historical"] = list(unique_points.values())
-        
-        # Sort historical data by timestamp
-        stored_data["historical"].sort(
-            key=lambda x: datetime.fromisoformat(x["timestamp"])
-        )
-        
-        # Keep only last year of data
-        current_time = datetime.now(copenhagen_tz)
-        one_year_ago = current_time - timedelta(days=365)
-        
-        stored_data["historical"] = [
-            point for point in stored_data["historical"]
-            if datetime.fromisoformat(point["timestamp"]) > one_year_ago
-        ]
-        
-        print(f"Total historical points after cleanup: {len(stored_data['historical'])}")
-        
-        # Save the updated data
-        with open('data.json.tmp', 'w') as f:
-            json.dump(stored_data, f, indent=4)
-        
-        # Replace the original file
-        os.replace('data.json.tmp', 'data.json')
-        
-        file_size = os.path.getsize('data.json')
-        print(f"Save successful - File size: {file_size/1024:.2f}KB")
-        
-    except Exception as e:
-        print(f"Error during save operation: {e}")
-        import traceback
-        traceback.print_exc()
-    
-    print("=== Save Operation Complete ===\n")
-    sys.stdout.flush()
+def save_data(new_points):
+    log("\n=== Starting Save Operation ===")
 
-def verify_data():
+    all_points = []
+
+    # 1. Load existing data if any
+    if os.path.exists('data.json'):
+        # Read the file and handle empty content as "{}"
+        try:
+            with open('data.json', 'r') as f:
+                file_content = f.read().strip()
+                if file_content == "":
+                    # It's empty, so treat as empty dict
+                    existing_data = {}
+                else:
+                    existing_data = json.loads(file_content)
+
+            if 'historical' in existing_data:
+                all_points.extend(existing_data['historical'])
+                log(f"Loaded {len(existing_data['historical'])} existing points")
+
+        except json.JSONDecodeError as e:
+            # If it's not empty but invalid JSON, abort
+            log(f"Error loading existing data: {e}")
+            log("Aborting to avoid overwriting old data.")
+            return None
+        except Exception as e:
+            # If any other error, also abort
+            log(f"Error loading existing data: {e}")
+            log("Aborting to avoid overwriting old data.")
+            return None
+
+    # 2. Add new points
+    all_points.extend(new_points)
+    log(f"Added {len(new_points)} new points")
+
+    # 3. Deduplicate by timestamp
+    points_dict = {}
+    for point in all_points:
+        points_dict[point['timestamp']] = point
+
+    # 4. Sort
+    unique_points = list(points_dict.values())
+    unique_points.sort(key=lambda x: datetime.fromisoformat(x['timestamp']))
+
+    log(f"Total unique points: {len(unique_points)}")
+
+    # 5. Construct new data
+    new_data = {
+        'current': new_points,
+        'historical': unique_points
+    }
+
+    # 6. Write to temp file, then replace
+    temp_file = 'data.json.tmp'
+    try:
+        with open(temp_file, 'w') as f:
+            json.dump(new_data, f, indent=4)
+        
+        # Verify
+        with open(temp_file, 'r') as f:
+            verify_data = json.load(f)
+            if len(verify_data['historical']) != len(unique_points):
+                raise ValueError("Verification failed: mismatch in historical points.")
+
+        os.replace(temp_file, 'data.json')
+
+        log("\nSave successful:")
+        log(f"- Historical points: {len(unique_points)}")
+        if len(unique_points) > 0:
+            log(f"- Time range: {unique_points[0]['timestamp']} "
+                f"to {unique_points[-1]['timestamp']}")
+        log(f"- File size: {os.path.getsize('data.json')/1024:.2f}KB")
+
+    except Exception as e:
+        log(f"Error during save: {e}")
+        if os.path.exists(temp_file):
+            os.remove(temp_file)
+        raise
+
+    return len(unique_points)
+
+def verify_file():
     try:
         with open('data.json', 'r') as f:
-            data = json.load(f)
+            file_content = f.read().strip()
+            if not file_content:
+                log("Verification error: data.json is empty.")
+                return 0
+
+            data = json.loads(file_content)
+            hist_len = len(data.get('historical', []))
+            curr_len = len(data.get('current', []))
             
-        timestamps = set()
-        for point in data["historical"]:
-            timestamps.add(point["timestamp"])
-        
-        print("\n=== Data Verification ===")
-        print(f"Current points: {len(data['current'])}")
-        print(f"Historical points: {len(data['historical'])}")
-        print(f"Unique timestamps: {len(timestamps)}")
-        
-        # Show time range
-        if data["historical"]:
-            first_time = min(datetime.fromisoformat(p["timestamp"]) for p in data["historical"])
-            last_time = max(datetime.fromisoformat(p["timestamp"]) for p in data["historical"])
-            print(f"Time range: {first_time} to {last_time}")
-            print(f"Duration: {last_time - first_time}")
-        
+            if hist_len > 0:
+                first = data['historical'][0]['timestamp']
+                last = data['historical'][-1]['timestamp']
+                log(f"\nFile verification:")
+                log(f"- Historical points: {hist_len}")
+                log(f"- Current points: {curr_len}")
+                log(f"- Time range: {first} to {last}")
+            return hist_len
     except Exception as e:
-        print(f"Verification error: {e}")
+        log(f"Verification error: {e}")
+        return 0
 
 if __name__ == "__main__":
-    print("\n=== Script Started ===")
-    print(f"Working directory: {os.getcwd()}")
-    print(f"User ID: {os.getuid()}")
-    print(f"Directory permissions: {oct(os.stat('.').st_mode)[-3:]}")
-    sys.stdout.flush()
-    
+    log("\n=== Script Started ===")
+
+    # Check existing data
+    initial_count = verify_file()
+
+    # Collect data for one minute
     minute_data = collect_minute_data()
+
     if minute_data:
-        save_data(minute_data)
-        verify_data()
-    else:
-        print("No data collected!")
-    
-    print("=== Script Completed ===\n")
-    sys.stdout.flush()
+        final_count = save_data(minute_data)
+
+        # Re-verify if save_data succeeded
+        if final_count is not None:
+            verify_file()
+            log(f"\nPoints growth: {initial_count} -> {final_count}")
+
+    log("\n=== Script Completed ===")

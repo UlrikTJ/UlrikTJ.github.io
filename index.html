@@ -383,7 +383,7 @@
 
         async function updateCharts() {
             try {
-                const response = await fetch('data.json');
+                const response = await fetch('http://serverstatsapi.ddns.net:5000/data.json');
                 const data = await response.json();
                 
                 // Combine current and historical data
