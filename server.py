@@ -7,10 +7,6 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello():
-    return "Hello! This server is providing data.json."
-
-@app.route("/data.json", methods=["GET"])
-def serve_data():
     # Try reading data.json locally
     try:
         with open("data.json", "r") as f:
@@ -20,6 +16,11 @@ def serve_data():
     except json.JSONDecodeError:
         data = {"error": "data.json is invalid JSON."}
     return jsonify(data)
+
+# Keep the /data.json endpoint as a backup
+@app.route("/data.json", methods=["GET"])
+def serve_data():
+    return hello()
 
 if __name__ == "__main__":
     # Run on port 5000, accessible from any IP
