@@ -27,5 +27,4 @@ def create_app():
 if __name__ == "__main__":
     # Build and run the Flask app
     app = create_app()
-    context = ('/path/to/ssl/cert.pem', '/path/to/ssl/key.pem')  # Update with the path to your SSL certificate and key
-    app.run(host="0.0.0.0", port=5000, debug=True, ssl_context=context)
+    app.run(host="127.0.0.1", port=5000, debug=False)
