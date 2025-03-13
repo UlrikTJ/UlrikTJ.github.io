@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from flask import Flask, jsonify, request
-from flask_cors import CORS
 from system_info_db import init_db, produce_json_structure
 import time
 from functools import lru_cache
@@ -13,8 +12,6 @@ def create_app():
     # Create the Flask app
     app = Flask(__name__)
     
-    # Enable CORS for all routes
-    CORS(app)
 
     # Use the application context immediately after creating 'app'
     with app.app_context():

@@ -1,2 +1,25 @@
-data.json
+# Database files
 system_info.db
+*.db
+*.db-journal
+
+# Python virtual environments
+myflask_venv/
+venv/
+env/
+.env/
+
+# No-IP client
+noip-2.1.9-1/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Log files
+*.log
+
+# OS specific files
+.DS_Store
+Thumbs.db

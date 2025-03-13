@@ -7,7 +7,7 @@ import os
 import psutil
 import subprocess
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 import sys
 import json
@@ -203,23 +203,58 @@ def get_all_data():
             all_data.append(p)
     return all_data
 
-def produce_json_structure():
+def produce_json_structure(historical_limit=100, historical_offset=0):
     """
-    Return a dict with:
-      'current' = the last ~19 points
-      'historical' = everything in the DB
+    Produce the JSON data structure with current and historical data
     """
-    all_points = get_all_data()
-    if not all_points:
-        return {"current": [], "historical": []}
-
-    last_n = 19
-    historical = all_points
-    current = all_points[-last_n:]  # last 19 entries
-    return {
-        "current": current,
-        "historical": historical
-    }
+    try:
+        with sqlite3.connect(DB_FILE) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            
+            # Get current data (last minute)
+            try:
+                cutoff_timestamp = (datetime.now(copenhagen_tz) - 
+                                  timedelta(minutes=1)).isoformat()
+                
+                cursor.execute("SELECT * FROM points WHERE timestamp >= ?", (cutoff_timestamp,))
+                current_points = [dict(row) for row in cursor.fetchall()]
+            except Exception as e:
+                print(f"Error fetching current data: {e}")
+                current_points = []
+            
+            # Get historical data with pagination
+            try:
+                cursor.execute(
+                    "SELECT * FROM points WHERE timestamp < ? ORDER BY timestamp DESC LIMIT ? OFFSET ?", 
+                    (cutoff_timestamp, historical_limit, historical_offset)
+                )
+                historical_points = [dict(row) for row in cursor.fetchall()]
+            except Exception as e:
+                print(f"Error fetching historical data: {e}")
+                historical_points = []
+            
+            # Process the data (convert JSON strings to objects)
+            for point in current_points + historical_points:
+                try:
+                    if 'cpu_usage_per_core' in point and point['cpu_usage_per_core']:
+                        point['cpu_usage_per_core'] = json.loads(point['cpu_usage_per_core'])
+                    if 'gpu_usage' in point and point['gpu_usage']:
+                        point['gpu_usage'] = json.loads(point['gpu_usage'])
+                except Exception as e:
+                    print(f"Error processing point data: {e}")
+            
+            return {
+                'current': current_points,
+                'historical': historical_points
+            }
+    except Exception as e:
+        print(f"Error in produce_json_structure: {e}")
+        # Return empty data rather than causing error
+        return {
+            'current': [],
+            'historical': []
+        }
 
 if __name__ == "__main__":
     # Example usage: run this script to do one minute of collection & save to DB.
