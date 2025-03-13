@@ -382,29 +382,58 @@
         }
 
         async function updateCharts() {
-            try {
-                const response = await fetch('https://serverstatsapi.ddns.net/data.json');
-                const data = await response.json();
-                console.log('Fetched data:', data); // Add this line to log the fetched data
-                
-                // Combine current and historical data
-                const allData = [...data.current, ...data.historical];
-                
-                // Update each chart with its own time range
-                updateSingleChart(cpuChart, allData, timeRanges.cpu, 'cpu');
-                updateSingleChart(memoryChart, allData, timeRanges.memory, 'memory');
-                updateSingleChart(temperatureChart, allData, timeRanges.temp, 'temp');
-
-                // Update current stats
-                if (data.current.length > 0) {
-                    updateCurrentStats(data.current[data.current.length - 1]);
-                }
-
-            } catch (error) {
-                console.error('Error fetching data:', error);
+    try {
+        // Calculate how much data we need based on currently selected time ranges
+        let maxRange = 'hour'; // Default to hour
+        const ranges = [timeRanges.cpu, timeRanges.memory, timeRanges.temp];
+        
+        // Find the largest time range selected
+        for (const range of ranges) {
+            if (range === 'year') {
+                maxRange = 'year';
+                break;
+            } else if (range === '6month' && maxRange !== 'year') {
+                maxRange = '6month';
+            } else if (range === 'month' && maxRange !== 'year' && maxRange !== '6month') {
+                maxRange = 'month';
+            } else if (range === 'week' && maxRange !== 'year' && maxRange !== '6month' && maxRange !== 'month') {
+                maxRange = 'week';
+            } else if (range === 'day' && maxRange !== 'year' && maxRange !== '6month' && maxRange !== 'month' && maxRange !== 'week') {
+                maxRange = 'day';
             }
         }
+        
+        // Set limit based on the selected time range
+        let limit = 100; // Default for hour or less
+        if (maxRange === 'day') limit = 500;
+        else if (maxRange === 'week') limit = 1000;
+        else if (maxRange === 'month') limit = 2000;
+        else if (maxRange === '6month') limit = 5000; 
+        else if (maxRange === 'year') limit = 10000;
+        
+        // Make the API call with appropriate limit
+        const response = await fetch(`https://serverstatsapi.ddns.net/data.json?limit=${limit}`);
+        const data = await response.json();
+        console.log('Fetched data:', data);
+        
+        // Combine current and historical data
+        const allData = [...data.current, ...data.historical];
+        
+        // Update each chart with its own time range
+        updateSingleChart(cpuChart, allData, timeRanges.cpu, 'cpu');
+        updateSingleChart(memoryChart, allData, timeRanges.memory, 'memory');
+        updateSingleChart(temperatureChart, allData, timeRanges.temp, 'temp');
 
+        // Update current stats
+        if (data.current.length > 0) {
+            updateCurrentStats(data.current[data.current.length - 1]);
+        }
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+        
         function toggleCores() {
             const coreUsage = document.getElementById('core-usage');
             coreUsage.style.display = coreUsage.style.display === 'none' ? 'block' : 'none';
