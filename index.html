@@ -397,17 +397,19 @@
         function getLimitForRange(range) {
             switch (range) {
                 case 'minute':
-                    return 120;  // or smaller if you want
+                    return 500;  // or smaller if you want
                 case 'hour':
-                    return 120;  // 1-min intervals for 12 hours, for example
+                    return 500*60;  // 1-min intervals for 12 hours, for example
                 case 'day':
-                    return 2000; // might need up to 2000 data points
+                    return 500*60*24; // might need up to 2000 data points
                 case 'week':
-                    return 4000; // etc.
+                    return 500*60*24*7; // etc.
                 case 'month':
+                    return 500*60*24*7*4;
                 case '6month':
+                    return 500*60*24*7*4*6;
                 case 'year':
-                    return 5000; // max server limit
+                    return 500*60*24*7*4*6*2; // max server limit
                 default:
                     return 100;  // fallback
             }
