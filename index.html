@@ -394,33 +394,49 @@
             chart.update('none');
         }
 
+        function getLimitForRange(range) {
+            switch (range) {
+                case 'minute':
+                    return 120;  // or smaller if you want
+                case 'hour':
+                    return 720;  // 1-min intervals for 12 hours, for example
+                case 'day':
+                    return 2000; // might need up to 2000 data points
+                case 'week':
+                    return 4000; // etc.
+                case 'month':
+                case '6month':
+                case 'year':
+                    return 5000; // max server limit
+                default:
+                    return 100;  // fallback
+            }
+        }
+
         async function updateCharts() {
             try {
-                // Calculate needed data based on current view
-                let limit = 100;
-                // Set based on timeRanges...
+                // Decide the largest needed limit among the displayed charts
+                const maxLimit = Math.max(
+                    getLimitForRange(timeRanges.cpu),
+                    getLimitForRange(timeRanges.memory),
+                    getLimitForRange(timeRanges.temp)
+                );
 
-                // Use a longer timeout and add retry logic
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+                const timeoutId = setTimeout(() => controller.abort(), 30000);
 
                 try {
-                    const response = await fetch(`https://serverstatsapi.ddns.net/data.json?limit=${limit}`, {
-                        signal: controller.signal,
-                        cache: "no-store" // Force fresh content
-                    });
+                    const response = await fetch(
+                        `https://serverstatsapi.ddns.net/data.json?limit=${maxLimit}`,
+                        { signal: controller.signal, cache: "no-store" }
+                    );
 
                     clearTimeout(timeoutId);
-
-                    if (!response.ok) {
-                        throw new Error(`Server returned ${response.status}`);
-                    }
+                    if (!response.ok) throw new Error(`Server returned ${response.status}`);
 
                     const data = await response.json();
-                    console.log("Successfully fetched data");
-
-                    // Update charts with data
                     const allData = [...data.current, ...data.historical];
+
                     updateSingleChart(cpuChart, allData, timeRanges.cpu, 'cpu');
                     updateSingleChart(memoryChart, allData, timeRanges.memory, 'memory');
                     updateSingleChart(temperatureChart, allData, timeRanges.temp, 'temp');
@@ -428,11 +444,9 @@
                     if (data.current.length > 0) {
                         updateCurrentStats(data.current[data.current.length - 1]);
                     }
-
                 } catch (error) {
                     clearTimeout(timeoutId);
                     console.error("Error fetching data:", error);
-                    // Don't update UI on error - keep existing data
                 }
             } catch (error) {
                 console.error("Error in updateCharts:", error);
