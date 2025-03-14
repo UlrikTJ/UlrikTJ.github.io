@@ -399,7 +399,7 @@
                 case 'minute':
                     return 120;  // or smaller if you want
                 case 'hour':
-                    return 720;  // 1-min intervals for 12 hours, for example
+                    return 120;  // 1-min intervals for 12 hours, for example
                 case 'day':
                     return 2000; // might need up to 2000 data points
                 case 'week':
@@ -460,10 +460,10 @@
 
         // Initialize and start updates
         initializeCharts();
-        setTimeRange('hour', 'cpu');
-        setTimeRange('hour', 'memory');
-        setTimeRange('hour', 'temp');
-        setInterval(updateCharts, 10000);
+        //setTimeRange('hour', 'cpu');
+        //setTimeRange('hour', 'memory');
+        //setTimeRange('hour', 'temp');
+        setInterval(updateCharts, 370000);
     </script>
 </body>
 
