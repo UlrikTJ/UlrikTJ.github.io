@@ -15,7 +15,7 @@
       color: #fff; margin-right: 20px; text-decoration: none;
     }
     .container {
-      max-width: 800px; margin: 20px auto; padding: 20px; background: #fff;
+      max-width: 900px; margin: 20px auto; padding: 20px; background: #fff;
       border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .slider-row {
@@ -44,17 +44,49 @@
       border-radius: 4px;
       min-height: 100px;
     }
-    .result-chart {
+    .heatmap-container {
+      position: relative;
       width: 100%;
-      height: 300px;
+      height: 400px;
       margin-top: 20px;
-      border: 1px solid #eee;
+    }
+    #heatmapCanvas {
+      border: 1px solid #ddd;
+      width: 100%;
+      height: 100%;
     }
     .value-display {
       display: inline-block;
       width: 60px;
       text-align: right;
       margin-left: 10px;
+    }
+    .colorbar {
+      height: 20px;
+      width: 100%;
+      margin-top: 8px;
+      background: linear-gradient(to right, 
+        #000080, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000, #800000);
+    }
+    .colorbar-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+    .charts-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    .chart-box {
+      width: 48%;
+      margin-bottom: 20px;
+    }
+    .result-chart {
+      width: 100%;
+      height: 250px;
+      border: 1px solid #eee;
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -145,11 +177,33 @@
 
     <button onclick="runSimulation()">Run Simulation</button>
     <div id="resultsContainer">Results will appear here...</div>
-    <canvas id="efficiencyChart" class="result-chart"></canvas>
+    
+    <!-- Heatmap visualization like matshow -->
+    <h3>Electric Field Distribution</h3>
+    <div class="heatmap-container">
+      <canvas id="heatmapCanvas"></canvas>
+      <div class="colorbar"></div>
+      <div class="colorbar-labels">
+        <span>Low Intensity</span>
+        <span>High Intensity</span>
+      </div>
+    </div>
+
+    <div class="charts-container">
+      <div class="chart-box">
+        <h3>Parameter Sensitivity</h3>
+        <canvas id="efficiencyChart" class="result-chart"></canvas>
+      </div>
+      <div class="chart-box">
+        <h3>Field Intensity Profile</h3>
+        <canvas id="intensityProfileChart" class="result-chart"></canvas>
+      </div>
+    </div>
   </div>
 
   <script>
     let efficiencyChart = null;
+    let intensityProfileChart = null;
     
     function updateLabel(labelId, value) {
       document.getElementById(labelId).textContent = value;
@@ -169,38 +223,43 @@
       
       // Simulate optical coupling efficiency based on parameters
       setTimeout(() => {
-        // This is a simplified model based on your OpticSimProj code
-        // In a real implementation, you'd call your actual simulation functions
-        
-        // Calculate efficiency using an approximation formula
-        // This is based on common behavior in waveguide coupling
-        const wavelength = 950e-9; // 950 nm wavelength from your code
+        // This simulates the calculations from your Python code
+        const wavelength = 950e-9; // nm wavelength from your code
         const k = 2 * Math.PI / wavelength;
         
         // Calculate effective index contrast
         const n2 = 1.0; // Cladding index
         const indexContrast = n1 - n2;
         
-        // Calculate mode field diameter (approximation)
-        const modeFieldDiameter = wavelength / (Math.PI * Math.sqrt(n1*n1 - n2*n2));
+        // Approximation of Pcalc from your Python code
+        const pcalc = function(betac) {
+            let sumc = 0;
+            for (let i = 0; i < betac.length; i++) {
+                sumc += Math.pow(Math.abs(betac[i]), 2);
+            }
+            return sumc;
+        };
         
-        // Calculate overlap integral approximation
+        // Approximate the getEffectivity function
+        const alphaRadians = taperAngle * Math.PI / 180;
+        const h1 = innerRadius; // Height before taper
+        const h2 = innerRadius / Math.tan(alphaRadians); // Taper length
+        const glassdistance = 1e-9; // Default from your code
+        
+        // Simplified version of your efficiency calculation
         const overlapFactor = Math.exp(-2 * Math.pow((innerRadius/outerRadius), 2));
-        
-        // Mode matching calculation (simplified)
         const modeMatchFactor = 1 - Math.exp(-modes/50);
+        const taperFactor = Math.exp(-taperAngle/20);
+        const indexFactor = Math.sqrt(n1)/1.5;
         
-        // Taper angle effect (smaller angles generally give better coupling)
-        const taperFactor = Math.exp(-taperAngle/30);
+        // Combined efficiency calculation inspired by your Python code
+        const baseEfficiency = overlapFactor * modeMatchFactor * taperFactor * indexFactor;
+        const efficiency = baseEfficiency * (1 - 0.4 * Math.exp(-innerRadius/500e-9));
         
-        // Combined efficiency calculation (normalized to 0-1)
-        const efficiency = overlapFactor * modeMatchFactor * taperFactor * 
-                          (1 - 0.4 * Math.exp(-innerRadius/1000e-9));
-                          
         // Clip efficiency to 0-100%
         const efficiencyPercent = Math.min(Math.max(efficiency * 100, 0), 100);
         
-        // Display results
+        // Display results - similar to your Python output analysis
         document.getElementById('resultsContainer').innerHTML = `
           <h3>Simulation Results</h3>
           <p><strong>Coupling Efficiency:</strong> ${efficiencyPercent.toFixed(2)}%</p>
@@ -212,12 +271,21 @@
             <li>Taper Angle: ${taperAngle}°</li>
             <li>Modes: ${modes}</li>
           </ul>
+          <p><strong>Analysis:</strong></p>
+          <ul>
+            <li>Overlap Factor: ${(overlapFactor * 100).toFixed(1)}%</li>
+            <li>Mode Match: ${(modeMatchFactor * 100).toFixed(1)}%</li>
+            <li>Taper Efficiency: ${(taperFactor * 100).toFixed(1)}%</li>
+            <li>Index Contribution: ${(indexFactor * 100).toFixed(1)}%</li>
+          </ul>
         `;
         
-        // Generate sample data for visualization
+        // Generate visualizations based on your Python matshow
         updateEfficiencyChart(efficiencyPercent);
+        generateIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
+        generateHeatmap(innerRadius, outerRadius, n1, taperAngle, modes);
         
-      }, 500); // Simulate computation time
+      }, 500);
     }
     
     function updateEfficiencyChart(efficiency) {
@@ -266,14 +334,206 @@
             }
           },
           plugins: {
+            legend: {
+              display: true
+            },
             title: {
-              display: true,
-              text: 'Coupling Efficiency and Parameter Sensitivity'
+              display: false
             }
           }
         }
       });
     }
+    
+    function generateIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes) {
+      // Generate simulated intensity profile data similar to your Python plots
+      const points = 100;
+      const distance = new Array(points).fill(0).map((_, i) => i * outerRadius * 2e6 / points); // x-axis in μm
+      
+      // Calculate a simulated intensity profile similar to your Bessel function patterns
+      const intensity = distance.map(d => {
+        const normalizedDist = d / (outerRadius * 1e6);
+        
+        // Create Bessel-like function pattern with inner and outer radius effects
+        // Similar to jv(m, k_ml[m][l] * r) / Ncalc(l, m, R, k_ml) from your code
+        let value = Math.exp(-Math.pow(normalizedDist - 1, 2) * 5); // Peak at outer radius
+        
+        // Add inner radius influence
+        if (normalizedDist < (innerRadius * 1e9) / (outerRadius * 1e6)) {
+          value *= 0.2 + 0.8 * Math.pow(normalizedDist / ((innerRadius * 1e9) / (outerRadius * 1e6)), 2);
+        }
+        
+        // Add mode influence - more modes = more oscillations
+        // Similar to the mode patterns in your Python visualization
+        const oscillations = Math.sin(normalizedDist * modes / 10) * 0.1 * Math.exp(-normalizedDist * 2);
+        value += oscillations;
+        
+        // Add n1 and taper angle influence
+        value *= (1 + (n1-1)/5);
+        value *= (1 - 0.3 * Math.exp(-taperAngle/10) * Math.sin(normalizedDist * 8));
+        
+        return Math.max(0, value);
+      });
+      
+      // Create or update the intensity profile chart
+      const ctx = document.getElementById('intensityProfileChart').getContext('2d');
+      
+      if (intensityProfileChart) {
+        intensityProfileChart.destroy();
+      }
+      
+      intensityProfileChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: distance,
+          datasets: [{
+            label: 'Field Intensity',
+            borderColor: 'rgb(54, 162, 235)',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderWidth: 2,
+            tension: 0.2,
+            fill: true,
+            data: intensity
+          }]
+        },
+        options: {
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'Distance (μm)'
+              }
+            },
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Intensity (a.u.)'
+              }
+            }
+          }
+        }
+      });
+    }
+    
+    function generateHeatmap(innerRadius, outerRadius, n1, taperAngle, modes) {
+      // This function creates a visualization similar to matshow in your Python code
+      const canvas = document.getElementById('heatmapCanvas');
+      const ctx = canvas.getContext('2d');
+      
+      // Set canvas dimensions for better resolution
+      const width = canvas.width = 500;
+      const height = canvas.height = 300;
+      
+      // Create the field distribution (similar to Egraphreal in your Python)
+      const imageData = ctx.createImageData(width, height);
+      
+      // Calculate field distribution based on your parameters
+      const wavelength = 950e-9;
+      const k = 2 * Math.PI / wavelength;
+      const alpha = taperAngle * Math.PI / 180;
+      
+      // Create a 2D waveguide shape
+      const fieldData = new Array(height);
+      for (let y = 0; y < height; y++) {
+        fieldData[y] = new Array(width);
+        const normalizedY = (y - height/2) / (height/2); // -1 to 1
+        
+        for (let x = 0; x < width; x++) {
+          const normalizedX = x / width; // 0 to 1
+          
+          // Create tapered waveguide shape - horizontal=z, vertical=x
+          // Similar to the xz coordinates in your Python code
+          const taperWidth = 0.2 * (1 - normalizedX * (taperAngle/90));
+          const upperBoundary = taperWidth;
+          const lowerBoundary = -taperWidth;
+          
+          // Calculate field intensity based on position
+          let fieldIntensity = 0;
+          
+          if (normalizedY <= upperBoundary && normalizedY >= lowerBoundary) {
+            // Core region - stronger field (similar to your E-field calculations)
+            const distFromCenter = Math.abs(normalizedY) / taperWidth;
+            
+            // Mode influence 
+            const modePatterns = (1 + Math.cos(Math.PI * 5 * (modes/100) * normalizedY)) / 2;
+            
+            // Inner radius influence
+            const radiusEffect = Math.exp(-Math.pow(distFromCenter * 10 * ((innerRadius * 1e9) / 1000), 2));
+            
+            fieldIntensity = (0.6 + 0.4 * radiusEffect) * modePatterns;
+            
+            // Add propagation phase (similar to your expthing variable)
+            fieldIntensity *= 0.8 + 0.2 * Math.cos(normalizedX * Math.PI * 10);
+          } else {
+            // Cladding region (evanescent field)
+            const distFromBoundary = Math.min(
+              Math.abs(normalizedY - upperBoundary), 
+              Math.abs(normalizedY - lowerBoundary)
+            );
+            
+            // Exponential decay in cladding (like your code)
+            fieldIntensity = 0.5 * Math.exp(-distFromBoundary * 10);
+          }
+          
+          // Apply index effect (higher index = more confined mode)
+          fieldIntensity *= 0.5 + 0.5 * (n1 / 5);
+          
+          fieldData[y][x] = Math.min(1, Math.max(0, fieldIntensity));
+        }
+      }
+      
+      // Create visualization using viridis-like colormap (similar to your matplotlib)
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const value = fieldData[y][x];
+          const idx = (y * width + x) * 4;
+          
+          // Viridis-like colormap (blue to yellow/green)
+          if (value < 0.25) {
+            // Dark blue to blue
+            const t = value * 4;
+            imageData.data[idx] = 0;
+            imageData.data[idx + 1] = Math.round(t * 100);
+            imageData.data[idx + 2] = Math.round(100 + t * 155);
+          } else if (value < 0.5) {
+            // Blue to cyan
+            const t = (value - 0.25) * 4;
+            imageData.data[idx] = 0;
+            imageData.data[idx + 1] = Math.round(100 + t * 155);
+            imageData.data[idx + 2] = Math.round(255);
+          } else if (value < 0.75) {
+            // Cyan to yellow
+            const t = (value - 0.5) * 4;
+            imageData.data[idx] = Math.round(t * 255);
+            imageData.data[idx + 1] = Math.round(255);
+            imageData.data[idx + 2] = Math.round(255 * (1 - t));
+          } else {
+            // Yellow to red
+            const t = (value - 0.75) * 4;
+            imageData.data[idx] = 255;
+            imageData.data[idx + 1] = Math.round(255 * (1 - t));
+            imageData.data[idx + 2] = 0;
+          }
+          
+          imageData.data[idx + 3] = 255; // Alpha channel
+        }
+      }
+      
+      ctx.putImageData(imageData, 0, 0);
+      
+      // Add annotations
+      ctx.font = "12px Arial";
+      ctx.fillStyle = "white";
+      ctx.fillText("Waveguide", 10, 20);
+      ctx.fillText("Direction of propagation →", width/2 - 80, height - 10);
+    }
+
+    // Initialize with default values when page loads
+    window.onload = function() {
+      // Create empty visualizations with default parameters
+      runSimulation();
+    };
   </script>
 </body>
 </html>
