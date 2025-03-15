@@ -454,8 +454,9 @@
             <small id="vizStatus" style="margin-left: 10px;"></small>
           </div>
         </div>
-         <!--
+        
         <div class="charts-grid">
+          <!--
           <div class="visualization-container">
             <div class="viz-title">
               <i class="bi bi-bar-chart"></i> Parameter Sensitivity
@@ -480,7 +481,7 @@
 
   <script>
     // Define these variables at the top level of your script
-    let efficiencyChart = null;
+    //let efficiencyChart = null;
     let intensityProfileChart = null;
     
     // Define all your functions before window.onload
@@ -668,7 +669,7 @@
         }
         
         // Update charts
-        updateEfficiencyChart(data.efficiency, data.factors);
+        //updateEfficiencyChart(data.efficiency, data.factors);
         generateIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
       })
       .catch(error => {
@@ -687,7 +688,7 @@
         generateHeatmap(innerRadius, outerRadius, n1, taperAngle, modes);
       });
     }
-    
+    /*
     function updateEfficiencyChart(efficiency, factors) {
       const parameters = ['Outer Radius', 'Inner Radius', 'Core Index', 'Taper Angle'];
       const factorValues = [
@@ -750,7 +751,7 @@
         }
       });
     }
-    
+    */
     function generateIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes) {
       const points = 100;
       const distance = new Array(points).fill(0).map((_, i) => i * outerRadius * 2e6 / points); // x-axis in μm
