@@ -579,12 +579,18 @@
               <small id="vizStatus"></small>
             </div>
             <div class="viz-content">
-              <canvas id="heatmapCanvas" style="display: none;"></canvas>
-              <img id="simulationImage" style="display: block; width: 100%;" src="${data.heatmap}" />
-              <div class="colorbar mt-3"></div>
-              <div class="colorbar-labels">
-                <span>Low Intensity</span>
-                <span>High Intensity</span>
+              <div id="heatmapContainer">
+                <canvas id="heatmapCanvas" style="display: none; width: 100%;"></canvas>
+                <img id="simulationImage" 
+                     style="display: block; width: 100%;" 
+                     src="${data.heatmap}" 
+                     onerror="this.style.display='none'; document.getElementById('heatmapCanvas').style.display='block'; generateHeatmap(${innerRadius}, ${outerRadius}, ${n1}, ${taperAngle}, ${modes});"
+                />
+                <div class="colorbar mt-3"></div>
+                <div class="colorbar-labels">
+                  <span>Low Intensity</span>
+                  <span>High Intensity</span>
+                </div>
               </div>
             </div>
           </div>
@@ -641,6 +647,30 @@
             </div>
           </div>
         `;
+        
+        // Check if image exists/loaded
+        const img = document.getElementById('simulationImage');
+        if (img) {
+          console.log('Image src:', img.src);
+          console.log('Image complete:', img.complete);
+          
+          if (!img.complete) {
+            // If image is not loaded yet, add event listener
+            img.addEventListener('load', function() {
+              console.log('Image loaded successfully');
+            });
+            
+            img.addEventListener('error', function() {
+              console.log('Image failed to load, falling back to canvas');
+              img.style.display = 'none';
+              const canvas = document.getElementById('heatmapCanvas');
+              if (canvas) {
+                canvas.style.display = 'block';
+                generateHeatmap(innerRadius, outerRadius, n1, taperAngle, modes);
+              }
+            });
+          }
+        }
         
         // Update charts
         updateEfficiencyChart(data.efficiency, data.factors);
@@ -797,12 +827,27 @@
     }
     
     function generateHeatmap(innerRadius, outerRadius, n1, taperAngle, modes) {
+      console.log('generateHeatmap called with:', {innerRadius, outerRadius, n1, taperAngle, modes});
+      
       // Client-side fallback visualization
-      const canvas = document.getElementById('heatmapCanvas');
+      let canvas = document.getElementById('heatmapCanvas');
+      
+      if (!canvas) {
+        console.log('Canvas not found, creating new one');
+        const container = document.getElementById('heatmapContainer') || document.getElementById('resultsContainer');
+        canvas = document.createElement('canvas');
+        canvas.id = 'heatmapCanvas';
+        canvas.style.width = '100%';
+        canvas.style.borderRadius = '8px';
+        canvas.style.boxShadow = '0 2px 10px rgba(0,0,0,0.05)';
+        container.prepend(canvas);
+      }
+      
       const ctx = canvas.getContext('2d');
       
       canvas.width = 500;
       canvas.height = 300;
+      canvas.style.display = 'block';
       
       const imageData = ctx.createImageData(canvas.width, canvas.height);
       const width = canvas.width;
