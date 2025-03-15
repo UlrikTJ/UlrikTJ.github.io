@@ -581,12 +581,12 @@
             </div>
             <div class="viz-content">
               <div id="heatmapContainer">
-                <canvas id="heatmapCanvas" style="display: none; width: 100%;"></canvas>
                 <img id="simulationImage" 
                      style="display: block; width: 100%;" 
                      src="${data.heatmap}" 
-                     onerror="this.style.display='none'; document.getElementById('heatmapCanvas').style.display='block'; generateHeatmap(${innerRadius}, ${outerRadius}, ${n1}, ${taperAngle}, ${modes});"
+                     onerror="this.style.display='none'; document.getElementById('heatmapCanvas').style.display='block'; console.error('Image load error, falling back to canvas');"
                 />
+                <canvas id="heatmapCanvas" style="display: none; width: 100%;"></canvas>
               </div>
             </div>
           </div>
@@ -644,32 +644,9 @@
           </div>
         `;
         
-        // Check if image exists/loaded
-        const img = document.getElementById('simulationImage');
-        if (img) {
-          console.log('Image src:', img.src);
-          console.log('Image complete:', img.complete);
-          
-          if (!img.complete) {
-            // If image is not loaded yet, add event listener
-            img.addEventListener('load', function() {
-              console.log('Image loaded successfully');
-            });
-            
-            img.addEventListener('error', function() {
-              console.log('Image failed to load, falling back to canvas');
-              img.style.display = 'none';
-              const canvas = document.getElementById('heatmapCanvas');
-              if (canvas) {
-                canvas.style.display = 'block';
-                generateHeatmap(innerRadius, outerRadius, n1, taperAngle, modes);
-              }
-            });
-          }
-        }
+        // We directly use the Python-generated heatmap now, no need for client-side generation
         
-        // Update charts
-        //updateEfficiencyChart(data.efficiency, data.factors);
+        // Generate intensity profile using Python backend
         generateIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
       })
       .catch(error => {
@@ -685,7 +662,7 @@
         `;
         
         // Fall back to client-side visualization if the server call fails
-        generateHeatmap(innerRadius, outerRadius, n1, taperAngle, modes);
+        fallbackIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
       });
     }
     
