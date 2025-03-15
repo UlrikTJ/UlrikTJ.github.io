@@ -3,200 +3,491 @@
 <head>
   <meta charset="UTF-8" />
   <title>Optic Simulator</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
   <style>
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2c3e50;
+      --accent-color: #e74c3c;
+      --light-bg: #f8f9fa;
+      --dark-bg: #343a40;
+      --text-color: #2c3e50;
+    }
+    
     body {
-      margin: 0; padding: 0; font-family: sans-serif;
-      background-color: #f5f5f5;
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--light-bg);
+      color: var(--text-color);
     }
+    
     nav {
-      background-color: #343a40; padding: 10px;
+      background-color: var(--dark-bg);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
-    nav a {
-      color: #fff; margin-right: 20px; text-decoration: none;
+    
+    .navbar-brand {
+      font-weight: 600;
+      color: white;
     }
+    
+    .nav-link {
+      color: rgba(255,255,255,0.9) !important;
+      margin-right: 15px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .nav-link:hover {
+      color: white !important;
+      transform: translateY(-1px);
+    }
+    
     .container {
-      max-width: 900px; margin: 20px auto; padding: 20px; background: #fff;
-      border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
     }
-    .slider-row {
-      margin-bottom: 20px;
+    
+    .card {
+      border-radius: 12px;
+      border: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      margin-bottom: 30px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
-    .slider-row label {
-      display: block; margin-bottom: 6px; font-weight: bold;
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
     }
-    button {
-      background-color: #007bff;
+    
+    .card-header {
+      background-color: var(--primary-color);
       color: white;
       border: none;
-      border-radius: 4px;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 10px;
+      padding: 15px 20px;
+      font-weight: 600;
     }
-    button:hover {
-      background-color: #0056b3;
+    
+    .card-body {
+      padding: 20px;
     }
-    #resultsContainer {
-      margin-top: 20px;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      min-height: 100px;
-    }
-    .heatmap-container {
+    
+    .slider-row {
+      margin-bottom: 25px;
       position: relative;
-      width: 100%;
-      height: 400px;
-      margin-top: 20px;
     }
-    #heatmapCanvas {
-      border: 1px solid #ddd;
-      width: 100%;
-      height: 100%;
+    
+    .slider-row label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--secondary-color);
     }
+    
+    .slider-row .form-range {
+      height: 5px;
+    }
+    
+    .slider-row .form-range::-webkit-slider-thumb {
+      background: var(--primary-color);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    
     .value-display {
       display: inline-block;
       width: 60px;
-      text-align: right;
-      margin-left: 10px;
+      text-align: center;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 20px;
+      position: absolute;
+      right: 0;
+      top: 0;
+      font-size: 13px;
+      font-weight: 600;
     }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      padding: 10px 24px;
+      font-weight: 600;
+      border-radius: 30px;
+      box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+      transition: all 0.2s;
+    }
+    
+    .btn-primary:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+    }
+    
+    #resultsContainer {
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: white;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    }
+    
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 15px;
+      margin: 15px 0;
+    }
+    
+    .result-item {
+      padding: 15px;
+      border-radius: 8px;
+      background: var(--light-bg);
+      text-align: center;
+    }
+    
+    .result-item strong {
+      display: block;
+      font-size: 24px;
+      color: var(--primary-color);
+      margin-bottom: 5px;
+    }
+    
+    .result-item span {
+      font-size: 14px;
+      color: var(--secondary-color);
+    }
+    
+    .visualization-container {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      margin: 30px 0;
+    }
+    
+    .viz-title {
+      padding: 15px 20px;
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .viz-title i {
+      margin-right: 10px;
+    }
+    
+    .viz-content {
+      padding: 20px;
+    }
+    
+    #heatmapCanvas, #simulationImage {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
     .colorbar {
       height: 20px;
       width: 100%;
-      margin-top: 8px;
+      margin-top: 10px;
+      border-radius: 3px;
       background: linear-gradient(to right, 
         #000080, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000, #800000);
     }
+    
     .colorbar-labels {
       display: flex;
       justify-content: space-between;
       font-size: 12px;
+      margin-top: 5px;
+      color: var(--secondary-color);
     }
-    .charts-container {
+    
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+    
+    .parameter-group {
+      background-color: rgba(52, 152, 219, 0.05);
+      border-left: 4px solid var(--primary-color);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+    }
+    
+    .parameter-group h4 {
+      font-size: 16px;
+      margin-bottom: 15px;
+      color: var(--primary-color);
+    }
+    
+    .loading {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      margin-top: 20px;
+      justify-content: center;
+      align-items: center;
+      min-height: 200px;
     }
-    .chart-box {
-      width: 48%;
-      margin-bottom: 20px;
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(52, 152, 219, 0.3);
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
     }
-    .result-chart {
-      width: 100%;
-      height: 250px;
-      border: 1px solid #eee;
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <nav>
-    <a href="./index.html">Server Stats</a>
-    <a href="./simulator.html">Optic Simulator</a>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <span class="navbar-brand">Optical Physics Lab</span>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="./index.html">
+              <i class="bi bi-cpu"></i> Server Stats
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="./simulator.html">
+              <i class="bi bi-lightbulb"></i> Optic Simulator
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </nav>
+
   <div class="container">
-    <h1>Optic Simulator</h1>
-    <p>Adjust parameters to see how they affect the coupling efficiency of the waveguide.</p>
+    <h1 class="mb-4">Waveguide Coupling Simulator</h1>
+    <p class="lead mb-5">Simulate the optical field distribution and coupling efficiency in a tapered waveguide structure.</p>
 
-    <div class="slider-row">
-      <label for="radiusSlider">Outer Radius (μm):</label>
-      <input
-        type="range"
-        id="radiusSlider"
-        name="radiusSlider"
-        min="1"
-        max="20"
-        step="1"
-        value="10"
-        oninput="updateLabel('radiusLabel', this.value)"
-      />
-      <span id="radiusLabel" class="value-display">10</span>
-    </div>
-
-    <div class="slider-row">
-      <label for="innerRadiusSlider">Inner Radius (nm):</label>
-      <input
-        type="range"
-        id="innerRadiusSlider"
-        name="innerRadiusSlider"
-        min="100"
-        max="2000"
-        step="100"
-        value="1000"
-        oninput="updateLabel('innerRadiusLabel', this.value)"
-      />
-      <span id="innerRadiusLabel" class="value-display">1000</span>
-    </div>
-
-    <div class="slider-row">
-      <label for="n1Slider">Core Refractive Index (n1):</label>
-      <input
-        type="range"
-        id="n1Slider"
-        name="n1Slider"
-        min="1"
-        max="5"
-        step="0.1"
-        value="3.5"
-        oninput="updateLabel('n1Label', this.value)"
-      />
-      <span id="n1Label" class="value-display">3.5</span>
-    </div>
-
-    <div class="slider-row">
-      <label for="taperAngleSlider">Taper Angle (degrees):</label>
-      <input
-        type="range"
-        id="taperAngleSlider"
-        name="taperAngleSlider"
-        min="1"
-        max="90"
-        step="1"
-        value="5"
-        oninput="updateLabel('taperAngleLabel', this.value)"
-      />
-      <span id="taperAngleLabel" class="value-display">5</span>
-    </div>
-
-    <div class="slider-row">
-      <label for="modesSlider">Number of Modes:</label>
-      <input
-        type="range"
-        id="modesSlider"
-        name="modesSlider"
-        min="10"
-        max="200"
-        step="10"
-        value="100"
-        oninput="updateLabel('modesLabel', this.value)"
-      />
-      <span id="modesLabel" class="value-display">100</span>
-    </div>
-
-    <button onclick="runSimulation()">Run Simulation</button>
-    <div id="resultsContainer">Results will appear here...</div>
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-header">
+            <i class="bi bi-sliders"></i> Parameters
+          </div>
+          <div class="card-body">
+            <div class="parameter-group">
+              <h4><i class="bi bi-rulers"></i> Dimensions</h4>
+              
+              <div class="slider-row">
+                <label for="radiusSlider">Outer Radius (μm):</label>
+                <input
+                  type="range"
+                  class="form-range"
+                  id="radiusSlider"
+                  min="1"
+                  max="20"
+                  step="1"
+                  value="10"
+                  oninput="updateLabel('radiusLabel', this.value)"
+                />
+                <span id="radiusLabel" class="value-display">10</span>
+              </div>
     
-    <h3>Electric Field Distribution</h3>
-    <div class="heatmap-container">
-      <canvas id="heatmapCanvas"></canvas>
-      <img id="simulationImage" style="display: none; width: 100%; height: auto;" />
-      <div class="colorbar"></div>
-      <div class="colorbar-labels">
-        <span>Low Intensity</span>
-        <span>High Intensity</span>
+              <div class="slider-row">
+                <label for="innerRadiusSlider">Inner Radius (nm):</label>
+                <input
+                  type="range"
+                  class="form-range"
+                  id="innerRadiusSlider"
+                  min="100"
+                  max="2000"
+                  step="100"
+                  value="1000"
+                  oninput="updateLabel('innerRadiusLabel', this.value)"
+                />
+                <span id="innerRadiusLabel" class="value-display">1000</span>
+              </div>
+              
+              <div class="slider-row">
+                <label for="taperAngleSlider">Taper Angle (degrees):</label>
+                <input
+                  type="range"
+                  class="form-range"
+                  id="taperAngleSlider"
+                  min="1"
+                  max="90"
+                  step="1"
+                  value="5"
+                  oninput="updateLabel('taperAngleLabel', this.value)"
+                />
+                <span id="taperAngleLabel" class="value-display">5</span>
+              </div>
+            </div>
+            
+            <div class="parameter-group">
+              <h4><i class="bi bi-water"></i> Materials</h4>
+              
+              <div class="slider-row">
+                <label for="n1Slider">Core Refractive Index (n1):</label>
+                <input
+                  type="range"
+                  class="form-range"
+                  id="n1Slider"
+                  min="1"
+                  max="5"
+                  step="0.1"
+                  value="3.5"
+                  oninput="updateLabel('n1Label', this.value)"
+                />
+                <span id="n1Label" class="value-display">3.5</span>
+              </div>
+              
+              <div class="slider-row">
+                <label for="n2Slider">Cladding Index (n2):</label>
+                <input
+                  type="range"
+                  class="form-range"
+                  id="n2Slider"
+                  min="1.0"
+                  max="2.0"
+                  step="0.05"
+                  value="1.0"
+                  oninput="updateLabel('n2Label', this.value)"
+                />
+                <span id="n2Label" class="value-display">1.0</span>
+              </div>
+              
+              <div class="slider-row">
+                <label for="glassIndexSlider">Glass Index (nglass):</label>
+                <input
+                  type="range"
+                  class="form-range"
+                  id="glassIndexSlider"
+                  min="1.0"
+                  max="2.0"
+                  step="0.05"
+                  value="1.49"
+                  oninput="updateLabel('glassIndexLabel', this.value)"
+                />
+                <span id="glassIndexLabel" class="value-display">1.49</span>
+              </div>
+            </div>
+            
+            <div class="parameter-group">
+              <h4><i class="bi bi-grid-1x2"></i> Simulation Settings</h4>
+              
+              <div class="slider-row">
+                <label for="modesSlider">Number of Modes:</label>
+                <input
+                  type="range"
+                  class="form-range"
+                  id="modesSlider"
+                  min="10"
+                  max="150"
+                  step="10"
+                  value="100"
+                  oninput="updateLabel('modesLabel', this.value)"
+                />
+                <span id="modesLabel" class="value-display">100</span>
+              </div>
+              
+              <div class="slider-row">
+                <label for="glassDistanceSlider">Glass Distance (nm):</label>
+                <input
+                  type="range"
+                  class="form-range"
+                  id="glassDistanceSlider"
+                  min="1"
+                  max="100"
+                  step="1"
+                  value="1"
+                  oninput="updateLabel('glassDistanceLabel', this.value)"
+                />
+                <span id="glassDistanceLabel" class="value-display">1</span>
+              </div>
+              
+              <div class="slider-row">
+                <label for="wavelengthSlider">Wavelength (nm):</label>
+                <input
+                  type="range"
+                  class="form-range"
+                  id="wavelengthSlider"
+                  min="800"
+                  max="1600"
+                  step="10"
+                  value="950"
+                  oninput="updateLabel('wavelengthLabel', this.value)"
+                />
+                <span id="wavelengthLabel" class="value-display">950</span>
+              </div>
+            </div>
+    
+            <button onclick="runSimulation()" class="btn btn-primary w-100 mt-3">
+              <i class="bi bi-play-fill"></i> Run Simulation
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+      
+      <div class="col-lg-8">
+        <div id="resultsContainer" class="mb-4">
+          <h3>Set your parameters and run the simulation</h3>
+          <p>Adjust the sliders on the left to configure your waveguide structure, then click "Run Simulation" to see results.</p>
+        </div>
+        
+        <div class="visualization-container">
+          <div class="viz-title">
+            <span><i class="bi bi-hdd-stack"></i> Electric Field Distribution</span>
+            <small id="vizStatus"></small>
+          </div>
+          <div class="viz-content">
+            <canvas id="heatmapCanvas" style="display: none;"></canvas>
+            <img id="simulationImage" style="display: none; width: 100%;" />
+            <div id="loadingViz" class="loading">
+              <div class="loading-spinner"></div>
+            </div>
+            <div class="colorbar mt-3"></div>
+            <div class="colorbar-labels">
+              <span>Low Intensity</span>
+              <span>High Intensity</span>
+            </div>
+          </div>
+        </div>
 
-    <div class="charts-container">
-      <div class="chart-box">
-        <h3>Parameter Sensitivity</h3>
-        <canvas id="efficiencyChart" class="result-chart"></canvas>
-      </div>
-      <div class="chart-box">
-        <h3>Field Intensity Profile</h3>
-        <canvas id="intensityProfileChart" class="result-chart"></canvas>
+        <div class="charts-grid">
+          <div class="visualization-container">
+            <div class="viz-title">
+              <i class="bi bi-bar-chart"></i> Parameter Sensitivity
+            </div>
+            <div class="viz-content">
+              <canvas id="efficiencyChart"></canvas>
+            </div>
+          </div>
+          
+          <div class="visualization-container">
+            <div class="viz-title">
+              <i class="bi bi-graph-up"></i> Field Intensity Profile
+            </div>
+            <div class="viz-content">
+              <canvas id="intensityProfileChart"></canvas>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -209,18 +500,37 @@
       document.getElementById(labelId).textContent = value;
     }
     
-    function runSimulation() {
-      // Get parameter values
-      const outerRadius = parseFloat(document.getElementById('radiusSlider').value) * 1e-6; // Convert to meters
-      const innerRadius = parseFloat(document.getElementById('innerRadiusSlider').value) * 1e-9; // Convert to meters
-      const n1 = parseFloat(document.getElementById('n1Slider').value);
-      const taperAngle = parseFloat(document.getElementById('taperAngleSlider').value);
-      const modes = parseInt(document.getElementById('modesSlider').value);
-      
-      // Show loading state
-      document.getElementById('resultsContainer').innerHTML = "<p>Running simulation...</p>";
+    function showLoading() {
+      document.getElementById('loadingViz').style.display = 'flex';
       document.getElementById('heatmapCanvas').style.display = 'none';
       document.getElementById('simulationImage').style.display = 'none';
+      document.getElementById('vizStatus').textContent = 'Calculating...';
+    }
+    
+    function hideLoading() {
+      document.getElementById('loadingViz').style.display = 'none';
+      document.getElementById('vizStatus').textContent = '';
+    }
+    
+    function runSimulation() {
+      // Get parameter values from all sliders
+      const outerRadius = parseFloat(document.getElementById('radiusSlider').value) * 1e-6; // μm to meters
+      const innerRadius = parseFloat(document.getElementById('innerRadiusSlider').value) * 1e-9; // nm to meters
+      const n1 = parseFloat(document.getElementById('n1Slider').value);
+      const n2 = parseFloat(document.getElementById('n2Slider').value);
+      const glassIndex = parseFloat(document.getElementById('glassIndexSlider').value);
+      const taperAngle = parseFloat(document.getElementById('taperAngleSlider').value);
+      const modes = parseInt(document.getElementById('modesSlider').value);
+      const glassDistance = parseFloat(document.getElementById('glassDistanceSlider').value) * 1e-9; // nm to meters
+      const wavelength = parseFloat(document.getElementById('wavelengthSlider').value) * 1e-9; // nm to meters
+      
+      // Show loading state
+      document.getElementById('resultsContainer').innerHTML = `
+        <div class="loading">
+          <div class="loading-spinner"></div>
+        </div>
+      `;
+      showLoading();
       
       // Call the server-side simulation
       fetch('https://serverstatsapi.ddns.net/simulate', {
@@ -229,11 +539,15 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          outerRadius: outerRadius,
-          innerRadius: innerRadius,
-          n1: n1,
-          taperAngle: taperAngle,
-          modes: modes
+          outerRadius,
+          innerRadius,
+          n1,
+          n2,
+          glassIndex,
+          taperAngle,
+          modes,
+          glassDistance,
+          wavelength
         })
       })
       .then(response => {
@@ -243,25 +557,72 @@
         return response.json();
       })
       .then(data => {
-        // Display the results
+        hideLoading();
+        
+        // Display the results in a more modern layout
         document.getElementById('resultsContainer').innerHTML = `
-          <h3>Simulation Results</h3>
-          <p><strong>Coupling Efficiency:</strong> ${data.efficiency.toFixed(2)}%</p>
-          <p><strong>Parameters:</strong></p>
-          <ul>
-            <li>Outer Radius: ${(outerRadius*1e6).toFixed(1)} μm</li>
-            <li>Inner Radius: ${(innerRadius*1e9).toFixed(0)} nm</li>
-            <li>Core Index (n1): ${n1}</li>
-            <li>Taper Angle: ${taperAngle}°</li>
-            <li>Modes: ${modes}</li>
-          </ul>
-          <p><strong>Analysis:</strong></p>
-          <ul>
-            <li>Overlap Factor: ${data.factors.overlapFactor.toFixed(1)}%</li>
-            <li>Mode Match: ${data.factors.modeMatchFactor.toFixed(1)}%</li>
-            <li>Taper Efficiency: ${data.factors.taperFactor.toFixed(1)}%</li>
-            <li>Index Contribution: ${data.factors.indexFactor.toFixed(1)}%</li>
-          </ul>
+          <h3 class="mb-3">Simulation Results</h3>
+          
+          <div class="result-item" style="background: ${getEfficiencyColor(data.efficiency)}">
+            <strong>${data.efficiency.toFixed(1)}%</strong>
+            <span>Coupling Efficiency</span>
+          </div>
+          
+          <h5 class="mt-4 mb-3">Parameter Analysis</h5>
+          <div class="results-grid">
+            <div class="result-item">
+              <strong>${data.factors.overlapFactor.toFixed(1)}%</strong>
+              <span>Overlap Factor</span>
+            </div>
+            <div class="result-item">
+              <strong>${data.factors.modeMatchFactor.toFixed(1)}%</strong>
+              <span>Mode Match</span>
+            </div>
+            <div class="result-item">
+              <strong>${data.factors.taperFactor.toFixed(1)}%</strong>
+              <span>Taper Efficiency</span>
+            </div>
+            <div class="result-item">
+              <strong>${data.factors.indexFactor.toFixed(1)}%</strong>
+              <span>Index Contribution</span>
+            </div>
+          </div>
+          
+          <h5 class="mt-4 mb-3">Configuration</h5>
+          <div class="row">
+            <div class="col-md-6">
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Outer Radius
+                  <span class="badge bg-primary rounded-pill">${(outerRadius*1e6).toFixed(1)} μm</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Inner Radius
+                  <span class="badge bg-primary rounded-pill">${(innerRadius*1e9).toFixed(0)} nm</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Taper Angle
+                  <span class="badge bg-primary rounded-pill">${taperAngle}°</span>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Core Index (n1)
+                  <span class="badge bg-primary rounded-pill">${n1.toFixed(2)}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Modes
+                  <span class="badge bg-primary rounded-pill">${modes}</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  Wavelength
+                  <span class="badge bg-primary rounded-pill">${(wavelength*1e9).toFixed(0)} nm</span>
+                </li>
+              </ul>
+            </div>
+          </div>
         `;
         
         // Show python-generated image
@@ -269,27 +630,42 @@
         document.getElementById('simulationImage').src = data.heatmap;
         document.getElementById('simulationImage').style.display = 'block';
         
-        // Update charts (we can still keep these)
-        updateEfficiencyChart(data.efficiency);
+        // Update charts
+        updateEfficiencyChart(data.efficiency, data.factors);
         generateIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
       })
       .catch(error => {
+        hideLoading();
         console.error('Error:', error);
-        document.getElementById('resultsContainer').innerHTML = `<p>Error running simulation: ${error.message}</p>`;
+        document.getElementById('resultsContainer').innerHTML = `
+          <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Simulation Error</h4>
+            <p>${error.message}</p>
+            <hr>
+            <p class="mb-0">Try adjusting your parameters or check server connectivity.</p>
+          </div>
+        `;
+        
         // Fall back to client-side visualization if the server call fails
         generateHeatmap(innerRadius, outerRadius, n1, taperAngle, modes);
       });
     }
     
-    function updateEfficiencyChart(efficiency) {
-      // Generate data for the chart
+    function getEfficiencyColor(efficiency) {
+      if (efficiency > 80) return 'rgba(46, 204, 113, 0.15)'; // Green
+      if (efficiency > 50) return 'rgba(52, 152, 219, 0.15)'; // Blue
+      if (efficiency > 30) return 'rgba(241, 196, 15, 0.15)'; // Yellow
+      return 'rgba(231, 76, 60, 0.15)'; // Red
+    }
+    
+    function updateEfficiencyChart(efficiency, factors) {
       const parameters = ['Outer Radius', 'Inner Radius', 'Core Index', 'Taper Angle', 'Modes'];
-      const sensitivity = [
-        efficiency * 0.8 * Math.random() + 0.2 * efficiency,
-        efficiency * 0.7 * Math.random() + 0.3 * efficiency,
-        efficiency * 0.9 * Math.random() + 0.1 * efficiency,
-        efficiency * 0.6 * Math.random() + 0.4 * efficiency,
-        efficiency * 0.75 * Math.random() + 0.25 * efficiency
+      const factorValues = [
+        factors.overlapFactor,
+        factors.modeMatchFactor, 
+        factors.indexFactor,
+        factors.taperFactor,
+        Math.min(factors.modeMatchFactor, factors.overlapFactor)
       ];
       
       // Create or update the chart
@@ -304,31 +680,39 @@
         data: {
           labels: parameters,
           datasets: [{
-            label: 'Parameter Sensitivity (%)',
-            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-            borderColor: 'rgba(54, 162, 235, 1)',
+            label: 'Parameter Contribution (%)',
+            backgroundColor: 'rgba(52, 152, 219, 0.7)',
+            borderColor: 'rgba(52, 152, 219, 1)',
             borderWidth: 1,
-            data: sensitivity
+            data: factorValues
           }, {
             type: 'line',
             label: 'Coupling Efficiency (%)',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(231, 76, 60, 0.2)',
+            borderColor: 'rgba(231, 76, 60, 1)',
             borderWidth: 2,
+            pointBackgroundColor: 'rgba(231, 76, 60, 1)',
             fill: false,
             data: Array(parameters.length).fill(efficiency)
           }]
         },
         options: {
+          responsive: true,
+          maintainAspectRatio: false,
           scales: {
             y: {
               beginAtZero: true,
-              max: 100
+              max: 100,
+              title: {
+                display: true,
+                text: 'Percentage (%)'
+              }
             }
           },
           plugins: {
             legend: {
-              display: true
+              display: true,
+              position: 'top'
             },
             title: {
               display: false
@@ -339,36 +723,33 @@
     }
     
     function generateIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes) {
-      // Generate simulated intensity profile data similar to your Python plots
       const points = 100;
       const distance = new Array(points).fill(0).map((_, i) => i * outerRadius * 2e6 / points); // x-axis in μm
       
-      // Calculate a simulated intensity profile similar to your Bessel function patterns
+      // Calculate intensity profile (similar to your Python code)
       const intensity = distance.map(d => {
         const normalizedDist = d / (outerRadius * 1e6);
         
-        // Create Bessel-like function pattern with inner and outer radius effects
-        // Similar to jv(m, k_ml[m][l] * r) / Ncalc(l, m, R, k_ml) from your code
-        let value = Math.exp(-Math.pow(normalizedDist - 1, 2) * 5); // Peak at outer radius
+        // Bessel-like function pattern
+        let value = Math.exp(-Math.pow(normalizedDist - 1, 2) * 5);
         
-        // Add inner radius influence
+        // Inner radius influence
         if (normalizedDist < (innerRadius * 1e9) / (outerRadius * 1e6)) {
           value *= 0.2 + 0.8 * Math.pow(normalizedDist / ((innerRadius * 1e9) / (outerRadius * 1e6)), 2);
         }
         
-        // Add mode influence - more modes = more oscillations
-        // Similar to the mode patterns in your Python visualization
+        // Mode influence
         const oscillations = Math.sin(normalizedDist * modes / 10) * 0.1 * Math.exp(-normalizedDist * 2);
         value += oscillations;
         
-        // Add n1 and taper angle influence
+        // n1 and taper angle influence
         value *= (1 + (n1-1)/5);
         value *= (1 - 0.3 * Math.exp(-taperAngle/10) * Math.sin(normalizedDist * 8));
         
         return Math.max(0, value);
       });
       
-      // Create or update the intensity profile chart
+      // Create or update chart
       const ctx = document.getElementById('intensityProfileChart').getContext('2d');
       
       if (intensityProfileChart) {
@@ -381,15 +762,17 @@
           labels: distance,
           datasets: [{
             label: 'Field Intensity',
-            borderColor: 'rgb(54, 162, 235)',
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            borderColor: 'rgb(52, 152, 219)',
+            backgroundColor: 'rgba(52, 152, 219, 0.2)',
             borderWidth: 2,
-            tension: 0.2,
+            tension: 0.3,
             fill: true,
             data: intensity
           }]
         },
         options: {
+          responsive: true,
+          maintainAspectRatio: false,
           scales: {
             x: {
               title: {
@@ -410,123 +793,117 @@
     }
     
     function generateHeatmap(innerRadius, outerRadius, n1, taperAngle, modes) {
-      // This function creates a visualization similar to matshow in your Python code
-      const canvas = document.getElementById('heatmapCanvas');
-      const ctx = canvas.getContext('2d');
+  // Client-side fallback visualization
+  const canvas = document.getElementById('heatmapCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  canvas.width = 500;
+  canvas.height = 300;
+  
+  const imageData = ctx.createImageData(canvas.width, canvas.height);
+  const width = canvas.width;
+  const height = canvas.height;
+  
+  // Generate visualization similar to your Python code
+  const fieldData = new Array(height);
+  for (let y = 0; y < height; y++) {
+    fieldData[y] = new Array(width);
+    const normalizedY = (y - height/2) / (height/2);
+    
+    for (let x = 0; x < width; x++) {
+      const normalizedX = x / width;
       
-      // Set canvas dimensions for better resolution
-      const width = canvas.width = 500;
-      const height = canvas.height = 300;
+      // Create tapered waveguide shape
+      const taperWidth = 0.2 * (1 - normalizedX * (taperAngle/90));
+      const upperBoundary = taperWidth;
+      const lowerBoundary = -taperWidth;
       
-      // Create the field distribution (similar to Egraphreal in your Python)
-      const imageData = ctx.createImageData(width, height);
+      let fieldIntensity = 0;
       
-      // Calculate field distribution based on your parameters
-      const wavelength = 950e-9;
-      const k = 2 * Math.PI / wavelength;
-      const alpha = taperAngle * Math.PI / 180;
-      
-      // Create a 2D waveguide shape
-      const fieldData = new Array(height);
-      for (let y = 0; y < height; y++) {
-        fieldData[y] = new Array(width);
-        const normalizedY = (y - height/2) / (height/2); // -1 to 1
+      if (normalizedY <= upperBoundary && normalizedY >= lowerBoundary) {
+        // Core region
+        const distFromCenter = Math.abs(normalizedY) / taperWidth;
+        const modePatterns = (1 + Math.cos(Math.PI * 5 * (modes/100) * normalizedY)) / 2;
+        const radiusEffect = Math.exp(-Math.pow(distFromCenter * 10 * ((innerRadius * 1e9) / 1000), 2));
         
-        for (let x = 0; x < width; x++) {
-          const normalizedX = x / width; // 0 to 1
-          
-          // Create tapered waveguide shape - horizontal=z, vertical=x
-          // Similar to the xz coordinates in your Python code
-          const taperWidth = 0.2 * (1 - normalizedX * (taperAngle/90));
-          const upperBoundary = taperWidth;
-          const lowerBoundary = -taperWidth;
-          
-          // Calculate field intensity based on position
-          let fieldIntensity = 0;
-          
-          if (normalizedY <= upperBoundary && normalizedY >= lowerBoundary) {
-            // Core region - stronger field (similar to your E-field calculations)
-            const distFromCenter = Math.abs(normalizedY) / taperWidth;
-            
-            // Mode influence 
-            const modePatterns = (1 + Math.cos(Math.PI * 5 * (modes/100) * normalizedY)) / 2;
-            
-            // Inner radius influence
-            const radiusEffect = Math.exp(-Math.pow(distFromCenter * 10 * ((innerRadius * 1e9) / 1000), 2));
-            
-            fieldIntensity = (0.6 + 0.4 * radiusEffect) * modePatterns;
-            
-            // Add propagation phase (similar to your expthing variable)
-            fieldIntensity *= 0.8 + 0.2 * Math.cos(normalizedX * Math.PI * 10);
-          } else {
-            // Cladding region (evanescent field)
-            const distFromBoundary = Math.min(
-              Math.abs(normalizedY - upperBoundary), 
-              Math.abs(normalizedY - lowerBoundary)
-            );
-            
-            // Exponential decay in cladding (like your code)
-            fieldIntensity = 0.5 * Math.exp(-distFromBoundary * 10);
-          }
-          
-          // Apply index effect (higher index = more confined mode)
-          fieldIntensity *= 0.5 + 0.5 * (n1 / 5);
-          
-          fieldData[y][x] = Math.min(1, Math.max(0, fieldIntensity));
-        }
+        fieldIntensity = (0.6 + 0.4 * radiusEffect) * modePatterns;
+        
+        // Add propagation phase
+        fieldIntensity *= 0.8 + 0.2 * Math.cos(normalizedX * Math.PI * 10);
+      } else {
+        // Cladding region (evanescent field)
+        const distFromBoundary = Math.min(
+          Math.abs(normalizedY - upperBoundary), 
+          Math.abs(normalizedY - lowerBoundary)
+        );
+        
+        // Exponential decay in cladding
+        fieldIntensity = 0.5 * Math.exp(-distFromBoundary * 10);
       }
       
-      // Create visualization using viridis-like colormap (similar to your matplotlib)
-      for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-          const value = fieldData[y][x];
-          const idx = (y * width + x) * 4;
-          
-          // Viridis-like colormap (blue to yellow/green)
-          if (value < 0.25) {
-            // Dark blue to blue
-            const t = value * 4;
-            imageData.data[idx] = 0;
-            imageData.data[idx + 1] = Math.round(t * 100);
-            imageData.data[idx + 2] = Math.round(100 + t * 155);
-          } else if (value < 0.5) {
-            // Blue to cyan
-            const t = (value - 0.25) * 4;
-            imageData.data[idx] = 0;
-            imageData.data[idx + 1] = Math.round(100 + t * 155);
-            imageData.data[idx + 2] = Math.round(255);
-          } else if (value < 0.75) {
-            // Cyan to yellow
-            const t = (value - 0.5) * 4;
-            imageData.data[idx] = Math.round(t * 255);
-            imageData.data[idx + 1] = Math.round(255);
-            imageData.data[idx + 2] = Math.round(255 * (1 - t));
-          } else {
-            // Yellow to red
-            const t = (value - 0.75) * 4;
-            imageData.data[idx] = 255;
-            imageData.data[idx + 1] = Math.round(255 * (1 - t));
-            imageData.data[idx + 2] = 0;
-          }
-          
-          imageData.data[idx + 3] = 255; // Alpha channel
-        }
-      }
+      // Apply index effect (higher index = more confined mode)
+      fieldIntensity *= 0.5 + 0.5 * (n1 / 5);
       
-      ctx.putImageData(imageData, 0, 0);
-      
-      // Add annotations
-      ctx.font = "12px Arial";
-      ctx.fillStyle = "white";
-      ctx.fillText("Waveguide", 10, 20);
-      ctx.fillText("Direction of propagation →", width/2 - 80, height - 10);
+      fieldData[y][x] = Math.min(1, Math.max(0, fieldIntensity));
     }
+  }
+  
+  // Create visualization using viridis-like colormap
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const value = fieldData[y][x];
+      const idx = (y * width + x) * 4;
+      
+      // Viridis-like colormap (blue to yellow/green)
+      if (value < 0.25) {
+        // Dark blue to blue
+        const t = value * 4;
+        imageData.data[idx] = 0;
+        imageData.data[idx + 1] = Math.round(t * 100);
+        imageData.data[idx + 2] = Math.round(100 + t * 155);
+      } else if (value < 0.5) {
+        // Blue to cyan
+        const t = (value - 0.25) * 4;
+        imageData.data[idx] = 0;
+        imageData.data[idx + 1] = Math.round(100 + t * 155);
+        imageData.data[idx + 2] = Math.round(255);
+      } else if (value < 0.75) {
+        // Cyan to yellow
+        const t = (value - 0.5) * 4;
+        imageData.data[idx] = Math.round(t * 255);
+        imageData.data[idx + 1] = Math.round(255);
+        imageData.data[idx + 2] = Math.round(255 * (1 - t));
+      } else {
+        // Yellow to red
+        const t = (value - 0.75) * 4;
+        imageData.data[idx] = 255;
+        imageData.data[idx + 1] = Math.round(255 * (1 - t));
+        imageData.data[idx + 2] = 0;
+      }
+      
+      imageData.data[idx + 3] = 255; // Alpha channel
+    }
+  }
+  
+  ctx.putImageData(imageData, 0, 0);
+  canvas.style.display = 'block';
+  
+  // Add annotations
+  ctx.font = "12px Arial";
+  ctx.fillStyle = "white";
+  ctx.fillText("Waveguide", 10, 20);
+  ctx.fillText("Direction of propagation →", width/2 - 80, height - 10);
+}
 
-    // Initialize with default values when page loads
-    window.onload = function() {
-      // Create empty visualizations with default parameters
-      runSimulation();
-    };
-  </script>
-</body>
-</html>
+// Initialize the page when loaded
+window.onload = function() {
+  // Hide loading visualization initially
+  document.getElementById('loadingViz').style.display = 'none';
+  
+  // Set up button active states for time ranges
+  document.querySelectorAll('.time-range-selector button').forEach((btn, index) => {
+    if (index === 1) { // Default to hour view (second button)
+      btn.classList.add('active');
+    }
+  });
+};
