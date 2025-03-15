@@ -450,25 +450,6 @@
           <p>Adjust the sliders on the left to configure your waveguide structure, then click "Run Simulation" to see results.</p>
         </div>
         
-        <div class="visualization-container">
-          <div class="viz-title">
-            <span><i class="bi bi-hdd-stack"></i> Electric Field Distribution</span>
-            <small id="vizStatus"></small>
-          </div>
-          <div class="viz-content">
-            <canvas id="heatmapCanvas" style="display: none;"></canvas>
-            <img id="simulationImage" style="display: none; width: 100%;" />
-            <div id="loadingViz" class="loading">
-              <div class="loading-spinner"></div>
-            </div>
-            <div class="colorbar mt-3"></div>
-            <div class="colorbar-labels">
-              <span>Low Intensity</span>
-              <span>High Intensity</span>
-            </div>
-          </div>
-        </div>
-
         <div class="charts-grid">
           <div class="visualization-container">
             <div class="viz-title">
@@ -577,6 +558,22 @@
             <span>Coupling Efficiency</span>
           </div>
           
+          <div class="visualization-container mt-4">
+            <div class="viz-title">
+              <span><i class="bi bi-hdd-stack"></i> Electric Field Distribution</span>
+              <small id="vizStatus"></small>
+            </div>
+            <div class="viz-content">
+              <canvas id="heatmapCanvas" style="display: none;"></canvas>
+              <img id="simulationImage" style="display: block; width: 100%;" src="${data.heatmap}" />
+              <div class="colorbar mt-3"></div>
+              <div class="colorbar-labels">
+                <span>Low Intensity</span>
+                <span>High Intensity</span>
+              </div>
+            </div>
+          </div>
+          
           <h5 class="mt-4 mb-3">Parameter Analysis</h5>
           <div class="results-grid">
             <div class="result-item">
@@ -590,10 +587,6 @@
             <div class="result-item">
               <strong>${data.factors.taperFactor.toFixed(1)}%</strong>
               <span>Taper Efficiency</span>
-            </div>
-            <div class="result-item">
-              <strong>${data.factors.indexFactor.toFixed(1)}%</strong>
-              <span>Index Contribution</span>
             </div>
           </div>
           
@@ -634,10 +627,8 @@
           </div>
         `;
         
-        // Show python-generated image
-        document.getElementById('heatmapCanvas').style.display = 'none';
-        document.getElementById('simulationImage').src = data.heatmap;
-        document.getElementById('simulationImage').style.display = 'block';
+        // Remove the original visualization container as we've moved it
+        document.querySelector('.visualization-container:not(.charts-grid .visualization-container)').style.display = 'none';
         
         // Update charts
         updateEfficiencyChart(data.efficiency, data.factors);
@@ -661,11 +652,10 @@
     }
     
     function updateEfficiencyChart(efficiency, factors) {
-      const parameters = ['Outer Radius', 'Inner Radius', 'Core Index', 'Taper Angle', 'Modes'];
+      const parameters = ['Outer Radius', 'Inner Radius', 'Core Index', 'Taper Angle'];
       const factorValues = [
         factors.overlapFactor,
         factors.modeMatchFactor, 
-        factors.indexFactor,
         factors.taperFactor,
         Math.min(factors.modeMatchFactor, factors.overlapFactor)
       ];
