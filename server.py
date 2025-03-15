@@ -73,21 +73,36 @@ def create_app():
             taper_angle = float(data.get('taperAngle', 5))
             modes = int(data.get('modes', 100))
             
+            app.logger.info(f"Starting simulation with: R={outer_radius}, r={inner_radius}, n1={n1}, angle={taper_angle}, modes={modes}")
+            
             # Import necessary functions from OpticSimProj
-            sys.path.append(os.path.join(os.path.dirname(__file__), 'OpticSimProj/Workspace'))
-            from commands import xzgraph, getk_n_ml, getn_ml, getbetaclists, getpropagationmatrices
-            from commands import get_T_R_list, getSTSR1_Q, ABlist
-            import matplotlib
-            matplotlib.use('Agg')  # Use non-GUI backend
-            import matplotlib.pyplot as plt
-            from io import BytesIO
-            import base64
+            try:
+                sys.path.append(os.path.join(os.path.dirname(__file__), 'OpticSimProj/Workspace'))
+                app.logger.info(f"Module path: {os.path.join(os.path.dirname(__file__), 'OpticSimProj/Workspace')}")
+                
+                from commands import xzgraph, getk_n_ml, getn_ml, getbetaclists, getpropagationmatrices
+                from commands import get_T_R_list, getSTSR1_Q, ABlist
+                app.logger.info("Commands module imported successfully")
+            except Exception as e:
+                app.logger.error(f"Error importing modules: {str(e)}")
+                return jsonify({"error": f"Module import error: {str(e)}"}), 500
+                
+            try:
+                import matplotlib
+                matplotlib.use('Agg')  # Use non-GUI backend
+                import matplotlib.pyplot as plt
+                from io import BytesIO
+                import base64
+                app.logger.info("Matplotlib imported successfully")
+            except Exception as e:
+                app.logger.error(f"Error importing matplotlib: {str(e)}")
+                return jsonify({"error": f"Matplotlib import error: {str(e)}"}), 500
             
             # Setup parameters similar to your Python code
             wavelength = 950e-9
             k = 2 * np.pi / wavelength
             R = outer_radius
-            size = modes
+            size = min(modes, 150)  # Limit size to avoid memory issues
             rWG = inner_radius
             
             # Calculate alpha and other parameters
@@ -96,53 +111,90 @@ def create_app():
             h2 = rWG / np.tan(alpha)
             
             # Create lists and arrays
-            glassinfo = [1.4949, 1.4533, 1.8e-6, 1e-9]  # n1, n2, glasssize, glass distance
-            Rvalues = [rWG, 0, glassinfo[2]]
-            hlist = [0, h1, h1 + glassinfo[3], 2 * h1 + glassinfo[3]]
-            n1list = [n1, 1, glassinfo[0]]
-            n2list = [1, 1, glassinfo[1]]
+            try:
+                glassinfo = [1.4949, 1.4533, 1.8e-6, 1e-9]  # n1, n2, glasssize, glass distance
+                Rvalues = [rWG, 0, glassinfo[2]]
+                hlist = [0, h1, h1 + glassinfo[3], 2 * h1 + glassinfo[3]]
+                n1list = [n1, 1, glassinfo[0]]
+                n2list = [1, 1, glassinfo[1]]
+                
+                # Create starting vector
+                start = np.zeros(size)
+                start[0] = 1
+                app.logger.info("Parameters set up successfully")
+            except Exception as e:
+                app.logger.error(f"Error setting up parameters: {str(e)}")
+                return jsonify({"error": f"Parameter setup error: {str(e)}"}), 500
             
-            # Create starting vector
-            start = np.zeros(size)
-            start[0] = 1
-            
-            # Run simulation calculations
-            k_ml = getk_n_ml(size, R)
-            n_lm = getn_ml(size, k_ml, R)
-            bclist = getbetaclists(0, n1list, n2list, Rvalues, R, k_ml, n_lm, size, k)
-            Plist = getpropagationmatrices(bclist, hlist)
-            forT, forR, backT, backR = get_T_R_list(bclist)
-            STlist, SRlist, STrevlist, SRrevlist = getSTSR1_Q(Plist, forT, forR, backT, backR)
+            # Run simulation calculations with proper error handling
+            try:
+                app.logger.info("Getting k_ml values...")
+                k_ml = getk_n_ml(size, R)
+                
+                app.logger.info("Getting n_lm values...")
+                n_lm = getn_ml(size, k_ml, R)
+                
+                app.logger.info("Getting betaclists...")
+                bclist = getbetaclists(0, n1list, n2list, Rvalues, R, k_ml, n_lm, size, k)
+                
+                app.logger.info("Getting propagation matrices...")
+                Plist = getpropagationmatrices(bclist, hlist)
+                
+                app.logger.info("Getting T_R lists...")
+                forT, forR, backT, backR = get_T_R_list(bclist)
+                
+                app.logger.info("Getting STSR values...")
+                STlist, SRlist, STrevlist, SRrevlist = getSTSR1_Q(Plist, forT, forR, backT, backR)
+            except Exception as e:
+                app.logger.error(f"Error in simulation calculations: {str(e)}")
+                return jsonify({"error": f"Simulation calculation error: {str(e)}"}), 500
             
             # Calculate efficiency
-            a_q = STlist[-1] @ Plist[0] @ start
-            t2 = abs(a_q[0]) ** 2
+            try:
+                app.logger.info("Calculating efficiency...")
+                a_q = STlist[-1] @ Plist[0] @ start
+                t2 = abs(a_q[0]) ** 2
+            except Exception as e:
+                app.logger.error(f"Error calculating efficiency: {str(e)}")
+                return jsonify({"error": f"Efficiency calculation error: {str(e)}"}), 500
             
-            # Generate visualization
-            STlist2, SRlist2, STrevlist2, SRrevlist2 = getSTSR1_Q(
-                Plist[::-1], backT[::-1], backR[::-1], forT[::-1], forR[::-1]
-            )
-            alist, blist = ABlist(Plist, SRlist, STlist, SRrevlist2[::-1], start, SRrevlist)
-            Egraphreal = np.real(xzgraph(1000, alist, blist, 0, bclist, k_ml, R, hlist, size, R))
+            # Generate visualization with error handling
+            try:
+                app.logger.info("Generating visualization...")
+                STlist2, SRlist2, STrevlist2, SRrevlist2 = getSTSR1_Q(
+                    Plist[::-1], backT[::-1], backR[::-1], forT[::-1], forR[::-1]
+                )
+                alist, blist = ABlist(Plist, SRlist, STlist, SRrevlist2[::-1], start, SRrevlist)
+                Egraphreal = np.real(xzgraph(1000, alist, blist, 0, bclist, k_ml, R, hlist, size, R))
+            except Exception as e:
+                app.logger.error(f"Error in visualization generation: {str(e)}")
+                return jsonify({"error": f"Visualization error: {str(e)}"}), 500
             
-            # Create plot
-            plt.figure(figsize=(10, 6))
-            plt.matshow(Egraphreal, origin='lower', cmap='viridis')
-            plt.colorbar(label='Field Intensity')
-            plt.title('Electric Field Distribution')
+            # Create plot with error handling
+            try:
+                app.logger.info("Creating plot...")
+                plt.figure(figsize=(10, 6))
+                plt.matshow(Egraphreal, origin='lower', cmap='viridis')
+                plt.colorbar(label='Field Intensity')
+                plt.title('Electric Field Distribution')
+                
+                # Save plot to a BytesIO object
+                buffer = BytesIO()
+                plt.savefig(buffer, format='png', dpi=150)
+                buffer.seek(0)
+                image_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
+                plt.close()
+            except Exception as e:
+                app.logger.error(f"Error creating or saving plot: {str(e)}")
+                return jsonify({"error": f"Plot generation error: {str(e)}"}), 500
             
-            # Save plot to a BytesIO object
-            buffer = BytesIO()
-            plt.savefig(buffer, format='png', dpi=150)
-            buffer.seek(0)
-            image_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
-            plt.close()
-            
-            # Calculate additional factors for the frontend
+            # Calculate additional factors
             overlap_factor = np.exp(-2 * ((inner_radius/outer_radius) ** 2))
             mode_match_factor = 1 - np.exp(-modes/50)
             taper_factor = np.exp(-taper_angle/20)
             index_factor = np.sqrt(n1)/1.5
+            
+            app.logger.info("Simulation completed successfully")
             
             # Return data and image
             return jsonify({
@@ -157,7 +209,7 @@ def create_app():
             })
             
         except Exception as e:
-            app.logger.error(f"Error in simulation: {str(e)}")
+            app.logger.error(f"Uncaught error in simulation: {str(e)}")
             return jsonify({"error": str(e)}), 500
 
     return app
