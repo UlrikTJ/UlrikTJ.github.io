@@ -758,6 +758,94 @@
       const points = 100;
       const distance = new Array(points).fill(0).map((_, i) => i * outerRadius * 2e6 / points); // x-axis in μm
       
+      // Instead of calculating the intensity profile in JavaScript,
+      // we'll fetch it from the server where the Python calculations are done
+      fetch('https://serverstatsapi.ddns.net/intensity_profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          innerRadius,
+          outerRadius,
+          n1,
+          taperAngle,
+          modes
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Use the returned data from Python calculations
+        const ctx = document.getElementById('intensityProfileChart').getContext('2d');
+        
+        if (intensityProfileChart) {
+          intensityProfileChart.destroy();
+        }
+        
+        intensityProfileChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: data.distance, // Use distance values from Python
+            datasets: [{
+              label: 'Field Intensity',
+              borderColor: 'rgb(52, 152, 219)',
+              backgroundColor: 'rgba(52, 152, 219, 0.2)',
+              borderWidth: 2,
+              tension: 0.3,
+              fill: true,
+              data: data.intensity // Use intensity values from Python
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: 'Distance (μm)'
+                },
+                ticks: {
+                  callback: function(value) {
+                    // Format tick labels to avoid floating point precision issues
+                    return parseFloat(value).toFixed(1);
+                  }
+                }
+              },
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: 'Intensity (a.u.)'
+                },
+                ticks: {
+                  callback: function(value) {
+                    // Format tick labels to avoid floating point precision issues
+                    return parseFloat(value).toFixed(2);
+                  }
+                }
+              }
+            }
+          }
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching intensity profile:', error);
+        // Fall back to client-side calculation if server request fails
+        fallbackIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
+      });
+    }
+    
+    // Keep the original JS implementation as a fallback
+    function fallbackIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes) {
+      const points = 100;
+      const distance = new Array(points).fill(0).map((_, i) => i * outerRadius * 2e6 / points); // x-axis in μm
+      
       // Calculate intensity profile (similar to your Python code)
       const intensity = distance.map(d => {
         const normalizedDist = d / (outerRadius * 1e6);
@@ -793,7 +881,7 @@
         data: {
           labels: distance,
           datasets: [{
-            label: 'Field Intensity',
+            label: 'Field Intensity (JS Fallback)',
             borderColor: 'rgb(52, 152, 219)',
             backgroundColor: 'rgba(52, 152, 219, 0.2)',
             borderWidth: 2,
@@ -814,7 +902,7 @@
               ticks: {
                 callback: function(value) {
                   // Format tick labels to avoid floating point precision issues
-                  return Number(value).toFixed(1);
+                  return parseFloat(value).toFixed(1);
                 }
               }
             },
@@ -827,7 +915,7 @@
               ticks: {
                 callback: function(value) {
                   // Format tick labels to avoid floating point precision issues
-                  return Number(value).toFixed(2);
+                  return parseFloat(value).toFixed(2);
                 }
               }
             }
