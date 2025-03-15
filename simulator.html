@@ -448,6 +448,11 @@
         <div id="resultsContainer" class="mb-4">
           <h3>Set your parameters and run the simulation</h3>
           <p>Adjust the sliders on the left to configure your waveguide structure, then click "Run Simulation" to see results.</p>
+          <!-- Add this div for loading visualization -->
+          <div id="loadingViz" class="loading" style="display: none;">
+            <div class="loading-spinner"></div>
+            <small id="vizStatus" style="margin-left: 10px;"></small>
+          </div>
         </div>
         
         <div class="charts-grid">
@@ -484,15 +489,25 @@
     }
     
     function showLoading() {
-      document.getElementById('loadingViz').style.display = 'flex';
-      document.getElementById('heatmapCanvas').style.display = 'none';
-      document.getElementById('simulationImage').style.display = 'none';
-      document.getElementById('vizStatus').textContent = 'Calculating...';
+      const loadingElement = document.getElementById('loadingViz');
+      if (loadingElement) loadingElement.style.display = 'flex';
+      
+      const heatmapCanvas = document.getElementById('heatmapCanvas');
+      if (heatmapCanvas) heatmapCanvas.style.display = 'none';
+      
+      const simulationImage = document.getElementById('simulationImage');
+      if (simulationImage) simulationImage.style.display = 'none';
+      
+      const vizStatus = document.getElementById('vizStatus');
+      if (vizStatus) vizStatus.textContent = 'Calculating...';
     }
     
     function hideLoading() {
-      document.getElementById('loadingViz').style.display = 'none';
-      document.getElementById('vizStatus').textContent = '';
+      const loadingElement = document.getElementById('loadingViz');
+      if (loadingElement) loadingElement.style.display = 'none';
+      
+      const vizStatus = document.getElementById('vizStatus');
+      if (vizStatus) vizStatus.textContent = '';
     }
     
     function getEfficiencyColor(efficiency) {
@@ -891,7 +906,10 @@
     window.onload = function() {
       console.log('Window loaded');
       console.log('runSimulation exists: ', typeof runSimulation === 'function');
-      document.getElementById('loadingViz').style.display = 'none';
+      
+      // Add null check here
+      const loadingElement = document.getElementById('loadingViz');
+      if (loadingElement) loadingElement.style.display = 'none';
     };
   </script>
 </body>
