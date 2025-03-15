@@ -178,10 +178,10 @@
     <button onclick="runSimulation()">Run Simulation</button>
     <div id="resultsContainer">Results will appear here...</div>
     
-    <!-- Heatmap visualization like matshow -->
     <h3>Electric Field Distribution</h3>
     <div class="heatmap-container">
       <canvas id="heatmapCanvas"></canvas>
+      <img id="simulationImage" style="display: none; width: 100%; height: auto;" />
       <div class="colorbar"></div>
       <div class="colorbar-labels">
         <span>Low Intensity</span>
@@ -218,51 +218,35 @@
       const modes = parseInt(document.getElementById('modesSlider').value);
       
       // Show loading state
-      document.getElementById('resultsContainer').innerHTML = 
-        "<p>Calculating coupling efficiency...</p>";
+      document.getElementById('resultsContainer').innerHTML = "<p>Running simulation...</p>";
+      document.getElementById('heatmapCanvas').style.display = 'none';
+      document.getElementById('simulationImage').style.display = 'none';
       
-      // Simulate optical coupling efficiency based on parameters
-      setTimeout(() => {
-        // This simulates the calculations from your Python code
-        const wavelength = 950e-9; // nm wavelength from your code
-        const k = 2 * Math.PI / wavelength;
-        
-        // Calculate effective index contrast
-        const n2 = 1.0; // Cladding index
-        const indexContrast = n1 - n2;
-        
-        // Approximation of Pcalc from your Python code
-        const pcalc = function(betac) {
-            let sumc = 0;
-            for (let i = 0; i < betac.length; i++) {
-                sumc += Math.pow(Math.abs(betac[i]), 2);
-            }
-            return sumc;
-        };
-        
-        // Approximate the getEffectivity function
-        const alphaRadians = taperAngle * Math.PI / 180;
-        const h1 = innerRadius; // Height before taper
-        const h2 = innerRadius / Math.tan(alphaRadians); // Taper length
-        const glassdistance = 1e-9; // Default from your code
-        
-        // Simplified version of your efficiency calculation
-        const overlapFactor = Math.exp(-2 * Math.pow((innerRadius/outerRadius), 2));
-        const modeMatchFactor = 1 - Math.exp(-modes/50);
-        const taperFactor = Math.exp(-taperAngle/20);
-        const indexFactor = Math.sqrt(n1)/1.5;
-        
-        // Combined efficiency calculation inspired by your Python code
-        const baseEfficiency = overlapFactor * modeMatchFactor * taperFactor * indexFactor;
-        const efficiency = baseEfficiency * (1 - 0.4 * Math.exp(-innerRadius/500e-9));
-        
-        // Clip efficiency to 0-100%
-        const efficiencyPercent = Math.min(Math.max(efficiency * 100, 0), 100);
-        
-        // Display results - similar to your Python output analysis
+      // Call the server-side simulation
+      fetch('https://serverstatsapi.ddns.net/simulate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          outerRadius: outerRadius,
+          innerRadius: innerRadius,
+          n1: n1,
+          taperAngle: taperAngle,
+          modes: modes
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Display the results
         document.getElementById('resultsContainer').innerHTML = `
           <h3>Simulation Results</h3>
-          <p><strong>Coupling Efficiency:</strong> ${efficiencyPercent.toFixed(2)}%</p>
+          <p><strong>Coupling Efficiency:</strong> ${data.efficiency.toFixed(2)}%</p>
           <p><strong>Parameters:</strong></p>
           <ul>
             <li>Outer Radius: ${(outerRadius*1e6).toFixed(1)} μm</li>
@@ -273,19 +257,28 @@
           </ul>
           <p><strong>Analysis:</strong></p>
           <ul>
-            <li>Overlap Factor: ${(overlapFactor * 100).toFixed(1)}%</li>
-            <li>Mode Match: ${(modeMatchFactor * 100).toFixed(1)}%</li>
-            <li>Taper Efficiency: ${(taperFactor * 100).toFixed(1)}%</li>
-            <li>Index Contribution: ${(indexFactor * 100).toFixed(1)}%</li>
+            <li>Overlap Factor: ${data.factors.overlapFactor.toFixed(1)}%</li>
+            <li>Mode Match: ${data.factors.modeMatchFactor.toFixed(1)}%</li>
+            <li>Taper Efficiency: ${data.factors.taperFactor.toFixed(1)}%</li>
+            <li>Index Contribution: ${data.factors.indexFactor.toFixed(1)}%</li>
           </ul>
         `;
         
-        // Generate visualizations based on your Python matshow
-        updateEfficiencyChart(efficiencyPercent);
-        generateIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
-        generateHeatmap(innerRadius, outerRadius, n1, taperAngle, modes);
+        // Show python-generated image
+        document.getElementById('heatmapCanvas').style.display = 'none';
+        document.getElementById('simulationImage').src = data.heatmap;
+        document.getElementById('simulationImage').style.display = 'block';
         
-      }, 500);
+        // Update charts (we can still keep these)
+        updateEfficiencyChart(data.efficiency);
+        generateIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('resultsContainer').innerHTML = `<p>Error running simulation: ${error.message}</p>`;
+        // Fall back to client-side visualization if the server call fails
+        generateHeatmap(innerRadius, outerRadius, n1, taperAngle, modes);
+      });
     }
     
     function updateEfficiencyChart(efficiency) {
