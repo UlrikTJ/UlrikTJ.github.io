@@ -788,8 +788,22 @@
       console.log('Efficiency chart removed');
     }
     function generateIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes) {
-      const points = 100;
-      const distance = new Array(points).fill(0).map((_, i) => i * outerRadius * 2e6 / points); // x-axis in μm
+      // Get structure type
+      const structureType = document.getElementById('structureTypeSelect').value;
+      
+      // Get other relevant parameters
+      const n2 = parseFloat(document.getElementById('n2Slider').value);
+      const glassDistance = parseFloat(document.getElementById('glassDistanceSlider').value) * 1e-9;
+      const wavelength = parseFloat(document.getElementById('wavelengthSlider').value) * 1e-9;
+      
+      // Structure-specific parameters
+      let arThickness = 0;
+      let arIndex = 0;
+      
+      if (structureType === 'ar_coating') {
+        arThickness = parseFloat(document.getElementById('arThicknessSlider').value) * 1e-9;
+        arIndex = parseFloat(document.getElementById('arIndexSlider').value);
+      }
       
       // Instead of calculating the intensity profile in JavaScript,
       // we'll fetch it from the server where the Python calculations are done
@@ -799,11 +813,17 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+          type_of_structure: structureType,
           innerRadius,
           outerRadius,
           n1,
-          taperAngle,
-          modes
+          n2,
+          taperAngle: structureType === 'taper' ? taperAngle : null,
+          n_ar: structureType === 'ar_coating' ? arIndex : null,
+          thickness_of_ar_coating: structureType === 'ar_coating' ? arThickness : null,
+          modes,
+          glassDistance,
+          wavelength
         })
       })
       .then(response => {

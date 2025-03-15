@@ -201,43 +201,37 @@ def create_app():
         data = request.json
         
         # Extract parameters
+        structure_type = data.get('type_of_structure', 'taper')  
         outer_radius = data.get('outerRadius', 10e-6)
         inner_radius = data.get('innerRadius', 1000e-9) 
         n1 = data.get('n1', 3.5)
-        taper_angle = data.get('taperAngle', 5.0)
+        n2 = data.get('n2', 1.0)
+        taper_angle = data.get('taperAngle', 5.0) if structure_type == 'taper' else None
+        n_ar = data.get('n_ar', 1.9) if structure_type == 'ar_coating' else None
+        ar_thickness = data.get('thickness_of_ar_coating', 100e-9) if structure_type == 'ar_coating' else None
         modes = data.get('modes', 100)
+        glass_distance = data.get('glassDistance', 1e-9)
+        wavelength = data.get('wavelength', 950e-9)
         
         try:
-            # For simplicity, we'll generate data directly here
-            # In a production implementation, you should call your Python functions
-            # that properly calculate the intensity profile based on your physics models
+            # Use the new function from GodFunction.py
+            from OpticSimProj.Workspace.GodFunction import get_intensity_profile
             
-            # Call the relevant function from GodFunction.py or create a helper function
-            # that extracts the intensity profile data from the simulation
-            
-            # For example, you might simulate with a modified function that returns profile data
-            result = simulate_optical_structure(
-                type_of_structure='taper',
+            result = get_intensity_profile(
+                type_of_structure=structure_type,
                 inner_radius=inner_radius,
                 outer_radius=outer_radius,
                 n1=n1,
+                n2=n2,
                 taper_angle=taper_angle,
+                n_ar=n_ar, 
+                thickness_of_ar_coating=ar_thickness,
                 number_of_modes=modes,
-                return_image=False  # We don't need the image for intensity profile
+                glass_distance=glass_distance,
+                wavelength=wavelength
             )
             
-            # Extract or calculate intensity profile
-            points = 100
-            distance = [float(i * outer_radius * 2e6 / points) for i in range(points)]
-            
-            # We would ideally extract this from the simulation result
-            # Here using a simplified model for demonstration
-            intensity = calculate_intensity_profile(distance, inner_radius, outer_radius, n1, taper_angle, modes)
-            
-            return jsonify({
-                'distance': distance,
-                'intensity': intensity
-            })
+            return jsonify(result)
         
         except Exception as e:
             return jsonify({'error': str(e)}), 500
