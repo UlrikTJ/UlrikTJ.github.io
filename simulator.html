@@ -810,6 +810,12 @@
               title: {
                 display: true,
                 text: 'Distance (μm)'
+              },
+              ticks: {
+                callback: function(value) {
+                  // Format tick labels to avoid floating point precision issues
+                  return Number(value).toFixed(1);
+                }
               }
             },
             y: {
@@ -817,6 +823,12 @@
               title: {
                 display: true,
                 text: 'Intensity (a.u.)'
+              },
+              ticks: {
+                callback: function(value) {
+                  // Format tick labels to avoid floating point precision issues
+                  return Number(value).toFixed(2);
+                }
               }
             }
           }
