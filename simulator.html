@@ -292,7 +292,17 @@
           <div class="card-body">
             <div class="parameter-group">
               <h4><i class="bi bi-rulers"></i> Dimensions</h4>
-              
+              <div class="slider-row">
+                <label for="structureTypeSelect">Structure Type:</label>
+                <select 
+                  class="form-select" 
+                  id="structureTypeSelect" 
+                  onchange="updateStructureTypeFields()">
+                  <option value="taper" selected>Tapered Structure</option>
+                  <option value="ar_coating">AR Coating</option>
+                  <option value="flat">Flat Structure</option>
+                </select>
+              </div>
               <div class="slider-row">
                 <label for="radiusSlider">Outer Radius (μm):</label>
                 <input
@@ -336,6 +346,35 @@
                   oninput="updateLabel('taperAngleLabel', this.value)"
                 />
                 <span id="taperAngleLabel" class="value-display">5</span>
+              </div>
+              <div class="slider-row" id="arCoatingThicknessRow" style="display: none;">
+                <label for="arThicknessSlider">AR Coating Thickness (nm):</label>
+                <input
+                  type="range"
+                  class="form-range"
+                  id="arThicknessSlider"
+                  min="10"
+                  max="500"
+                  step="10"
+                  value="100"
+                  oninput="updateLabel('arThicknessLabel', this.value)"
+                />
+                <span id="arThicknessLabel" class="value-display">100</span>
+              </div>
+              
+              <div class="slider-row" id="arCoatingIndexRow" style="display: none;">
+                <label for="arIndexSlider">AR Coating Index:</label>
+                <input
+                  type="range"
+                  class="form-range"
+                  id="arIndexSlider"
+                  min="1.0"
+                  max="3.5"
+                  step="0.1"
+                  value="1.9"
+                  oninput="updateLabel('arIndexLabel', this.value)"
+                />
+                <span id="arIndexLabel" class="value-display">1.9</span>
               </div>
             </div>
             
@@ -519,16 +558,30 @@
     }
     
     function runSimulation() {
+      // Get structure type
+      const structureType = document.getElementById('structureTypeSelect').value;
+      
       // Get parameter values from all sliders
       const outerRadius = parseFloat(document.getElementById('radiusSlider').value) * 1e-6; // μm to meters
       const innerRadius = parseFloat(document.getElementById('innerRadiusSlider').value) * 1e-9; // nm to meters
       const n1 = parseFloat(document.getElementById('n1Slider').value);
       const n2 = parseFloat(document.getElementById('n2Slider').value);
       const glassIndex = parseFloat(document.getElementById('glassIndexSlider').value);
-      const taperAngle = parseFloat(document.getElementById('taperAngleSlider').value);
       const modes = parseInt(document.getElementById('modesSlider').value);
       const glassDistance = parseFloat(document.getElementById('glassDistanceSlider').value) * 1e-9; // nm to meters
       const wavelength = parseFloat(document.getElementById('wavelengthSlider').value) * 1e-9; // nm to meters
+      
+      // Structure-specific parameters
+      let taperAngle = 0;
+      let arThickness = 0;
+      let arIndex = 0;
+      
+      if (structureType === 'taper') {
+        taperAngle = parseFloat(document.getElementById('taperAngleSlider').value);
+      } else if (structureType === 'ar_coating') {
+        arThickness = parseFloat(document.getElementById('arThicknessSlider').value) * 1e-9; // nm to meters
+        arIndex = parseFloat(document.getElementById('arIndexSlider').value);
+      }
       
       // Show loading state
       document.getElementById('resultsContainer').innerHTML = `
@@ -538,19 +591,22 @@
       `;
       showLoading();
       
-      // Call the server-side simulation
+      // Call the server-side simulation with structure-specific parameters
       fetch('https://serverstatsapi.ddns.net/simulate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+          type_of_structure: structureType,
           outerRadius,
           innerRadius,
           n1,
           n2,
           glassIndex,
           taperAngle,
+          n_ar: arIndex,
+          thickness_of_ar_coating: arThickness,
           modes,
           glassDistance,
           wavelength
@@ -1062,10 +1118,34 @@
       console.log('Window loaded');
       console.log('runSimulation exists: ', typeof runSimulation === 'function');
       
+      // Initialize structure type fields
+      updateStructureTypeFields();
+      
       // Add null check here
       const loadingElement = document.getElementById('loadingViz');
       if (loadingElement) loadingElement.style.display = 'none';
     };
+
+    function updateStructureTypeFields() {
+      const structureType = document.getElementById('structureTypeSelect').value;
+      const taperAngleRow = document.getElementById('taperAngleSlider').parentNode;
+      const arCoatingThicknessRow = document.getElementById('arCoatingThicknessRow');
+      const arCoatingIndexRow = document.getElementById('arCoatingIndexRow');
+      
+      // Hide all structure-specific fields first
+      taperAngleRow.style.display = 'none';
+      arCoatingThicknessRow.style.display = 'none';
+      arCoatingIndexRow.style.display = 'none';
+      
+      // Then show only the ones relevant for selected structure
+      if (structureType === 'taper') {
+        taperAngleRow.style.display = 'block';
+      } else if (structureType === 'ar_coating') {
+        arCoatingThicknessRow.style.display = 'block';
+        arCoatingIndexRow.style.display = 'block';
+      }
+      // 'flat' type doesn't need additional fields
+    }
   </script>
 </body>
 </html>

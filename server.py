@@ -156,27 +156,34 @@ def create_app():
         """API endpoint for optical simulation"""
         data = request.json
         
-        # Extract parameters from the request
+        # Extract structure type
+        structure_type = data.get('type_of_structure', 'taper')
+        
+        # Extract common parameters
         outer_radius = data.get('outerRadius', 10e-6)
         inner_radius = data.get('innerRadius', 1000e-9)
         n1 = data.get('n1', 3.5)
         n2 = data.get('n2', 1.0)
         glass_index = data.get('glassIndex', 1.49)
-        taper_angle = data.get('taperAngle', 5.0)
         modes = data.get('modes', 100)
         glass_distance = data.get('glassDistance', 1e-9)
         wavelength = data.get('wavelength', 950e-9)
         
-        # Currently only supporting taper structures
-        # Could expand with structure_type parameter later
+        # Extract structure-specific parameters
+        taper_angle = data.get('taperAngle', 5.0) if structure_type == 'taper' else None
+        n_ar = data.get('n_ar', 1.9) if structure_type == 'ar_coating' else None
+        ar_thickness = data.get('thickness_of_ar_coating', 100e-9) if structure_type == 'ar_coating' else None
+        
         try:
             result = simulate_optical_structure(
-                type_of_structure='taper',
+                type_of_structure=structure_type,
                 inner_radius=inner_radius,
                 outer_radius=outer_radius,
                 n1=n1,
                 n2=n2,
                 taper_angle=taper_angle,
+                n_ar=n_ar,
+                thickness_of_ar_coating=ar_thickness,
                 number_of_modes=modes,
                 glass_distance=glass_distance,
                 glass_index=glass_index,
