@@ -642,9 +642,6 @@
           </div>
         `;
         
-        // Remove the original visualization container as we've moved it
-        document.querySelector('.visualization-container:not(.charts-grid .visualization-container)').style.display = 'none';
-        
         // Update charts
         updateEfficiencyChart(data.efficiency, data.factors);
         generateIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
