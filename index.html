@@ -402,19 +402,19 @@
         function getLimitForRange(range) {
             switch (range) {
                 case 'minute':
-                    return 500;  // or smaller if you want
+                    return 20;  // or smaller if you want
                 case 'hour':
-                    return 500*60;  // 1-min intervals for 12 hours, for example
+                    return 20*60;  // 1-min intervals for 12 hours, for example
                 case 'day':
-                    return 500*60*24; // might need up to 2000 data points
+                    return 20*60*24; // might need up to 2000 data points
                 case 'week':
-                    return 500*60*24*7; // etc.
+                    return 20*60*24*7; // etc.
                 case 'month':
-                    return 500*60*24*7*4;
+                    return 20*60*24*7*4;
                 case '6month':
-                    return 500*60*24*7*4*6;
+                    return 20*60*24*7*4*6;
                 case 'year':
-                    return 500*60*24*7*4*6*2; // max server limit
+                    return 20*60*24*7*4*6*2; // max server limit
                 default:
                     return 100;  // fallback
             }
@@ -470,7 +470,7 @@
         //setTimeRange('hour', 'cpu');
         //setTimeRange('hour', 'memory');
         //setTimeRange('hour', 'temp');
-        setInterval(updateCharts, 370000);
+        setInterval(updateCharts, 20*60*24*7*4*6*2);
     </script>
 </body>
 

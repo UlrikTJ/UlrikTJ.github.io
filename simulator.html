@@ -821,6 +821,7 @@
       });
     }
     
+    // Update generateHeatmap function to add appropriate annotations
     function generateHeatmap(innerRadius, outerRadius, n1, taperAngle, modes) {
       console.log('generateHeatmap called with:', {innerRadius, outerRadius, n1, taperAngle, modes});
       
@@ -932,11 +933,48 @@
       ctx.putImageData(imageData, 0, 0);
       canvas.style.display = 'block';
       
-      // Add annotations
+      // Add annotations with units
       ctx.font = "12px Arial";
       ctx.fillStyle = "white";
       ctx.fillText("Waveguide", 10, 20);
+      ctx.fillText(`Taper: ${taperAngle}°`, 10, 40);
+      
+      // Add micron scale at the bottom
+      const micronWidth = outerRadius * 1e6 * 2; // Width in microns
+      ctx.fillText(`${micronWidth.toFixed(1)} μm`, width - 50, height - 10);
       ctx.fillText("Direction of propagation →", width/2 - 80, height - 10);
+      
+      // Draw a scale bar
+      ctx.beginPath();
+      ctx.moveTo(width - 100, height - 20);
+      ctx.lineTo(width - 20, height - 20);
+      ctx.strokeStyle = "white";
+      ctx.stroke();
+      
+      // Add colorbar below the plot
+      const container = canvas.parentElement;
+      
+      // Only add if it doesn't exist yet
+      if (!document.getElementById('fallbackColorbar')) {
+        const colorbar = document.createElement('div');
+        colorbar.id = 'fallbackColorbar';
+        colorbar.className = 'colorbar mt-3';
+        colorbar.style.height = '20px';
+        colorbar.style.width = '100%';
+        colorbar.style.borderRadius = '3px';
+        colorbar.style.background = 'linear-gradient(to right, #000080, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000, #800000)';
+        
+        const colorbarLabels = document.createElement('div');
+        colorbarLabels.className = 'colorbar-labels';
+        colorbarLabels.style.display = 'flex';
+        colorbarLabels.style.justifyContent = 'space-between';
+        colorbarLabels.style.fontSize = '12px';
+        colorbarLabels.style.marginTop = '5px';
+        colorbarLabels.innerHTML = '<span>Low Intensity</span><span>High Intensity</span>';
+        
+        container.appendChild(colorbar);
+        container.appendChild(colorbarLabels);
+      }
     }
 
     // Single window.onload function
