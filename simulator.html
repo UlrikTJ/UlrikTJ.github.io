@@ -493,6 +493,17 @@
   </div>
 
   <script>
+    // Add this at the very beginning of your script section
+    console.log('Script loaded');
+    // Verify that runSimulation is globally available
+    window.onload = function() {
+      console.log('Window loaded');
+      console.log('runSimulation exists: ', typeof runSimulation === 'function');
+      
+      // Rest of your onload code...
+      document.getElementById('loadingViz').style.display = 'none';
+    }
+
     let efficiencyChart = null;
     let intensityProfileChart = null;
     
@@ -897,13 +908,12 @@
 
 // Initialize the page when loaded
 window.onload = function() {
-  // Hide loading visualization initially
-  document.getElementById('loadingViz').style.display = 'none';
+  console.log('Window loaded');
+  console.log('runSimulation exists: ', typeof runSimulation === 'function');
   
-  // Set up button active states for time ranges
-  document.querySelectorAll('.time-range-selector button').forEach((btn, index) => {
-    if (index === 1) { // Default to hour view (second button)
-      btn.classList.add('active');
-    }
-  });
+  // Rest of your onload code...
+  document.getElementById('loadingViz').style.display = 'none';
 };
+  </script>
+</body>
+</html>
