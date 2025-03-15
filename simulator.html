@@ -481,7 +481,7 @@
 
   <script>
     // Define these variables at the top level of your script
-    //let efficiencyChart = null;
+    let efficiencyChart = null;
     let intensityProfileChart = null;
     
     // Define all your functions before window.onload
@@ -688,8 +688,9 @@
         generateHeatmap(innerRadius, outerRadius, n1, taperAngle, modes);
       });
     }
-    /*
+    
     function updateEfficiencyChart(efficiency, factors) {
+      /*
       const parameters = ['Outer Radius', 'Inner Radius', 'Core Index', 'Taper Angle'];
       const factorValues = [
         factors.overlapFactor,
@@ -750,8 +751,9 @@
           }
         }
       });
+    }*/
+      console.log('Efficiency chart removed');
     }
-    */
     function generateIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes) {
       const points = 100;
       const distance = new Array(points).fill(0).map((_, i) => i * outerRadius * 2e6 / points); // x-axis in μm
