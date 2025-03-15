@@ -493,20 +493,11 @@
   </div>
 
   <script>
-    // Add this at the very beginning of your script section
-    console.log('Script loaded');
-    // Verify that runSimulation is globally available
-    window.onload = function() {
-      console.log('Window loaded');
-      console.log('runSimulation exists: ', typeof runSimulation === 'function');
-      
-      // Rest of your onload code...
-      document.getElementById('loadingViz').style.display = 'none';
-    }
-
+    // Define these variables at the top level of your script
     let efficiencyChart = null;
     let intensityProfileChart = null;
     
+    // Define all your functions before window.onload
     function updateLabel(labelId, value) {
       document.getElementById(labelId).textContent = value;
     }
@@ -521,6 +512,13 @@
     function hideLoading() {
       document.getElementById('loadingViz').style.display = 'none';
       document.getElementById('vizStatus').textContent = '';
+    }
+    
+    function getEfficiencyColor(efficiency) {
+      if (efficiency > 80) return 'rgba(46, 204, 113, 0.15)'; // Green
+      if (efficiency > 50) return 'rgba(52, 152, 219, 0.15)'; // Blue
+      if (efficiency > 30) return 'rgba(241, 196, 15, 0.15)'; // Yellow
+      return 'rgba(231, 76, 60, 0.15)'; // Red
     }
     
     function runSimulation() {
@@ -662,13 +660,6 @@
       });
     }
     
-    function getEfficiencyColor(efficiency) {
-      if (efficiency > 80) return 'rgba(46, 204, 113, 0.15)'; // Green
-      if (efficiency > 50) return 'rgba(52, 152, 219, 0.15)'; // Blue
-      if (efficiency > 30) return 'rgba(241, 196, 15, 0.15)'; // Yellow
-      return 'rgba(231, 76, 60, 0.15)'; // Red
-    }
-    
     function updateEfficiencyChart(efficiency, factors) {
       const parameters = ['Outer Radius', 'Inner Radius', 'Core Index', 'Taper Angle', 'Modes'];
       const factorValues = [
@@ -804,116 +795,114 @@
     }
     
     function generateHeatmap(innerRadius, outerRadius, n1, taperAngle, modes) {
-  // Client-side fallback visualization
-  const canvas = document.getElementById('heatmapCanvas');
-  const ctx = canvas.getContext('2d');
-  
-  canvas.width = 500;
-  canvas.height = 300;
-  
-  const imageData = ctx.createImageData(canvas.width, canvas.height);
-  const width = canvas.width;
-  const height = canvas.height;
-  
-  // Generate visualization similar to your Python code
-  const fieldData = new Array(height);
-  for (let y = 0; y < height; y++) {
-    fieldData[y] = new Array(width);
-    const normalizedY = (y - height/2) / (height/2);
-    
-    for (let x = 0; x < width; x++) {
-      const normalizedX = x / width;
+      // Client-side fallback visualization
+      const canvas = document.getElementById('heatmapCanvas');
+      const ctx = canvas.getContext('2d');
       
-      // Create tapered waveguide shape
-      const taperWidth = 0.2 * (1 - normalizedX * (taperAngle/90));
-      const upperBoundary = taperWidth;
-      const lowerBoundary = -taperWidth;
+      canvas.width = 500;
+      canvas.height = 300;
       
-      let fieldIntensity = 0;
+      const imageData = ctx.createImageData(canvas.width, canvas.height);
+      const width = canvas.width;
+      const height = canvas.height;
       
-      if (normalizedY <= upperBoundary && normalizedY >= lowerBoundary) {
-        // Core region
-        const distFromCenter = Math.abs(normalizedY) / taperWidth;
-        const modePatterns = (1 + Math.cos(Math.PI * 5 * (modes/100) * normalizedY)) / 2;
-        const radiusEffect = Math.exp(-Math.pow(distFromCenter * 10 * ((innerRadius * 1e9) / 1000), 2));
+      // Generate visualization similar to your Python code
+      const fieldData = new Array(height);
+      for (let y = 0; y < height; y++) {
+        fieldData[y] = new Array(width);
+        const normalizedY = (y - height/2) / (height/2);
         
-        fieldIntensity = (0.6 + 0.4 * radiusEffect) * modePatterns;
-        
-        // Add propagation phase
-        fieldIntensity *= 0.8 + 0.2 * Math.cos(normalizedX * Math.PI * 10);
-      } else {
-        // Cladding region (evanescent field)
-        const distFromBoundary = Math.min(
-          Math.abs(normalizedY - upperBoundary), 
-          Math.abs(normalizedY - lowerBoundary)
-        );
-        
-        // Exponential decay in cladding
-        fieldIntensity = 0.5 * Math.exp(-distFromBoundary * 10);
+        for (let x = 0; x < width; x++) {
+          const normalizedX = x / width;
+          
+          // Create tapered waveguide shape
+          const taperWidth = 0.2 * (1 - normalizedX * (taperAngle/90));
+          const upperBoundary = taperWidth;
+          const lowerBoundary = -taperWidth;
+          
+          let fieldIntensity = 0;
+          
+          if (normalizedY <= upperBoundary && normalizedY >= lowerBoundary) {
+            // Core region
+            const distFromCenter = Math.abs(normalizedY) / taperWidth;
+            const modePatterns = (1 + Math.cos(Math.PI * 5 * (modes/100) * normalizedY)) / 2;
+            const radiusEffect = Math.exp(-Math.pow(distFromCenter * 10 * ((innerRadius * 1e9) / 1000), 2));
+            
+            fieldIntensity = (0.6 + 0.4 * radiusEffect) * modePatterns;
+            
+            // Add propagation phase
+            fieldIntensity *= 0.8 + 0.2 * Math.cos(normalizedX * Math.PI * 10);
+          } else {
+            // Cladding region (evanescent field)
+            const distFromBoundary = Math.min(
+              Math.abs(normalizedY - upperBoundary), 
+              Math.abs(normalizedY - lowerBoundary)
+            );
+            
+            // Exponential decay in cladding
+            fieldIntensity = 0.5 * Math.exp(-distFromBoundary * 10);
+          }
+          
+          // Apply index effect (higher index = more confined mode)
+          fieldIntensity *= 0.5 + 0.5 * (n1 / 5);
+          
+          fieldData[y][x] = Math.min(1, Math.max(0, fieldIntensity));
+        }
       }
       
-      // Apply index effect (higher index = more confined mode)
-      fieldIntensity *= 0.5 + 0.5 * (n1 / 5);
-      
-      fieldData[y][x] = Math.min(1, Math.max(0, fieldIntensity));
-    }
-  }
-  
-  // Create visualization using viridis-like colormap
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const value = fieldData[y][x];
-      const idx = (y * width + x) * 4;
-      
-      // Viridis-like colormap (blue to yellow/green)
-      if (value < 0.25) {
-        // Dark blue to blue
-        const t = value * 4;
-        imageData.data[idx] = 0;
-        imageData.data[idx + 1] = Math.round(t * 100);
-        imageData.data[idx + 2] = Math.round(100 + t * 155);
-      } else if (value < 0.5) {
-        // Blue to cyan
-        const t = (value - 0.25) * 4;
-        imageData.data[idx] = 0;
-        imageData.data[idx + 1] = Math.round(100 + t * 155);
-        imageData.data[idx + 2] = Math.round(255);
-      } else if (value < 0.75) {
-        // Cyan to yellow
-        const t = (value - 0.5) * 4;
-        imageData.data[idx] = Math.round(t * 255);
-        imageData.data[idx + 1] = Math.round(255);
-        imageData.data[idx + 2] = Math.round(255 * (1 - t));
-      } else {
-        // Yellow to red
-        const t = (value - 0.75) * 4;
-        imageData.data[idx] = 255;
-        imageData.data[idx + 1] = Math.round(255 * (1 - t));
-        imageData.data[idx + 2] = 0;
+      // Create visualization using viridis-like colormap
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const value = fieldData[y][x];
+          const idx = (y * width + x) * 4;
+          
+          // Viridis-like colormap (blue to yellow/green)
+          if (value < 0.25) {
+            // Dark blue to blue
+            const t = value * 4;
+            imageData.data[idx] = 0;
+            imageData.data[idx + 1] = Math.round(t * 100);
+            imageData.data[idx + 2] = Math.round(100 + t * 155);
+          } else if (value < 0.5) {
+            // Blue to cyan
+            const t = (value - 0.25) * 4;
+            imageData.data[idx] = 0;
+            imageData.data[idx + 1] = Math.round(100 + t * 155);
+            imageData.data[idx + 2] = Math.round(255);
+          } else if (value < 0.75) {
+            // Cyan to yellow
+            const t = (value - 0.5) * 4;
+            imageData.data[idx] = Math.round(t * 255);
+            imageData.data[idx + 1] = Math.round(255);
+            imageData.data[idx + 2] = Math.round(255 * (1 - t));
+          } else {
+            // Yellow to red
+            const t = (value - 0.75) * 4;
+            imageData.data[idx] = 255;
+            imageData.data[idx + 1] = Math.round(255 * (1 - t));
+            imageData.data[idx + 2] = 0;
+          }
+          
+          imageData.data[idx + 3] = 255; // Alpha channel
+        }
       }
       
-      imageData.data[idx + 3] = 255; // Alpha channel
+      ctx.putImageData(imageData, 0, 0);
+      canvas.style.display = 'block';
+      
+      // Add annotations
+      ctx.font = "12px Arial";
+      ctx.fillStyle = "white";
+      ctx.fillText("Waveguide", 10, 20);
+      ctx.fillText("Direction of propagation →", width/2 - 80, height - 10);
     }
-  }
-  
-  ctx.putImageData(imageData, 0, 0);
-  canvas.style.display = 'block';
-  
-  // Add annotations
-  ctx.font = "12px Arial";
-  ctx.fillStyle = "white";
-  ctx.fillText("Waveguide", 10, 20);
-  ctx.fillText("Direction of propagation →", width/2 - 80, height - 10);
-}
 
-// Initialize the page when loaded
-window.onload = function() {
-  console.log('Window loaded');
-  console.log('runSimulation exists: ', typeof runSimulation === 'function');
-  
-  // Rest of your onload code...
-  document.getElementById('loadingViz').style.display = 'none';
-};
+    // Single window.onload function
+    window.onload = function() {
+      console.log('Window loaded');
+      console.log('runSimulation exists: ', typeof runSimulation === 'function');
+      document.getElementById('loadingViz').style.display = 'none';
+    };
   </script>
 </body>
 </html>
