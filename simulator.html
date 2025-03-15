@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Optic Simulator</title>
+  <style>
+    body {
+      margin: 0; padding: 0; font-family: sans-serif;
+      background-color: #f5f5f5;
+    }
+    nav {
+      background-color: #343a40; padding: 10px;
+    }
+    nav a {
+      color: #fff; margin-right: 20px; text-decoration: none;
+    }
+    .container {
+      max-width: 800px; margin: 20px auto; padding: 20px; background: #fff;
+      border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .slider-row {
+      margin-bottom: 20px;
+    }
+    .slider-row label {
+      display: block; margin-bottom: 6px; font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="./index.html">Server Stats</a>
+    <a href="./simulator.html">Optic Simulator</a>
+  </nav>
+  <div class="container">
+    <h1>Optic Simulator</h1>
+
+    <!-- Example slider row -->
+    <div class="slider-row">
+      <label for="radiusSlider">Radius (R):</label>
+      <input
+        type="range"
+        id="radiusSlider"
+        name="radiusSlider"
+        min="1"
+        max="10"
+        step="1"
+        value="5"
+        oninput="updateLabel('radiusLabel', this.value)"
+      />
+      <span id="radiusLabel">5</span>
+    </div>
+
+    <!-- Add as many sliders as needed for the discrete parameters -->
+    <!-- Then you can collect them and pass to the simulator logic -->
+
+    <button onclick="runSimulation()">Run Simulation</button>
+    <div id="resultsContainer"></div>
+  </div>
+
+  <script>
+    function updateLabel(labelId, value) {
+      document.getElementById(labelId).textContent = value;
+    }
+
+    function runSimulation() {
+      const R = document.getElementById('radiusSlider').value;
+      // Pass these values to your backend or your simulation code...
+      document.getElementById('resultsContainer').textContent =
+        "Simulation run with R = " + R;
+    }
+  </script>
+</body>
+</html>
