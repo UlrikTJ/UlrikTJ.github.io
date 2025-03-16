@@ -211,10 +211,11 @@ def create_app():
         ar_thickness = data.get('thickness_of_ar_coating', 100e-9) if structure_type == 'ar_coating' else None
         modes = data.get('modes', 100)
         glass_distance = data.get('glassDistance', 1e-9)
+        glass_index = data.get('glassIndex', 1.49)
         wavelength = data.get('wavelength', 950e-9)
         
         try:
-            # Use the new function from GodFunction.py
+            # Import the intensity profile function from GodFunction.py
             from OpticSimProj.Workspace.GodFunction import get_intensity_profile
             
             result = get_intensity_profile(
@@ -228,12 +229,14 @@ def create_app():
                 thickness_of_ar_coating=ar_thickness,
                 number_of_modes=modes,
                 glass_distance=glass_distance,
+                glass_index=glass_index,
                 wavelength=wavelength
             )
             
             return jsonify(result)
         
         except Exception as e:
+            app.logger.error(f"Error in intensity_profile: {str(e)}")
             return jsonify({'error': str(e)}), 500
 
     def calculate_intensity_profile(distance, inner_radius, outer_radius, n1, taper_angle, modes):
