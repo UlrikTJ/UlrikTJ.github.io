@@ -467,10 +467,48 @@
 
         // Initialize and start updates
         initializeCharts();
-        //setTimeRange('hour', 'cpu');
-        //setTimeRange('hour', 'memory');
-        //setTimeRange('hour', 'temp');
-        setInterval(updateCharts, 20*60*24*7*4*6*2);
+        
+        // Default to hour view for all charts on load
+        setTimeRange('hour', 'cpu');
+        setTimeRange('hour', 'memory');
+        setTimeRange('hour', 'temp');
+        
+        // Check if we're in active hours (8am-10pm Copenhagen time)
+        function isActiveHours() {
+            const copenhagenTime = luxon.DateTime.now().setZone('Europe/Copenhagen');
+            const hour = copenhagenTime.hour;
+            return hour >= 8 && hour < 22;
+        }
+        
+        // Update poll interval based on active hours
+        function updatePollInterval() {
+            if (isActiveHours()) {
+                // During active hours: poll every minute
+                return 60 * 1000; // 60 seconds
+            } else {
+                // Outside active hours: poll infrequently (once per hour) just to check if we're back in active hours
+                return 60 * 60 * 1000; // 60 minutes
+            }
+        }
+        
+        // Start polling, adjust the interval dynamically based on time
+        let updateInterval = setInterval(() => {
+            if (isActiveHours()) {
+                updateCharts();
+            } else {
+                console.log("Outside active hours (8am-10pm Copenhagen time), not fetching data");
+            }
+            
+            // Adjust interval if needed
+            const newInterval = updatePollInterval();
+            if (newInterval !== updateInterval._idleTimeout) {
+                clearInterval(updateInterval);
+                updateInterval = setInterval(updateCharts, newInterval);
+            }
+        }, updatePollInterval());
+        
+        // Initial update
+        updateCharts();
     </script>
 </body>
 
