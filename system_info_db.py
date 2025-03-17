@@ -19,6 +19,12 @@ def log(*args, **kwargs):
 copenhagen_tz = pytz.timezone('Europe/Copenhagen')
 DB_FILE = 'system_info.db'
 
+# Check if current time is within active hours (8am to 10pm Copenhagen time)
+def is_active_hours():
+    current_time = datetime.now(copenhagen_tz)
+    hour = current_time.hour
+    return 8 <= hour < 22  # Between 8am and 10pm
+
 def init_db():
     """
     Creates (if not existing) a SQLite database file with a 'points' table
@@ -257,6 +263,11 @@ def produce_json_structure(historical_limit=100, historical_offset=0):
         }
 
 if __name__ == "__main__":
+    # Skip data collection outside active hours
+    if not is_active_hours():
+        log("\n=== Outside active hours (8am-10pm), skipping data collection ===")
+        sys.exit(0)
+        
     # Example usage: run this script to do one minute of collection & save to DB.
     log("\n=== Script Started ===")
     init_db()
