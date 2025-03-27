@@ -344,6 +344,22 @@
                 <span id="innerRadiusLabel" class="value-display">2100</span>
               </div>
               
+              <!-- Add this slider to the Dimensions parameter group, after the Inner Radius slider -->
+              <div class="slider-row" id="glassSizeRow">
+                <label for="glassSizeSlider">Glass Core Size (μm):</label>
+                <input
+                  type="range"
+                  class="form-range"
+                  id="glassSizeSlider"
+                  min="0.5"
+                  max="10"
+                  step="0.1"
+                  value="1.8"
+                  oninput="updateLabel('glassSizeLabel', this.value)"
+                />
+                <span id="glassSizeLabel" class="value-display">1.8</span>
+              </div>
+              
               <div class="slider-row">
                 <label for="taperAngleSlider">Taper Angle (degrees):</label>
                 <input
@@ -582,13 +598,16 @@
       const glassDistance = parseFloat(document.getElementById('glassDistanceSlider').value) * 1e-9; // nm to meters
       const wavelength = parseFloat(document.getElementById('wavelengthSlider').value) * 1e-9; // nm to meters
       
-      // Determine glass size based on fiber type
-      let glassSize = 1.8e-6; // Default value
+      // Get glass size from the slider or use preset values for fiber types
+      let glassSize;
       const fiberType = document.getElementById('fiberTypeSelect').value;
       if (fiberType === 'UHNA3') {
         glassSize = 1.8e-6; // 1.8 μm for UHNA3
       } else if (fiberType === '780HP') {
         glassSize = 4.4e-6; // 4.4 μm for 780HP
+      } else {
+        // Custom settings - use the slider value
+        glassSize = parseFloat(document.getElementById('glassSizeSlider').value) * 1e-6; // μm to meters
       }
       
       // Structure-specific parameters
@@ -828,13 +847,16 @@
       const glassDistance = parseFloat(document.getElementById('glassDistanceSlider').value) * 1e-9;
       const wavelength = parseFloat(document.getElementById('wavelengthSlider').value) * 1e-9;
       
-      // Determine glass size based on fiber type
-      let glassSize = 1.8e-6; // Default value
+      // Get glass size from the slider or use preset values for fiber types
+      let glassSize;
       const fiberType = document.getElementById('fiberTypeSelect').value;
       if (fiberType === 'UHNA3') {
         glassSize = 1.8e-6; // 1.8 μm for UHNA3
       } else if (fiberType === '780HP') {
         glassSize = 4.4e-6; // 4.4 μm for 780HP
+      } else {
+        // Custom settings - use the slider value
+        glassSize = parseFloat(document.getElementById('glassSizeSlider').value) * 1e-6; // μm to meters
       }
       
       // Structure-specific parameters
@@ -1239,11 +1261,11 @@
       const fiberType = document.getElementById('fiberTypeSelect').value;
       
       // Enable all sliders by default (for custom mode)
-      document.getElementById('radiusSlider').disabled = false;
       document.getElementById('n1Slider').disabled = false;
       document.getElementById('n2Slider').disabled = false;
       document.getElementById('glassIndexSlider').disabled = false;
       document.getElementById('wavelengthSlider').disabled = false;
+      document.getElementById('glassSizeSlider').disabled = false;
       
       // Apply preset values based on fiber type
       if (fiberType === 'UHNA3') {
@@ -1251,44 +1273,48 @@
         document.getElementById('n1Slider').value = '1.4949';
         document.getElementById('n2Slider').value = '1.4533';
         document.getElementById('wavelengthSlider').value = '800';
+        document.getElementById('glassSizeSlider').value = '1.8';
         
         // Set the glass parameters
         document.getElementById('glassIndexSlider').value = '1.4949';
-        // The glass_size will be set in the fetch request
         
         // Update labels
         updateLabel('n1Label', '1.4949');
         updateLabel('n2Label', '1.4533');
         updateLabel('wavelengthLabel', '800');
         updateLabel('glassIndexLabel', '1.4949');
+        updateLabel('glassSizeLabel', '1.8');
         
         // Disable sliders for preset values
         document.getElementById('n1Slider').disabled = true;
         document.getElementById('n2Slider').disabled = true;
         document.getElementById('wavelengthSlider').disabled = true;
         document.getElementById('glassIndexSlider').disabled = true;
+        document.getElementById('glassSizeSlider').disabled = true;
         
       } else if (fiberType === '780HP') {
         // 780HP fiber specs
         document.getElementById('n1Slider').value = '1.4571';
         document.getElementById('n2Slider').value = '1.4517';
         document.getElementById('wavelengthSlider').value = '900';
+        document.getElementById('glassSizeSlider').value = '4.4';
         
         // Set the glass parameters
         document.getElementById('glassIndexSlider').value = '1.4571';
-        // The glass_size will be set in the fetch request
         
         // Update labels
         updateLabel('n1Label', '1.4571');
         updateLabel('n2Label', '1.4517');
         updateLabel('wavelengthLabel', '900');
         updateLabel('glassIndexLabel', '1.4571');
+        updateLabel('glassSizeLabel', '4.4');
         
         // Disable sliders for preset values
         document.getElementById('n1Slider').disabled = true;
         document.getElementById('n2Slider').disabled = true;
         document.getElementById('wavelengthSlider').disabled = true;
         document.getElementById('glassIndexSlider').disabled = true;
+        document.getElementById('glassSizeSlider').disabled = true;
       }
     }
   </script>
