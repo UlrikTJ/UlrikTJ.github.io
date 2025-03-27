@@ -209,7 +209,7 @@ def get_all_data():
             all_data.append(p)
     return all_data
 
-def produce_json_structure(historical_limit=100, historical_offset=0):
+def produce_json_structure(historical_limit=10000, historical_offset=0):
     """
     Produce the JSON data structure with current and historical data
     """
@@ -225,17 +225,40 @@ def produce_json_structure(historical_limit=100, historical_offset=0):
                 
                 cursor.execute("SELECT * FROM points WHERE timestamp >= ?", (cutoff_timestamp,))
                 current_points = [dict(row) for row in cursor.fetchall()]
+                print(f"Retrieved {len(current_points)} current points")
             except Exception as e:
                 print(f"Error fetching current data: {e}")
                 current_points = []
             
-            # Get historical data with pagination
+            # Implement downsampling for very large queries
+            downsample_factor = 1
+            if historical_limit > 5000:
+                # Calculate the downsample factor based on the requested limit
+                total_points = cursor.execute("SELECT COUNT(*) FROM points").fetchone()[0]
+                if total_points > 5000:
+                    downsample_factor = max(1, total_points // 5000)
+                    print(f"Downsampling with factor {downsample_factor} based on total {total_points} points")
+            
+            # Get historical data efficiently
             try:
-                cursor.execute(
-                    "SELECT * FROM points WHERE timestamp < ? ORDER BY timestamp DESC LIMIT ? OFFSET ?", 
-                    (cutoff_timestamp, historical_limit, historical_offset)
-                )
+                if downsample_factor > 1:
+                    # Use the modulo of rowid for efficient downsampling
+                    cursor.execute("""
+                        SELECT * FROM points 
+                        WHERE timestamp < ? AND rowid % ? = 0
+                        ORDER BY timestamp DESC 
+                        LIMIT ? OFFSET ?
+                    """, (cutoff_timestamp, downsample_factor, historical_limit, historical_offset))
+                else:
+                    cursor.execute("""
+                        SELECT * FROM points 
+                        WHERE timestamp < ? 
+                        ORDER BY timestamp DESC 
+                        LIMIT ? OFFSET ?
+                    """, (cutoff_timestamp, historical_limit, historical_offset))
+                
                 historical_points = [dict(row) for row in cursor.fetchall()]
+                print(f"Retrieved {len(historical_points)} historical points with limit={historical_limit}, offset={historical_offset}")
             except Exception as e:
                 print(f"Error fetching historical data: {e}")
                 historical_points = []
@@ -250,9 +273,16 @@ def produce_json_structure(historical_limit=100, historical_offset=0):
                 except Exception as e:
                     print(f"Error processing point data: {e}")
             
+            # Return the full structure
             return {
                 'current': current_points,
-                'historical': historical_points
+                'historical': historical_points,
+                'meta': {
+                    'requested': historical_limit,
+                    'returned': len(historical_points),
+                    'downsampled': downsample_factor > 1,
+                    'factor': downsample_factor
+                }
             }
     except Exception as e:
         print(f"Error in produce_json_structure: {e}")

@@ -420,6 +420,31 @@
             }
         }
 
+        async function fetchDataInBatches(totalLimit) {
+            const batchSize = 5000;
+            let allData = { current: [], historical: [] };
+            
+            for (let offset = 0; offset < totalLimit; offset += batchSize) {
+                const currentBatchSize = Math.min(batchSize, totalLimit - offset);
+                const response = await fetch(`https://serverstatsapi.ddns.net/data.json?limit=${currentBatchSize}&page=${offset/batchSize}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status}`);
+                }
+                
+                const batchData = await response.json();
+                
+                // Combine data
+                allData.current = batchData.current;  // Always use the latest 'current'
+                allData.historical = [...allData.historical, ...batchData.historical];
+                
+                // Update UI to show progress
+                updateLoadingProgress(offset + currentBatchSize, totalLimit);
+            }
+            
+            return allData;
+        }
+
         async function updateCharts() {
             try {
                 // Decide the largest needed limit among the displayed charts

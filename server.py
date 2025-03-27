@@ -17,6 +17,33 @@ from OpticSimProj.Workspace.GodFunction import simulate_optical_structure
 cache = {}
 CACHE_DURATION = 60  # seconds
 
+# Memory management - clean up old cache entries
+def clean_cache():
+    """Clean up old cache entries and prevent memory overflow"""
+    global cache
+    
+    # Get current time
+    current_time = time.time()
+    
+    # Remove old entries
+    keys_to_remove = [k for k, v in cache.items() 
+                     if current_time - v['time'] > CACHE_DURATION * 2]
+    
+    # For very large datasets, don't keep them in memory as long
+    large_keys = [k for k, v in cache.items() 
+                 if k.startswith('data_') and int(k.split('_')[1]) > 10000
+                 and current_time - v['time'] > CACHE_DURATION / 2]
+    
+    keys_to_remove.extend(large_keys)
+    
+    # Remove the keys
+    for k in keys_to_remove:
+        del cache[k]
+        
+    # Log cache size
+    cache_size = sum(sys.getsizeof(v.get('data', {})) for v in cache.values())
+    print(f"Cache size: {cache_size/1024/1024:.2f} MB with {len(cache)} entries")
+
 def create_app():
     # Create the Flask app
     app = Flask(__name__)
@@ -42,20 +69,26 @@ def create_app():
         try:
             # Get query parameters for pagination
             limit = request.args.get('limit', default=100, type=int)
-            # Cap the limit to prevent memory issues
-            if limit > 5000:
-                limit = 5000
-
             page = request.args.get('page', default=0, type=int)
-
+            
+            # Log the requested limit
+            app.logger.info(f"Data request with limit={limit}, page={page}")
+            
+            # Instead of capping the limit, we'll optimize for large queries
+            # For extremely large queries, we can increase cache duration
+            cache_timeout = CACHE_DURATION
+            if limit > 10000:
+                cache_timeout = CACHE_DURATION * 2  # Double cache time for large queries
+                app.logger.info(f"Large query detected (limit={limit}). Increasing cache duration.")
+            
             # Check cache first
             cache_key = f"data_{limit}_{page}"
             current_time = time.time()
 
-            if cache_key in cache and current_time - cache[cache_key]['time'] < CACHE_DURATION:
+            if cache_key in cache and current_time - cache[cache_key]['time'] < cache_timeout:
                 return jsonify(cache[cache_key]['data'])
 
-            # Get full data structure but limit historical data
+            # Get full data structure with requested limit
             data = produce_json_structure(historical_limit=limit, historical_offset=page*limit)
 
             # Store in cache
@@ -67,7 +100,7 @@ def create_app():
             return jsonify(data)
         except Exception as e:
             app.logger.error(f"Error in serve_data: {str(e)}")
-            return jsonify({"error": "Internal server error"}), 500
+            return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
     def generate_heatmap(inner_radius, outer_radius, n1, taper_angle, modes):
         # Create a field data matrix (replace with your actual field calculation)
