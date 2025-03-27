@@ -709,16 +709,27 @@
         hideLoading();
         console.error('Error:', error);
         document.getElementById('resultsContainer').innerHTML = `
-          <div class="alert alert-danger" role="alert">
-            <h4 class="alert-heading">Simulation Error</h4>
-            <p>${error.message}</p>
+          <div class="alert alert-warning" role="alert">
+            <h4 class="alert-heading">Simulation Notice</h4>
+            <p>The server encountered an issue with this simulation. This may happen with certain parameter combinations.</p>
             <hr>
-            <p class="mb-0">Try adjusting your parameters or check server connectivity.</p>
+            <p class="mb-0">Try adjusting your parameters:</p>
+            <ul>
+              <li>Use a larger Inner Radius (above 500 nm)</li>
+              <li>Reduce the number of modes</li>
+              <li>Use a smaller taper angle</li>
+            </ul>
           </div>
         `;
         
-        // Fall back to client-side visualization if the server call fails
-        fallbackIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
+        // Only generate fallback visualization if server is completely unreachable
+        // If it's just a simulation parameter issue, let the intensity profile be fetched normally
+        if (error.message === 'Failed to fetch' || error.message.includes('Network')) {
+          fallbackIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
+        } else {
+          // Still try to get the intensity profile from the server
+          generateIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
+        }
       });
     }
     
@@ -833,12 +844,14 @@
         return response.json();
       })
       .then(data => {
-        // Use the returned data from Python calculations
-        const ctx = document.getElementById('intensityProfileChart').getContext('2d');
-        
+        // Clear any existing chart first
         if (intensityProfileChart) {
           intensityProfileChart.destroy();
+          intensityProfileChart = null;
         }
+        
+        // Use the returned data from Python calculations
+        const ctx = document.getElementById('intensityProfileChart').getContext('2d');
         
         intensityProfileChart = new Chart(ctx, {
           type: 'line',
@@ -889,13 +902,33 @@
       })
       .catch(error => {
         console.error('Error fetching intensity profile:', error);
-        // Fall back to client-side calculation if server request fails
-        fallbackIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
+        
+        // Only fall back if we couldn't get data from server
+        if (!intensityProfileChart) {
+          // Add a small notice about using fallback
+          const chartContainer = document.getElementById('intensityProfileChart').parentNode;
+          const fallbackNotice = document.createElement('div');
+          fallbackNotice.className = 'alert alert-warning mt-2 mb-2 py-1';
+          fallbackNotice.style.fontSize = '12px';
+          fallbackNotice.innerHTML = '<strong>Note:</strong> Using simplified JavaScript calculation (server unavailable)';
+          chartContainer.appendChild(fallbackNotice);
+          
+          // Run the fallback calculation
+          fallbackIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
+        }
       });
     }
     
     // Keep the original JS implementation as a fallback
     function fallbackIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes) {
+      console.log("Using fallback intensity profile calculation");
+      
+      // Clear any existing chart first
+      if (intensityProfileChart) {
+        intensityProfileChart.destroy();
+        intensityProfileChart = null;
+      }
+      
       const points = 100;
       const distance = new Array(points).fill(0).map((_, i) => i * outerRadius * 2e6 / points); // x-axis in μm
       
