@@ -341,7 +341,7 @@
                   value="2100"
                   oninput="updateLabel('innerRadiusLabel', this.value)"
                 />
-                <span id="innerRadiusLabel" class="value-display">1000</span>
+                <span id="innerRadiusLabel" class="value-display">2100</span>
               </div>
               
               <div class="slider-row">
@@ -1228,7 +1228,7 @@
       // Apply preset values based on fiber type
       if (fiberType === 'UHNA3') {
         // UHNA3 fiber specs
-        document.getElementById('radiusSlider').value = '1.8';
+        //document.getElementById('radiusSlider').value = '1.8';
         document.getElementById('n1Slider').value = '1.4949';
         document.getElementById('n2Slider').value = '1.4533';
         document.getElementById('wavelengthSlider').value = '800';
@@ -1240,26 +1240,26 @@
         updateLabel('wavelengthLabel', '800');
         
         // Disable sliders for preset values
-        document.getElementById('radiusSlider').disabled = true;
+        //document.getElementById('radiusSlider').disabled = true;
         document.getElementById('n1Slider').disabled = true;
         document.getElementById('n2Slider').disabled = true;
         document.getElementById('wavelengthSlider').disabled = true;
         
       } else if (fiberType === '780HP') {
         // 780HP fiber specs
-        document.getElementById('radiusSlider').value = '4.4';
+        //document.getElementById('radiusSlider').value = '4.4';
         document.getElementById('n1Slider').value = '1.4571';
         document.getElementById('n2Slider').value = '1.4517';
         document.getElementById('wavelengthSlider').value = '900';
         
         // Update labels
-        updateLabel('radiusLabel', '4.4');
+        //updateLabel('radiusLabel', '4.4');
         updateLabel('n1Label', '1.4571');
         updateLabel('n2Label', '1.4517');
         updateLabel('wavelengthLabel', '900');
         
         // Disable sliders for preset values
-        document.getElementById('radiusSlider').disabled = true;
+        //document.getElementById('radiusSlider').disabled = true;
         document.getElementById('n1Slider').disabled = true;
         document.getElementById('n2Slider').disabled = true;
         document.getElementById('wavelengthSlider').disabled = true;
