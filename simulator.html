@@ -304,6 +304,17 @@
                 </select>
               </div>
               <div class="slider-row">
+                <label for="fiberTypeSelect">Fiber Type:</label>
+                <select 
+                  class="form-select" 
+                  id="fiberTypeSelect" 
+                  onchange="updateFiberTypeFields()">
+                  <option value="custom" selected>Custom Settings</option>
+                  <option value="UHNA3">UHNA3 (1.8 μm core, 800nm)</option>
+                  <option value="780HP">780HP (4.4 μm core, 900nm)</option>
+                </select>
+              </div>
+              <div class="slider-row">
                 <label for="radiusSlider">Outer Radius (μm):</label>
                 <input
                   type="range"
@@ -325,9 +336,9 @@
                   class="form-range"
                   id="innerRadiusSlider"
                   min="100"
-                  max="2000"
+                  max="3000"
                   step="100"
-                  value="1000"
+                  value="2100"
                   oninput="updateLabel('innerRadiusLabel', this.value)"
                 />
                 <span id="innerRadiusLabel" class="value-display">1000</span>
@@ -339,7 +350,7 @@
                   type="range"
                   class="form-range"
                   id="taperAngleSlider"
-                  min="0"
+                  min="1"
                   max="90"
                   step="1"
                   value="5"
@@ -356,7 +367,7 @@
                   min="10"
                   max="500"
                   step="10"
-                  value="100"
+                  value="88"
                   oninput="updateLabel('arThicknessLabel', this.value)"
                 />
                 <span id="arThicknessLabel" class="value-display">100</span>
@@ -371,7 +382,7 @@
                   min="1.0"
                   max="3.5"
                   step="0.1"
-                  value="1.9"
+                  value="2.3"
                   oninput="updateLabel('arIndexLabel', this.value)"
                 />
                 <span id="arIndexLabel" class="value-display">1.9</span>
@@ -387,9 +398,9 @@
                   type="range"
                   class="form-range"
                   id="n1Slider"
-                  min="1"
+                  min="1.0"
                   max="5"
-                  step="0.1"
+                  step="0.0001"
                   value="3.5"
                   oninput="updateLabel('n1Label', this.value)"
                 />
@@ -402,9 +413,9 @@
                   type="range"
                   class="form-range"
                   id="n2Slider"
-                  min="1.0"
+                  min="1.0" 
                   max="2.0"
-                  step="0.05"
+                  step="0.0001"
                   value="1.0"
                   oninput="updateLabel('n2Label', this.value)"
                 />
@@ -1174,6 +1185,9 @@
       // Initialize structure type fields
       updateStructureTypeFields();
       
+      // Initialize fiber type fields
+      updateFiberTypeFields();
+      
       // Add null check here
       const loadingElement = document.getElementById('loadingViz');
       if (loadingElement) loadingElement.style.display = 'none';
@@ -1198,6 +1212,58 @@
         arCoatingIndexRow.style.display = 'block';
       }
       // 'flat' type doesn't need additional fields
+    }
+
+    // Add this function near the other JavaScript functions (around line 901)
+    function updateFiberTypeFields() {
+      const fiberType = document.getElementById('fiberTypeSelect').value;
+      
+      // Enable all sliders by default (for custom mode)
+      document.getElementById('radiusSlider').disabled = false;
+      document.getElementById('n1Slider').disabled = false;
+      document.getElementById('n2Slider').disabled = false;
+      document.getElementById('glassIndexSlider').disabled = false;
+      document.getElementById('wavelengthSlider').disabled = false;
+      
+      // Apply preset values based on fiber type
+      if (fiberType === 'UHNA3') {
+        // UHNA3 fiber specs
+        document.getElementById('radiusSlider').value = '1.8';
+        document.getElementById('n1Slider').value = '1.4949';
+        document.getElementById('n2Slider').value = '1.4533';
+        document.getElementById('wavelengthSlider').value = '800';
+        
+        // Update labels
+        updateLabel('radiusLabel', '1.8');
+        updateLabel('n1Label', '1.4949');
+        updateLabel('n2Label', '1.4533');
+        updateLabel('wavelengthLabel', '800');
+        
+        // Disable sliders for preset values
+        document.getElementById('radiusSlider').disabled = true;
+        document.getElementById('n1Slider').disabled = true;
+        document.getElementById('n2Slider').disabled = true;
+        document.getElementById('wavelengthSlider').disabled = true;
+        
+      } else if (fiberType === '780HP') {
+        // 780HP fiber specs
+        document.getElementById('radiusSlider').value = '4.4';
+        document.getElementById('n1Slider').value = '1.4571';
+        document.getElementById('n2Slider').value = '1.4517';
+        document.getElementById('wavelengthSlider').value = '900';
+        
+        // Update labels
+        updateLabel('radiusLabel', '4.4');
+        updateLabel('n1Label', '1.4571');
+        updateLabel('n2Label', '1.4517');
+        updateLabel('wavelengthLabel', '900');
+        
+        // Disable sliders for preset values
+        document.getElementById('radiusSlider').disabled = true;
+        document.getElementById('n1Slider').disabled = true;
+        document.getElementById('n2Slider').disabled = true;
+        document.getElementById('wavelengthSlider').disabled = true;
+      }
     }
   </script>
 </body>
