@@ -582,6 +582,15 @@
       const glassDistance = parseFloat(document.getElementById('glassDistanceSlider').value) * 1e-9; // nm to meters
       const wavelength = parseFloat(document.getElementById('wavelengthSlider').value) * 1e-9; // nm to meters
       
+      // Determine glass size based on fiber type
+      let glassSize = 1.8e-6; // Default value
+      const fiberType = document.getElementById('fiberTypeSelect').value;
+      if (fiberType === 'UHNA3') {
+        glassSize = 1.8e-6; // 1.8 μm for UHNA3
+      } else if (fiberType === '780HP') {
+        glassSize = 4.4e-6; // 4.4 μm for 780HP
+      }
+      
       // Structure-specific parameters
       let taperAngle = 0;
       let arThickness = 0;
@@ -615,6 +624,7 @@
           n1,
           n2,
           glassIndex,
+          glass_size: glassSize, // Add the glass_size parameter
           taperAngle,
           n_ar: arIndex,
           thickness_of_ar_coating: arThickness,
@@ -818,6 +828,15 @@
       const glassDistance = parseFloat(document.getElementById('glassDistanceSlider').value) * 1e-9;
       const wavelength = parseFloat(document.getElementById('wavelengthSlider').value) * 1e-9;
       
+      // Determine glass size based on fiber type
+      let glassSize = 1.8e-6; // Default value
+      const fiberType = document.getElementById('fiberTypeSelect').value;
+      if (fiberType === 'UHNA3') {
+        glassSize = 1.8e-6; // 1.8 μm for UHNA3
+      } else if (fiberType === '780HP') {
+        glassSize = 4.4e-6; // 4.4 μm for 780HP
+      }
+      
       // Structure-specific parameters
       let arThickness = 0;
       let arIndex = 0;
@@ -840,6 +859,7 @@
           outerRadius,
           n1,
           n2,
+          glass_size: glassSize, // Add the glass_size parameter
           taperAngle: structureType === 'taper' ? taperAngle : null,
           n_ar: structureType === 'ar_coating' ? arIndex : null,
           thickness_of_ar_coating: structureType === 'ar_coating' ? arThickness : null,
@@ -1228,41 +1248,47 @@
       // Apply preset values based on fiber type
       if (fiberType === 'UHNA3') {
         // UHNA3 fiber specs
-        //document.getElementById('radiusSlider').value = '1.8';
         document.getElementById('n1Slider').value = '1.4949';
         document.getElementById('n2Slider').value = '1.4533';
         document.getElementById('wavelengthSlider').value = '800';
         
+        // Set the glass parameters
+        document.getElementById('glassIndexSlider').value = '1.4949';
+        // The glass_size will be set in the fetch request
+        
         // Update labels
-        updateLabel('radiusLabel', '1.8');
         updateLabel('n1Label', '1.4949');
         updateLabel('n2Label', '1.4533');
         updateLabel('wavelengthLabel', '800');
+        updateLabel('glassIndexLabel', '1.4949');
         
         // Disable sliders for preset values
-        //document.getElementById('radiusSlider').disabled = true;
         document.getElementById('n1Slider').disabled = true;
         document.getElementById('n2Slider').disabled = true;
         document.getElementById('wavelengthSlider').disabled = true;
+        document.getElementById('glassIndexSlider').disabled = true;
         
       } else if (fiberType === '780HP') {
         // 780HP fiber specs
-        //document.getElementById('radiusSlider').value = '4.4';
         document.getElementById('n1Slider').value = '1.4571';
         document.getElementById('n2Slider').value = '1.4517';
         document.getElementById('wavelengthSlider').value = '900';
         
+        // Set the glass parameters
+        document.getElementById('glassIndexSlider').value = '1.4571';
+        // The glass_size will be set in the fetch request
+        
         // Update labels
-        //updateLabel('radiusLabel', '4.4');
         updateLabel('n1Label', '1.4571');
         updateLabel('n2Label', '1.4517');
         updateLabel('wavelengthLabel', '900');
+        updateLabel('glassIndexLabel', '1.4571');
         
         // Disable sliders for preset values
-        //document.getElementById('radiusSlider').disabled = true;
         document.getElementById('n1Slider').disabled = true;
         document.getElementById('n2Slider').disabled = true;
         document.getElementById('wavelengthSlider').disabled = true;
+        document.getElementById('glassIndexSlider').disabled = true;
       }
     }
   </script>
