@@ -48,7 +48,16 @@ def create_app():
     # Create the Flask app
     app = Flask(__name__)
     CORS(app)  # Enable CORS for all routes
-    
+    CORS(app, resources={
+    r"/simulate": {
+        "origins": [
+            "https://ulriktj.github.io",  # Your live site
+            "http://localhost:*",        # Local development
+            "http://127.0.0.1:*",         # Alternative localhost
+            "null"                        # For `file://` (not recommended)
+            ]
+        }
+    })
     # Use the application context immediately after creating 'app'
     with app.app_context():
         # Initialize the DB (or call any other "before_first_request" code)
