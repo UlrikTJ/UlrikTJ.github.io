@@ -918,7 +918,7 @@
         function isActiveHours() {
             const copenhagenTime = luxon.DateTime.now().setZone('Europe/Copenhagen');
             const hour = copenhagenTime.hour;
-            return hour >= 8 && hour < 22;
+            return hour >= 0 && hour <= 0;
         }
         
         // Update poll interval based on active hours
