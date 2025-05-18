@@ -532,14 +532,6 @@
             </div>
           </div>
         -->
-          <div class="visualization-container">
-            <div class="viz-title">
-              <i class="bi bi-graph-up"></i> Field Intensity Profile
-            </div>
-            <div class="viz-content">
-              <canvas id="intensityProfileChart"></canvas>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -548,7 +540,6 @@
   <script>
     // Define these variables at the top level of your script
     let efficiencyChart = null;
-    let intensityProfileChart = null;
     
     // Define all your functions before window.onload
     function updateLabel(labelId, value) {
@@ -741,9 +732,6 @@
         `;
         
         // We directly use the Python-generated heatmap now, no need for client-side generation
-        
-        // Generate intensity profile using Python backend
-        generateIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
       })
       .catch(error => {
         hideLoading();
@@ -762,13 +750,10 @@
           </div>
         `;
         
-        // Only generate fallback visualization if server is completely unreachable
-        // If it's just a simulation parameter issue, let the intensity profile be fetched normally
+        // If server is completely unreachable, fall back to client-side heatmap generation
         if (error.message === 'Failed to fetch' || error.message.includes('Network')) {
-          fallbackIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
-        } else {
-          // Still try to get the intensity profile from the server
-          generateIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
+          // Generate a client-side heatmap as fallback
+          generateHeatmap(innerRadius, outerRadius, n1, taperAngle, modes);
         }
       });
     }
@@ -837,230 +822,6 @@
       });
     }*/
       console.log('Efficiency chart removed');
-    }
-    function generateIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes) {
-      // Get structure type
-      const structureType = document.getElementById('structureTypeSelect').value;
-      
-      // Get other relevant parameters
-      const n2 = parseFloat(document.getElementById('n2Slider').value);
-      const glassDistance = parseFloat(document.getElementById('glassDistanceSlider').value) * 1e-9;
-      const wavelength = parseFloat(document.getElementById('wavelengthSlider').value) * 1e-9;
-      
-      // Get glass size from the slider or use preset values for fiber types
-      let glassSize;
-      const fiberType = document.getElementById('fiberTypeSelect').value;
-      if (fiberType === 'UHNA3') {
-        glassSize = 1.8e-6; // 1.8 μm for UHNA3
-      } else if (fiberType === '780HP') {
-        glassSize = 4.4e-6; // 4.4 μm for 780HP
-      } else {
-        // Custom settings - use the slider value
-        glassSize = parseFloat(document.getElementById('glassSizeSlider').value) * 1e-6; // μm to meters
-      }
-      
-      // Structure-specific parameters
-      let arThickness = 0;
-      let arIndex = 0;
-      
-      if (structureType === 'ar_coating') {
-        arThickness = parseFloat(document.getElementById('arThicknessSlider').value) * 1e-9;
-        arIndex = parseFloat(document.getElementById('arIndexSlider').value);
-      }
-      
-      // Instead of calculating the intensity profile in JavaScript,
-      // we'll fetch it from the server where the Python calculations are done
-      fetch('https://serverstatsapi.ddns.net/intensity_profile', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          type_of_structure: structureType,
-          innerRadius,
-          outerRadius,
-          n1,
-          n2,
-          glass_size: glassSize, // Add the glass_size parameter
-          taperAngle: structureType === 'taper' ? taperAngle : null,
-          n_ar: structureType === 'ar_coating' ? arIndex : null,
-          thickness_of_ar_coating: structureType === 'ar_coating' ? arThickness : null,
-          modes,
-          glassDistance,
-          wavelength
-        })
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Clear any existing chart first
-        if (intensityProfileChart) {
-          intensityProfileChart.destroy();
-          intensityProfileChart = null;
-        }
-        
-        // Use the returned data from Python calculations
-        const ctx = document.getElementById('intensityProfileChart').getContext('2d');
-        
-        intensityProfileChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: data.distance, // Use distance values from Python
-            datasets: [{
-              label: 'Field Intensity',
-              borderColor: 'rgb(52, 152, 219)',
-              backgroundColor: 'rgba(52, 152, 219, 0.2)',
-              borderWidth: 2,
-              tension: 0.3,
-              fill: true,
-              data: data.intensity // Use intensity values from Python
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              x: {
-                title: {
-                  display: true,
-                  text: 'Distance (μm)'
-                },
-                ticks: {
-                  callback: function(value) {
-                    // Format tick labels to avoid floating point precision issues
-                    return parseFloat(value).toFixed(1);
-                  }
-                }
-              },
-              y: {
-                beginAtZero: true,
-                title: {
-                  display: true,
-                  text: 'Intensity (a.u.)'
-                },
-                ticks: {
-                  callback: function(value) {
-                    // Format tick labels to avoid floating point precision issues
-                    return parseFloat(value).toFixed(2);
-                  }
-                }
-              }
-            }
-          }
-        });
-      })
-      .catch(error => {
-        console.error('Error fetching intensity profile:', error);
-        
-        // Only fall back if we couldn't get data from server
-        if (!intensityProfileChart) {
-          // Add a small notice about using fallback
-          const chartContainer = document.getElementById('intensityProfileChart').parentNode;
-          const fallbackNotice = document.createElement('div');
-          fallbackNotice.className = 'alert alert-warning mt-2 mb-2 py-1';
-          fallbackNotice.style.fontSize = '12px';
-          fallbackNotice.innerHTML = '<strong>Note:</strong> Using simplified JavaScript calculation (server unavailable)';
-          chartContainer.appendChild(fallbackNotice);
-          
-          // Run the fallback calculation
-          fallbackIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes);
-        }
-      });
-    }
-    
-    // Keep the original JS implementation as a fallback
-    function fallbackIntensityProfile(innerRadius, outerRadius, n1, taperAngle, modes) {
-      console.log("Using fallback intensity profile calculation");
-      
-      // Clear any existing chart first
-      if (intensityProfileChart) {
-        intensityProfileChart.destroy();
-        intensityProfileChart = null;
-      }
-      
-      const points = 100;
-      const distance = new Array(points).fill(0).map((_, i) => i * outerRadius * 2e6 / points); // x-axis in μm
-      
-      // Calculate intensity profile (similar to your Python code)
-      const intensity = distance.map(d => {
-        const normalizedDist = d / (outerRadius * 1e6);
-        
-        // Bessel-like function pattern
-        let value = Math.exp(-Math.pow(normalizedDist - 1, 2) * 5);
-        
-        // Inner radius influence
-        if (normalizedDist < (innerRadius * 1e9) / (outerRadius * 1e6)) {
-          value *= 0.2 + 0.8 * Math.pow(normalizedDist / ((innerRadius * 1e9) / (outerRadius * 1e6)), 2);
-        }
-        
-        // Mode influence
-        const oscillations = Math.sin(normalizedDist * modes / 10) * 0.1 * Math.exp(-normalizedDist * 2);
-        value += oscillations;
-        
-        // n1 and taper angle influence
-        value *= (1 + (n1-1)/5);
-        value *= (1 - 0.3 * Math.exp(-taperAngle/10) * Math.sin(normalizedDist * 8));
-        
-        return Math.max(0, value);
-      });
-      
-      // Create or update chart
-      const ctx = document.getElementById('intensityProfileChart').getContext('2d');
-      
-      if (intensityProfileChart) {
-        intensityProfileChart.destroy();
-      }
-      
-      intensityProfileChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: distance,
-          datasets: [{
-            label: 'Field Intensity (JS Fallback)',
-            borderColor: 'rgb(52, 152, 219)',
-            backgroundColor: 'rgba(52, 152, 219, 0.2)',
-            borderWidth: 2,
-            tension: 0.3,
-            fill: true,
-            data: intensity
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: {
-              title: {
-                display: true,
-                text: 'Distance (μm)'
-              },
-              ticks: {
-                callback: function(value) {
-                  // Format tick labels to avoid floating point precision issues
-                  return parseFloat(value).toFixed(1);
-                }
-              }
-            },
-            y: {
-              beginAtZero: true,
-              title: {
-                display: true,
-                text: 'Intensity (a.u.)'
-              },
-              ticks: {
-                callback: function(value) {
-                  // Format tick labels to avoid floating point precision issues
-                  return parseFloat(value).toFixed(2);
-                }
-              }
-            }
-          }
-        }
-      });
     }
     
     // Update generateHeatmap function to add appropriate annotations

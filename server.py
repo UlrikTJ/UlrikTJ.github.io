@@ -11,7 +11,7 @@ from matplotlib.colors import LinearSegmentedColormap
 import io
 import base64
 from flask_cors import CORS
-from OpticSimProj.Workspace.GodFunction import simulate_optical_structure, get_intensity_profile
+from OpticSimProj.Workspace.GodFunction import simulate_optical_structure
 
 # Simple time-based cache
 cache = {}
@@ -231,105 +231,7 @@ def create_app():
         except Exception as e:
             return jsonify({'error': str(e)}), 500
 
-    @app.route('/intensity_profile', methods=['POST'])
-    def intensity_profile():
-        try:
-            params = request.json
-            print(f"Received intensity profile request with params: {params}")
-            
-            # Get parameters with defaults if missing
-            structure_type = params.get('type_of_structure', 'taper')
-            inner_radius = params.get('innerRadius', 1e-6)
-            outer_radius = params.get('outerRadius', 10e-6)
-            n1 = params.get('n1', 3.5)
-            n2 = params.get('n2', 1.0)
-            taper_angle = params.get('taperAngle')
-            n_ar = params.get('n_ar')
-            thickness_of_ar_coating = params.get('thickness_of_ar_coating')
-            modes = params.get('modes', 100)
-            glass_distance = params.get('glassDistance', 1e-9)
-            wavelength = params.get('wavelength', 950e-9)
-            
-            try:
-                # Try to use the accurate physics calculation
-                result = get_intensity_profile(
-                    structure_type,
-                    inner_radius,
-                    outer_radius,
-                    n1,
-                    n2,
-                    taper_angle,
-                    n_ar,
-                    thickness_of_ar_coating,
-                    modes,
-                    glass_distance,
-                    wavelength=wavelength
-                )
-                return jsonify(result)
-            except Exception as e:
-                print(f"Error in physics calculation: {str(e)}")
-                
-                # Provide a fallback calculation on the server side
-                # This is more accurate than the client-side JavaScript fallback
-                distance = np.linspace(0, outer_radius * 2e6, 100).tolist()
-                intensity = []
-                
-                for d in distance:
-                    r = d * 1e-6  # Convert μm to meters
-                    # Simple fallback model that mimics Bessel functions
-                    # Normalized distance
-                    norm_dist = r / outer_radius
-                    
-                    # Basic profile with exponential decay away from core edge
-                    value = np.exp(-np.power(norm_dist - 1, 2) * 5)
-                    
-                    # Inner radius influence
-                    if norm_dist < inner_radius / outer_radius:
-                        value *= 0.2 + 0.8 * np.power(norm_dist / (inner_radius / outer_radius), 2)
-                    
-                    # Mode influence
-                    value += np.sin(norm_dist * modes / 10) * 0.1 * np.exp(-norm_dist * 2)
-                    
-                    # n1 and taper angle influence
-                    value *= (1 + (n1-1)/5)
-                    if taper_angle is not None:
-                        value *= (1 - 0.3 * np.exp(-taper_angle/10) * np.sin(norm_dist * 8))
-                    
-                    intensity.append(float(max(0, value)))
-                
-                # Normalize
-                max_val = max(intensity) if intensity else 1
-                intensity = [i/max_val for i in intensity]
-                
-                return jsonify({
-                    'distance': distance,
-                    'intensity': intensity,
-                    'fallback': True  # Indicate this is a fallback calculation
-                })
-                
-        except Exception as e:
-            app.logger.error(f"Error in intensity_profile: {str(e)}")
-            # Return a minimal response that won't break the client
-            distance = np.linspace(0, 20, 100).tolist()
-            intensity = [max(0, np.exp(-((x-10)/5)**2)) for x in distance]
-            return jsonify({
-                'distance': distance,
-                'intensity': intensity,
-                'error': str(e),
-                'fallback': True
-            })
 
-    def calculate_intensity_profile(distance, inner_radius, outer_radius, n1, taper_angle, modes):
-        """
-        Calculate intensity profile data.
-        This is a placeholder - in your production code, you should use your physics models.
-        """
-        # In reality, you would extract this from the simulation results
-        # Or call existing Python functions that calculate this properly
-        return [float(np.exp(-np.power((d/(outer_radius*1e6) - 1), 2) * 5) * 
-                    (1 + (n1-1)/5) * 
-                    (1 - 0.3 * np.exp(-taper_angle/10) * np.sin(d/(outer_radius*1e6) * 8)))
-                for d in distance]
 
     return app
     
