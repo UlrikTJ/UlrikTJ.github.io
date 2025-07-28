@@ -881,6 +881,9 @@
                 // Update current stats with the newest data point
                 if (data.current.length > 0) {
                     updateCurrentStats(data.current[data.current.length - 1]);
+                } else if (data.historical.length > 0) {
+                    // Fallback to most recent historical data if no current data
+                    updateCurrentStats(data.historical[data.historical.length - 1]);
                 }
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -908,46 +911,23 @@
         setTimeRange('hour', 'memory');
         setTimeRange('hour', 'temp');
         
+        // Initial update when page loads - force immediate data fetch
+        updateCharts();
+        
         // Check if we're in active hours (8am-10pm Copenhagen time)
         function isActiveHours() {
             const copenhagenTime = luxon.DateTime.now().setZone('Europe/Copenhagen');
             const hour = copenhagenTime.hour;
-            return hour >= 0 && hour <= 0;
+            return hour >= 8 && hour <= 22;
         }
-        
-        // Update poll interval based on active hours
-        function updatePollInterval() {
-            if (isActiveHours()) {
-                // During active hours: poll every minute
-                return 60 * 1000; // 60 seconds
-            } else {
-                // Outside active hours: poll infrequently (once per hour) just to check if we're back in active hours
-                return 60 * 60 * 1000; // 60 minutes
-            }
-        }
-        
-        // Start polling, adjust the interval dynamically based on time
-        let updateInterval = setInterval(() => {
+
+        // Start simple polling - update every minute during active hours
+        setInterval(() => {
             if (isActiveHours()) {
                 updateCharts();
             } else {
                 console.log("Outside active hours (8am-10pm Copenhagen time), not fetching data");
             }
-            
-            // Adjust interval if needed
-            const newInterval = updatePollInterval();
-            if (newInterval !== updateInterval._idleTimeout) {
-                clearInterval(updateInterval);
-                updateInterval = setInterval(updateCharts, newInterval);
-            }
-        }, updatePollInterval());
-        
-        // Initial update when page loads
-        updateCharts();
-
-        // Set up automatic polling that runs continuously
-        setInterval(() => {
-            updateCharts(); // This should fetch new data and update all charts
         }, 60000); // Update every minute
 
         // Time range selection should only change the display, not stop polling
