@@ -191,27 +191,10 @@
       padding: 20px;
     }
     
-    #heatmapCanvas, #simulationImage {
+    #simulationImage {
       width: 100%;
       border-radius: 8px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-    
-    .colorbar {
-      height: 20px;
-      width: 100%;
-      margin-top: 10px;
-      border-radius: 3px;
-      background: linear-gradient(to right, 
-        #000080, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000, #800000);
-    }
-    
-    .colorbar-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      margin-top: 5px;
-      color: var(--secondary-color);
     }
     
     .parameter-group {
@@ -525,9 +508,6 @@
     function showLoading() {
       const loadingElement = document.getElementById('loadingViz');
       if (loadingElement) loadingElement.style.display = 'flex';
-      
-      const heatmapCanvas = document.getElementById('heatmapCanvas');
-      if (heatmapCanvas) heatmapCanvas.style.display = 'none';
       
       const simulationImage = document.getElementById('simulationImage');
       if (simulationImage) simulationImage.style.display = 'none';
