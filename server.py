@@ -49,17 +49,17 @@ def clean_cache():
 def create_app():
     # Create the Flask app
     app = Flask(__name__)
-    CORS(app)  # Enable CORS for all routes
-    CORS(app, resources={r"/": {
-        "origins": "",  # Allow all origins (you can restrict this later)
-        "methods": ["GET", "POST", "OPTIONS"],
-        "allow_headers": ["Content-Type", "Authorization", "X-Requested-With"]
-    }})
-    CORS(app, resources={r"/*": {
-        "origins": "*",  # Allow all origins (you can restrict this later)
-        "methods": ["GET", "POST", "OPTIONS"],
-        "allow_headers": ["Content-Type", "Authorization", "X-Requested-With"]
-    }})
+    
+    # Replace the multiple CORS configurations with this single one:
+    CORS(app, resources={
+        r"/*": {
+            "origins": "*",  # Allow all origins
+            "methods": ["GET", "POST", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization", "X-Requested-With"],
+            "supports_credentials": True
+        }
+    })
+    
     # Use the application context immediately after creating 'app'
     with app.app_context():
         # Initialize the DB (or call any other "before_first_request" code)
