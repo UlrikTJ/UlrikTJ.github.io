@@ -205,9 +205,7 @@ def create_app():
         # Add title with parameters
         ax.set_title(f'Field Distribution (n1={n1:.2f}, Taper={taper_angle}°)')
         
-        # Add annotations for waveguide
-        plt.text(0.05, 0.95, 'Waveguide', transform=ax.transAxes, color='white', fontweight='bold')
-        plt.text(0.7, 0.05, 'Direction →', transform=ax.transAxes, color='white')
+        # Text annotations removed for cleaner visualization
         
         # Convert plot to base64 image
         buf = io.BytesIO()

@@ -232,9 +232,7 @@ def generate_field_distribution(n1list, n2list, Rvalues, R, size, hlist, k, stru
     
     plt.colorbar(label='Field Amplitude')
     
-    # Add annotations
-    plt.annotate('Glass', xy=(0.9, 0.1), xycoords='axes fraction', color='white')
-    plt.annotate('Core', xy=(0.1, 0.5), xycoords='axes fraction', color='white')
+    # Text annotations removed for cleaner visualization
     
     # Save to base64
     buffer = BytesIO()
