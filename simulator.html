@@ -214,13 +214,6 @@
       color: var(--secondary-color);
     }
     
-    .charts-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
-      gap: 30px;
-      margin-top: 30px;
-    }
-    
     .parameter-group {
       background-color: rgba(52, 152, 219, 0.05);
       border-left: 4px solid var(--primary-color);
@@ -256,7 +249,6 @@
       100% { transform: rotate(360deg); }
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark">
@@ -520,27 +512,11 @@
             <small id="vizStatus" style="margin-left: 10px;"></small>
           </div>
         </div>
-        
-        <div class="charts-grid">
-          <!--
-          <div class="visualization-container">
-            <div class="viz-title">
-              <i class="bi bi-bar-chart"></i> Parameter Sensitivity
-            </div>
-            <div class="viz-content">
-              <canvas id="efficiencyChart"></canvas>
-            </div>
-          </div>
-        -->
-        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // Define these variables at the top level of your script
-    let efficiencyChart = null;
-    
     // Define all your functions before window.onload
     function updateLabel(labelId, value) {
       document.getElementById(labelId).textContent = value;
@@ -677,22 +653,6 @@
             </div>
           </div>
           
-          <h5 class="mt-4 mb-3">Parameter Analysis</h5>
-          <div class="results-grid">
-            <div class="result-item">
-              <strong>${data.factors.overlapFactor.toFixed(1)}%</strong>
-              <span>Overlap Factor</span>
-            </div>
-            <div class="result-item">
-              <strong>${data.factors.modeMatchFactor.toFixed(1)}%</strong>
-              <span>Mode Match</span>
-            </div>
-            <div class="result-item">
-              <strong>${data.factors.taperFactor.toFixed(1)}%</strong>
-              <span>Taper Efficiency</span>
-            </div>
-          </div>
-          
           <h5 class="mt-4 mb-3">Configuration</h5>
           <div class="row">
             <div class="col-md-6">
@@ -753,71 +713,7 @@
       });
     }
     
-    function updateEfficiencyChart(efficiency, factors) {
-      /*
-      const parameters = ['Outer Radius', 'Inner Radius', 'Core Index', 'Taper Angle'];
-      const factorValues = [
-        factors.overlapFactor,
-        factors.modeMatchFactor, 
-        factors.taperFactor,
-        Math.min(factors.modeMatchFactor, factors.overlapFactor)
-      ];
-      
-      // Create or update the chart
-      const ctx = document.getElementById('efficiencyChart').getContext('2d');
-      
-      if (efficiencyChart) {
-        efficiencyChart.destroy();
-      }
-      
-      efficiencyChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: parameters,
-          datasets: [{
-            label: 'Parameter Contribution (%)',
-            backgroundColor: 'rgba(52, 152, 219, 0.7)',
-            borderColor: 'rgba(52, 152, 219, 1)',
-            borderWidth: 1,
-            data: factorValues
-          }, {
-            type: 'line',
-            label: 'Coupling Efficiency (%)',
-            backgroundColor: 'rgba(231, 76, 60, 0.2)',
-            borderColor: 'rgba(231, 76, 60, 1)',
-            borderWidth: 2,
-            pointBackgroundColor: 'rgba(231, 76, 60, 1)',
-            fill: false,
-            data: Array(parameters.length).fill(efficiency)
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: {
-              beginAtZero: true,
-              max: 100,
-              title: {
-                display: true,
-                text: 'Percentage (%)'
-              }
-            }
-          },
-          plugins: {
-            legend: {
-              display: true,
-              position: 'top'
-            },
-            title: {
-              display: false
-            }
-          }
-        }
-      });
-    }*/
-      console.log('Efficiency chart removed');
-    }
+
     
     // generateHeatmap function removed - all simulations now use Python backend only
     function generateHeatmap(innerRadius, outerRadius, n1, taperAngle, modes) {

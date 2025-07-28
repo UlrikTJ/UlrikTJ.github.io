@@ -142,12 +142,7 @@ def simulate_optical_structure(
     efficiency_percentage = efficiency * 100
     
     result = {
-        'efficiency': efficiency_percentage,
-        'factors': {
-            'overlapFactor': min(100, efficiency_percentage * 1.2),  # Example factor calculation
-            'modeMatchFactor': min(100, efficiency_percentage * 0.9 + 10),  # Example factor calculation
-            'taperFactor': min(100, efficiency_percentage * 1.1)  # Example factor calculation
-        }
+        'efficiency': efficiency_percentage
     }
     
     # Generate image of field distribution if requested
