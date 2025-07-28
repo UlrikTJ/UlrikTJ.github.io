@@ -55,6 +55,8 @@ def create_app():
          origins="*", 
          methods=["GET", "POST", "OPTIONS", "PUT", "DELETE", "PATCH", "HEAD"],
          allow_headers="*",  # Allow all headers
+         expose_headers="*",  # Expose all headers
+         max_age=86400,  # Cache preflight for 24 hours
          supports_credentials=False)
     
     # Use the application context immediately after creating 'app'
@@ -62,15 +64,8 @@ def create_app():
         # Initialize the DB (or call any other "before_first_request" code)
         init_db()
 
-    @app.after_request
-    def after_request(response):
-        """Add permissive CORS headers to all responses"""
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Headers', '*')  # Allow all headers
-        response.headers.add('Access-Control-Allow-Methods', '*')  # Allow all methods
-        response.headers.add('Access-Control-Allow-Credentials', 'false')
-        response.headers.add('Access-Control-Max-Age', '86400')  # Cache preflight for 24 hours
-        return response
+    # Remove manual CORS handling since flask-cors handles it all
+    # @app.after_request is no longer needed
 
     @app.route("/")
     def root_endpoint():
@@ -93,14 +88,10 @@ def create_app():
     # In the serve_data route
     @app.route("/data.json", methods=["GET", "OPTIONS"])
     def serve_data():
-        # Handle preflight OPTIONS request
+        # flask-cors handles OPTIONS requests automatically
         if request.method == 'OPTIONS':
-            response = jsonify({'status': 'ok'})
-            response.headers.add('Access-Control-Allow-Origin', '*')
-            response.headers.add('Access-Control-Allow-Methods', '*')  # Allow all methods
-            response.headers.add('Access-Control-Allow-Headers', '*')  # Allow all headers
-            response.headers.add('Access-Control-Max-Age', '86400')  # Cache preflight for 24 hours
-            return response
+            # Let flask-cors handle this
+            return '', 200
             
         try:
             # Get query parameters for pagination
@@ -273,61 +264,16 @@ def create_app():
 
     @app.route('/intensity_profile', methods=['POST'])
     def intensity_profile():
-        try:
-            try:
-                return jsonify('Fuck you, I am not a fucking calculator')
-            except Exception as e:
-                print(f"Error in physics calculation: {str(e)}")
-                
-                # Provide a fallback calculation on the server side
-                # This is more accurate than the client-side JavaScript fallback
-                distance = np.linspace(0, outer_radius * 2e6, 100).tolist()
-                intensity = []
-                
-                for d in distance:
-                    r = d * 1e-6  # Convert μm to meters
-                    # Simple fallback model that mimics Bessel functions
-                    # Normalized distance
-                    norm_dist = r / outer_radius
-                    
-                    # Basic profile with exponential decay away from core edge
-                    value = np.exp(-np.power(norm_dist - 1, 2) * 5)
-                    
-                    # Inner radius influence
-                    if norm_dist < inner_radius / outer_radius:
-                        value *= 0.2 + 0.8 * np.power(norm_dist / (inner_radius / outer_radius), 2)
-                    
-                    # Mode influence
-                    value += np.sin(norm_dist * modes / 10) * 0.1 * np.exp(-norm_dist * 2)
-                    
-                    # n1 and taper angle influence
-                    value *= (1 + (n1-1)/5)
-                    if taper_angle is not None:
-                        value *= (1 - 0.3 * np.exp(-taper_angle/10) * np.sin(norm_dist * 8))
-                    
-                    intensity.append(float(max(0, value)))
-                
-                # Normalize
-                max_val = max(intensity) if intensity else 1
-                intensity = [i/max_val for i in intensity]
-                
-                return jsonify({
-                    'distance': distance,
-                    'intensity': intensity,
-                    'fallback': True  # Indicate this is a fallback calculation
-                })
-                
-        except Exception as e:
-            app.logger.error(f"Error in intensity_profile: {str(e)}")
-            # Return a minimal response that won't break the client
-            distance = np.linspace(0, 20, 100).tolist()
-            intensity = [max(0, np.exp(-((x-10)/5)**2)) for x in distance]
-            return jsonify({
-                'distance': distance,
-                'intensity': intensity,
-                'error': str(e),
-                'fallback': True
-            })
+        """
+        Intensity profile endpoint - currently disabled.
+        Returns a professional error message indicating service unavailability.
+        """
+        return jsonify({
+            'error': 'Service Temporarily Unavailable',
+            'message': 'The intensity profile calculation service is currently offline or experiencing technical difficulties. Please try again later or contact system administrator.',
+            'status': 'service_unavailable',
+            'timestamp': time.time()
+        }), 503
 
 
     return app

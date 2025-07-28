@@ -865,10 +865,7 @@
                 const response = await fetch(
                     `https://serverstatsapi.ddns.net/data.json?limit=${maxLimit}&_t=${Date.now()}`,
                     { 
-                        cache: "no-store",
-                        headers: {
-                            'Cache-Control': 'no-cache'
-                        }
+                        cache: "no-store"
                     }
                 );
 
