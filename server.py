@@ -50,20 +50,26 @@ def create_app():
     # Create the Flask app
     app = Flask(__name__)
     
-    # Replace the multiple CORS configurations with this single one:
-    CORS(app, resources={
-        r"/*": {
-            "origins": "*",  # Allow all origins
-            "methods": ["GET", "POST", "OPTIONS"],
-            "allow_headers": ["Content-Type", "Authorization", "X-Requested-With"],
-            "supports_credentials": True
-        }
-    })
+    # Configure CORS properly
+    CORS(app, 
+         origins="*", 
+         methods=["GET", "POST", "OPTIONS"],
+         allow_headers=["Content-Type", "Authorization", "X-Requested-With", "Cache-Control", "Pragma", "Expires"],
+         supports_credentials=False)  # Set to False when using origins="*"
     
     # Use the application context immediately after creating 'app'
     with app.app_context():
         # Initialize the DB (or call any other "before_first_request" code)
         init_db()
+
+    @app.after_request
+    def after_request(response):
+        """Add CORS headers to all responses"""
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With,Cache-Control,Pragma,Expires')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'false')
+        return response
 
     @app.route("/")
     def root_endpoint():
@@ -74,13 +80,31 @@ def create_app():
             app.logger.error(f"Error in root_endpoint: {str(e)}")
             return jsonify({"error": "Internal server error"}), 500
 
+    @app.route("/simulator.html")
+    def serve_simulator():
+        try:
+            from flask import send_from_directory
+            return send_from_directory('.', 'simulator.html')
+        except Exception as e:
+            app.logger.error(f"Error serving simulator.html: {str(e)}")
+            return "File not found", 404
+
     # In the serve_data route
-    @app.route("/data.json", methods=["GET"])
+    @app.route("/data.json", methods=["GET", "OPTIONS"])
     def serve_data():
+        # Handle preflight OPTIONS request
+        if request.method == 'OPTIONS':
+            response = jsonify({'status': 'ok'})
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            response.headers.add('Access-Control-Allow-Methods', 'GET, OPTIONS')
+            response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Cache-Control, Pragma, Expires')
+            return response
+            
         try:
             # Get query parameters for pagination
             limit = request.args.get('limit', default=100, type=int)
             page = request.args.get('page', default=0, type=int)
+            # Ignore cache-busting parameter _t for our internal caching logic
             
             # Log the requested limit
             app.logger.info(f"Data request with limit={limit}, page={page}")
@@ -92,23 +116,29 @@ def create_app():
                 cache_timeout = CACHE_DURATION * 2  # Double cache time for large queries
                 app.logger.info(f"Large query detected (limit={limit}). Increasing cache duration.")
             
-            # Check cache first
+            # Check cache first (but ignore cache-busting for fresh data)
             cache_key = f"data_{limit}_{page}"
             current_time = time.time()
 
-            if cache_key in cache and current_time - cache[cache_key]['time'] < cache_timeout:
-                return jsonify(cache[cache_key]['data'])
+            # Always get fresh data to fix the issue described
+            # if cache_key in cache and current_time - cache[cache_key]['time'] < cache_timeout:
+            #     return jsonify(cache[cache_key]['data'])
 
-            # Get full data structure with requested limit
+            # Get full data structure with requested limit - always fresh
             data = produce_json_structure(historical_limit=limit, historical_offset=page*limit)
 
-            # Store in cache
+            # Store in cache for future requests (but always return fresh data)
             cache[cache_key] = {
                 'time': current_time,
                 'data': data
             }
 
-            return jsonify(data)
+            response = jsonify(data)
+            response.headers.add('Access-Control-Allow-Origin', '*')
+            response.headers.add('Cache-Control', 'no-cache, no-store, must-revalidate')
+            response.headers.add('Pragma', 'no-cache')
+            response.headers.add('Expires', '0')
+            return response
         except Exception as e:
             app.logger.error(f"Error in serve_data: {str(e)}")
             return jsonify({"error": f"Internal server error: {str(e)}"}), 500
