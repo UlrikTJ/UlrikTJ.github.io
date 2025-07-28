@@ -914,20 +914,9 @@
         // Initial update when page loads - force immediate data fetch
         updateCharts();
         
-        // Check if we're in active hours (8am-10pm Copenhagen time)
-        function isActiveHours() {
-            const copenhagenTime = luxon.DateTime.now().setZone('Europe/Copenhagen');
-            const hour = copenhagenTime.hour;
-            return hour >= 8 && hour <= 22;
-        }
-
-        // Start simple polling - update every minute during active hours
+        // Start simple polling - update every minute (24/7)
         setInterval(() => {
-            if (isActiveHours()) {
-                updateCharts();
-            } else {
-                console.log("Outside active hours (8am-10pm Copenhagen time), not fetching data");
-            }
+            updateCharts();
         }, 60000); // Update every minute
 
         // Time range selection should only change the display, not stop polling

@@ -293,10 +293,8 @@ def produce_json_structure(historical_limit=10000, historical_offset=0):
         }
 
 if __name__ == "__main__":
-    # Skip data collection outside active hours
-    if not is_active_hours():
-        log("\n=== Outside active hours (8am-10pm), skipping data collection ===")
-        sys.exit(0)
+    # Collect data 24/7 - no active hours restriction
+    # (Removed active hours check for continuous monitoring)
         
     # Example usage: run this script to do one minute of collection & save to DB.
     log("\n=== Script Started ===")
