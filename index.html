@@ -487,9 +487,9 @@
     <script>
         let cpuChart, memoryChart, temperatureChart;
         let timeRanges = {
-            cpu: 'hour',
-            memory: 'hour',
-            temp: 'hour'
+            cpu: 'day',
+            memory: 'day',
+            temp: 'day'
         };
 
         function initializeCharts() {
@@ -906,10 +906,10 @@
         // Initialize and start updates
         initializeCharts();
         
-        // Default to hour view for all charts on load
-        setTimeRange('hour', 'cpu');
-        setTimeRange('hour', 'memory');
-        setTimeRange('hour', 'temp');
+        // Default to day view for all charts on load (faster performance)
+        setTimeRange('day', 'cpu');
+        setTimeRange('day', 'memory');
+        setTimeRange('day', 'temp');
         
         // Initial update when page loads - force immediate data fetch
         updateCharts();

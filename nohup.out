@@ -62,3 +62,48 @@ Finished with Distance to Glass: 2.000e-06
  * Running on http://82.211.195.56:5000
 [33mPress CTRL+C to quit[0m
 127.0.0.1 - - [28/Jul/2025 22:49:14] "GET /data.json?limit=28800&_t=1753742952310 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 22:50:14] "GET /data.json?limit=28800&_t=1753743013034 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 22:51:14] "GET /data.json?limit=28800&_t=1753743073064 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 22:52:14] "GET /data.json?limit=28800&_t=1753743133070 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 22:53:15] "GET /data.json?limit=28800&_t=1753743193725 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 22:54:15] "GET /data.json?limit=28800&_t=1753743253732 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 22:55:16] "GET /data.json?limit=28800&_t=1753743314194 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 22:56:16] "GET /data.json?limit=28800&_t=1753743374761 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 22:56:49] "GET /data.json?limit=1200&_t=1753743392142 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 22:56:49] "GET /data.json?limit=1200&_t=1753743392141 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 22:56:49] "GET /data.json?limit=1200&_t=1753743392142 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 22:56:49] "GET /data.json?limit=1200&_t=1753743392142 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 22:56:54] "GET /data.json?limit=28800&_t=1753743412955 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 22:57:34] "GET /data.json?limit=28800&_t=1753743452155 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 22:58:34] "GET /data.json?limit=28800&_t=1753743512184 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 22:59:34] "GET /data.json?limit=28800&_t=1753743572197 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 23:00:34] "GET /data.json?limit=28800&_t=1753743632199 HTTP/1.1" 200 -
+Starting Flask server (running 24/7 continuously)
+ * Tip: There are .env files present. Install python-dotenv to use them.
+Inner Radius: 1.000e-06, Effectivity: 37.58%
+Efficiency difference:0.0419%
+Inner Radius: 1.333e-06, Effectivity: 56.33%
+Inner Radius: 1.667e-06, Effectivity: 71.70%
+Efficiency difference:0.0142%
+Inner Radius: 2.000e-06, Effectivity: 80.66%
+Finished with Distance to Glass: 1.000e-08
+Inner Radius: 1.000e-06, Effectivity: 36.32%
+Efficiency difference:-0.4958%
+Inner Radius: 1.333e-06, Effectivity: 54.35%
+Inner Radius: 1.667e-06, Effectivity: 68.41%
+Efficiency difference:-0.0575%
+Inner Radius: 2.000e-06, Effectivity: 76.40%
+Finished with Distance to Glass: 1.005e-06
+Inner Radius: 1.000e-06, Effectivity: 33.66%
+Efficiency difference:0.6134%
+Inner Radius: 1.333e-06, Effectivity: 50.95%
+Inner Radius: 1.667e-06, Effectivity: 62.36%
+Efficiency difference:-0.1547%
+Inner Radius: 2.000e-06, Effectivity: 68.86%
+Finished with Distance to Glass: 2.000e-06
+ * Serving Flask app 'server'
+ * Debug mode: off
+Address already in use
+Port 5000 is in use by another program. Either identify and stop that program, or start the server with a different port.
+127.0.0.1 - - [28/Jul/2025 23:01:34] "GET /data.json?limit=28800&_t=1753743692200 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jul/2025 23:01:58] "GET /?id=6fc19b41-f33b-4952-8625-9689877fcefd&vscodeBrowserReqId=1753743716272 HTTP/1.1" 200 -
