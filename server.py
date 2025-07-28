@@ -50,12 +50,12 @@ def create_app():
     # Create the Flask app
     app = Flask(__name__)
     
-    # Configure CORS properly
+    # Configure CORS to allow everything
     CORS(app, 
          origins="*", 
-         methods=["GET", "POST", "OPTIONS"],
-         allow_headers=["Content-Type", "Authorization", "X-Requested-With", "Cache-Control", "Pragma", "Expires"],
-         supports_credentials=False)  # Set to False when using origins="*"
+         methods=["GET", "POST", "OPTIONS", "PUT", "DELETE", "PATCH", "HEAD"],
+         allow_headers="*",  # Allow all headers
+         supports_credentials=False)
     
     # Use the application context immediately after creating 'app'
     with app.app_context():
@@ -64,11 +64,12 @@ def create_app():
 
     @app.after_request
     def after_request(response):
-        """Add CORS headers to all responses"""
+        """Add permissive CORS headers to all responses"""
         response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requested-With,Cache-Control,Pragma,Expires')
-        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        response.headers.add('Access-Control-Allow-Headers', '*')  # Allow all headers
+        response.headers.add('Access-Control-Allow-Methods', '*')  # Allow all methods
         response.headers.add('Access-Control-Allow-Credentials', 'false')
+        response.headers.add('Access-Control-Max-Age', '86400')  # Cache preflight for 24 hours
         return response
 
     @app.route("/")
@@ -96,8 +97,9 @@ def create_app():
         if request.method == 'OPTIONS':
             response = jsonify({'status': 'ok'})
             response.headers.add('Access-Control-Allow-Origin', '*')
-            response.headers.add('Access-Control-Allow-Methods', 'GET, OPTIONS')
-            response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Cache-Control, Pragma, Expires')
+            response.headers.add('Access-Control-Allow-Methods', '*')  # Allow all methods
+            response.headers.add('Access-Control-Allow-Headers', '*')  # Allow all headers
+            response.headers.add('Access-Control-Max-Age', '86400')  # Cache preflight for 24 hours
             return response
             
         try:
