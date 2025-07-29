@@ -104,10 +104,6 @@ def onevar(info,changevar,startdist,enddist,n,tolerance):
                     fail = True
                     effectivity = 0
                     print('Error: Effectivity is not stable, setting rest to 0')
-                # R,size, effectivity= fixsizeR(n1list,n2list,Rvalues,R,size,hlist,glassinfo,k,effectivity,inf)
-                # if effectivity == 0:
-                #     fail = True
-                #     print('Error: Effectivity is not stable, setting rest to 0')
             effectivities.append(effectivity)
         testindex += 1
         if testindex == int(n**(1/2)):

@@ -238,6 +238,7 @@ def create_app():
         taper_angle = data.get('taperAngle', 5.0) if structure_type == 'taper' else None
         n_ar = data.get('n_ar', 1.9) if structure_type == 'ar_coating' else None
         ar_thickness = data.get('thickness_of_ar_coating', 100e-9) if structure_type == 'ar_coating' else None
+        glass_size = data.get('glass_size', 1.8e-6)  # Add missing glass_size parameter
         
         try:
             result = simulate_optical_structure(
@@ -252,6 +253,7 @@ def create_app():
                 number_of_modes=modes,
                 glass_distance=glass_distance,
                 glass_index=glass_index,
+                glass_size=glass_size,  # Add the missing parameter
                 wavelength=wavelength,
                 return_image=True
             )

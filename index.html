@@ -682,15 +682,7 @@
             });
         }
 
-        function setTimeRange(range, chartType) {
-            timeRanges[chartType] = range;
-            const container = document.querySelector(`#${chartType}-range-selector`);
-            container.querySelectorAll('button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            container.querySelector(`button[onclick="setTimeRange('${range}', '${chartType}')"]`).classList.add('active');
-            updateCharts();
-        }
+
 
         function filterDataByTimeRange(data, range) {
             const now = luxon.DateTime.now().setZone('Europe/Copenhagen');
