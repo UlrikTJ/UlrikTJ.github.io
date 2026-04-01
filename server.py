@@ -11,9 +11,9 @@ from matplotlib.colors import LinearSegmentedColormap
 import io
 import base64
 from flask_cors import CORS
-# from OpticSimProj.Workspace.GodFunction import simulate_optical_structure, get_intensity_profile
-from OpticSimProj.simulator import simulate_optical_structure
-from OpticSimProj.Workspace.GodFunction import simulate_optical_structure
+# Optical simulation imports - loaded dynamically to avoid startup issues
+# from OpticSimProj.simulator import simulate_optical_structure
+# from OpticSimProj.Workspace.GodFunction import simulate_optical_structure
 
 # Simple time-based cache
 cache = {}
@@ -240,6 +240,15 @@ def create_app():
         ar_thickness = data.get('thickness_of_ar_coating', 100e-9) if structure_type == 'ar_coating' else None
         glass_size = data.get('glass_size', 1.8e-6)  # Add missing glass_size parameter
         
+        # Import simulation function dynamically to avoid startup issues
+        try:
+            from OpticSimProj.simulator import simulate_optical_structure
+        except ImportError:
+            try:
+                from OpticSimProj.Workspace.GodFunction import simulate_optical_structure
+            except ImportError:
+                return jsonify({'error': 'Simulation module not available'}), 503
+        
         try:
             result = simulate_optical_structure(
                 type_of_structure=structure_type,
@@ -274,7 +283,6 @@ def create_app():
             'status': 'service_unavailable',
             'timestamp': time.time()
         }), 503
-
 
     return app
     

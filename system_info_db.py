@@ -134,7 +134,7 @@ def collect_minute_data():
             log(f"\rCollecting... Points: {len(data_points)} | "
                 f"CPU: {info['cpu_usage']:.1f}% | "
                 f"MEM: {info['memory_usage']:.1f}%", end="")
-            time.sleep(1)
+            time.sleep(5)
 
         log("\nCollection complete!")
     except Exception as e:
