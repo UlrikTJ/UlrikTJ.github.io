@@ -155,6 +155,24 @@ def get_T_R_list(bclist):
         forR[i],forT[i] = T_R_calc(bclist,i,1)
         backR[i],backT[i] = T_R_calc(bclist,i+1,-1)
     return forT,forR,backT,backR
+
+def _encode_heatmap_to_image(heatmap_array):
+    fig, ax = plt.subplots(figsize=(8, 5))
+    cax = ax.matshow(heatmap_array, origin='lower', cmap='viridis', aspect='auto')
+    fig.colorbar(cax, ax=ax, label='Field Intensity (a.u.)')
+    ax.set_ylabel('Position')
+    ax.set_xlabel('Width')
+    
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', dpi=100, bbox_inches='tight')
+    plt.close(fig)
+    buf.seek(0)
+    
+    encoded_image = base64.b64encode(buf.read()).decode('utf-8')
+    buf.close()
+    
+    return "data:image/png;base64," + encoded_image
+
 def SRT1_3(R21,R12,T21,P2,R23,T12,T23): #R21,R12,T21,P2,R23,T12,T23
     ICMatrix= inv(np.identity(len(R12[0])) - R21 @ P2 @ R23 @ P2)
     return R12 + T21@P2@R23@P2@ICMatrix@T12, T23@P2@ICMatrix@T12
@@ -389,7 +407,7 @@ def simulate_optical_structure(
             'modeMatchFactor': min(100, efficiency_percentage * 0.9 + 10),  # Example factor calculation
             'taperFactor': min(100, efficiency_percentage * 1.1)  # Example factor calculation
         },
-        'heatmap': heatmap.tolist() if hasattr(heatmap, 'tolist') else heatmap
+        'heatmap': _encode_heatmap_to_image(heatmap) if hasattr(heatmap, 'tolist') else heatmap
     }
     return result
 
