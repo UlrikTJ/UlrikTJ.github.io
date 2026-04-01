@@ -389,7 +389,7 @@ def simulate_optical_structure(
             'modeMatchFactor': min(100, efficiency_percentage * 0.9 + 10),  # Example factor calculation
             'taperFactor': min(100, efficiency_percentage * 1.1)  # Example factor calculation
         },
-        'heatmap': heatmap
+        'heatmap': heatmap.tolist() if hasattr(heatmap, 'tolist') else heatmap
     }
     return result
 

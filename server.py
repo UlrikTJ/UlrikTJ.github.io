@@ -269,6 +269,7 @@ def create_app():
             return jsonify(result)
         
         except Exception as e:
+            app.logger.error(f"Error in /simulate: {str(e)}", exc_info=True)
             return jsonify({'error': str(e)}), 500
 
     @app.route('/intensity_profile', methods=['POST'])
