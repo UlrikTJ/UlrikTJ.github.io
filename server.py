@@ -11,6 +11,15 @@ from matplotlib.colors import LinearSegmentedColormap
 import io
 import base64
 from flask_cors import CORS
+
+# Add Mathcad2LaTex to path
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'Mathcad2LaTex'))
+try:
+    from mathcad_to_latex import convert_mathcad_to_latex
+except ImportError:
+    print("Warning: Mathcad2LaTex module not found. Converter will be disabled.")
+    convert_mathcad_to_latex = None
+
 # Optical simulation imports - loaded dynamically to avoid startup issues
 # from OpticSimProj.simulator import simulate_optical_structure
 # from OpticSimProj.Workspace.GodFunction import simulate_optical_structure
@@ -83,6 +92,24 @@ def create_app():
             return send_from_directory('.', 'simulator.html')
         except Exception as e:
             app.logger.error(f"Error serving simulator.html: {str(e)}")
+            return "File not found", 404
+
+    @app.route("/mathcad.html")
+    def serve_mathcad():
+        try:
+            from flask import send_from_directory
+            return send_from_directory('.', 'mathcad.html')
+        except Exception as e:
+            app.logger.error(f"Error serving mathcad.html: {str(e)}")
+            return "File not found", 404
+
+    @app.route("/index.html")
+    def serve_index():
+        try:
+            from flask import send_from_directory
+            return send_from_directory('.', 'index.html')
+        except Exception as e:
+            app.logger.error(f"Error serving index.html: {str(e)}")
             return "File not found", 404
 
     # In the serve_data route
@@ -285,9 +312,28 @@ def create_app():
             'timestamp': time.time()
         }), 503
 
+    @app.route('/mathcad_to_latex', methods=['POST'])
+    def mathcad_to_latex():
+        """API endpoint for Mathcad to LaTeX conversion"""
+        if convert_mathcad_to_latex is None:
+            return jsonify({'error': 'Converter module not available'}), 503
+            
+        data = request.json
+        mathcad_expr = data.get('expression', '')
+        
+        if not mathcad_expr:
+            return jsonify({'error': 'No expression provided'}), 400
+            
+        try:
+            latex_expr = convert_mathcad_to_latex(mathcad_expr)
+            return jsonify({'latex': latex_expr})
+        except Exception as e:
+            app.logger.error(f"Error in /mathcad_to_latex: {str(e)}", exc_info=True)
+            return jsonify({'error': str(e)}), 500
+
     return app
     
 if __name__ == "__main__":
     # Build and run the Flask app
     app = create_app()
-    app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
+    app.run(host="127.0.0.1", port=5000, debug=False, threaded=True)
